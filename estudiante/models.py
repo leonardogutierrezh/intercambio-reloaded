@@ -1,5 +1,5 @@
 #encoding:utf-8
-from celery.worker.strategy import default
+#from celery.worker.strategy import default
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import admin

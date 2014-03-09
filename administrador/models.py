@@ -11,7 +11,7 @@ class Universidad(models.Model):
     pais = models.ForeignKey(Pais)
 
 class Usuario(models.Model):
-    nombreUsuario = models.CharField(max_length=100)
+    usuario = models.ForeignKey(User)
     tipo = models.CharField(max_length=100)
 
 class Administrador(models.Model):
