@@ -3,20 +3,53 @@
 {% block seccion-contenido %}
     <form method="POST">{% csrf_token %}
             <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-                    <div class="col-sm-12">
-                    {{ formulario.nombre_usuario | bootstrap }}
-                </div>
-                <div class="col-sm-12">
-                    {{ formulario.email | bootstrap }}
-                </div>
-                <div class="col-sm-12">
-                    {{ formulario.nombre | bootstrap }}
-                </div>
-                <div class="col-sm-12">
-                    <input type='submit' class="btn btn-default btn-primary" value='Crear'/>
-                </div>
+                    <div id="selector" class="col-sm-6 col-sm-offset-2 form-group">
+                        <label class="control-label">Tipo de usuario</label>
+                        <div class="">
+                            <select id="opcion" name="opcion" class="form-control" onchange="seleccionar()">
+                                <option value="gestor">Decanato</option>
+                                <option value="coordinacion">Coordinación</option>
+                                <option value="estudiante">Estudiante</option>
+                                <option value="extranjero">Estudiante Extranjero</option>
+                                <option value="universidad">Universidad Extranjera</option>
+                            </select>
+                        </div>
 
+
+                    </div>
+                    <div id="gestor" class="col-sm-6 col-sm-offset-2 escondido">
+                        {{ formularioUsuario | bootstrap }}
+                    </div>
+                    <div id="coordinacion" class="col-sm-6 col-sm-offset-2 escondido">
+                        {{ formularioCoordinacion | bootstrap }}
+                    </div>
+                    <div id="estudiante" class="col-sm-6 col-sm-offset-2 escondido">
+                        {{ formularioEstudiante | bootstrap }}
+                    </div>
+                    <div id="extranjero" class="col-sm-6 col-sm-offset-2 escondido">
+                        {{ formularioEstudianteExtranjero | bootstrap }}
+                    </div>
+                    <div id="universidad" class="col-sm-6 col-sm-offset-2 escondido">
+                        {{ formularioUniversidad | bootstrap }}
+                    </div>
+
+                    <div class="col-sm-12">
+                        <input type='submit' class="btn btn-default btn-primary" value='Crear'/>
+                    </div>
             </div>
     </form>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $(".escondido").hide();
+        $('#opcion').val('{{ seleccionado }}');
+        $("#" + $("#opcion").val()).show();
+
+});
+function seleccionar(){
+        $(".escondido").hide();
+        $("#" + $("#opcion").val()).show();
+}
+</script>
 {% endblock %}
