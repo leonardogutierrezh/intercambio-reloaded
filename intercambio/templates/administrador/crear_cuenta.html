@@ -7,7 +7,8 @@
                         <label class="control-label">Tipo de usuario</label>
                         <div class="">
                             <select id="opcion" name="opcion" class="form-control" onchange="seleccionar()">
-                                <option value="gestor">Decanato</option>
+                                <option value="decanato">Decanato</option>
+                                <option value="dric">DRIC</option>
                                 <option value="coordinacion">Coordinación</option>
                                 <option value="estudiante">Estudiante</option>
                                 <option value="extranjero">Estudiante Extranjero</option>
@@ -18,7 +19,7 @@
                     <span class="help-block has-error" style="color: #a94442;">El nombre de usuario ya existe</span>
                     {% endif %}
                     </div>
-                    <div id="gestor" class="col-sm-6 col-sm-offset-2 escondido">
+                    <div id="decanato" class="col-sm-6 col-sm-offset-2 escondido">
                         {{ formularioUsuario | bootstrap }}
                     </div>
                     <div id="coordinacion" class="col-sm-6 col-sm-offset-2 escondido">
@@ -50,7 +51,12 @@
 });
 function seleccionar(){
         $(".escondido").hide();
-        $("#" + $("#opcion").val()).show();
+        if ($("#opcion").val() == "dric"){
+            $("#decanato").show();
+        }else{
+            $("#" + $("#opcion").val()).show();
+        }
+
 }
 </script>
 {% endblock %}

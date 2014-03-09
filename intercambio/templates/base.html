@@ -36,6 +36,7 @@
 
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
+                {% if usuario == 'ninguno' %}
                 <ul class="nav" id="side-menu">
                     <li>
                         <a href="#">Entrar</a>
@@ -50,6 +51,31 @@
                         <!-- /.nav-second-level -->
                     </li>
                  </ul>
+                {% elif usuario == 'admin' %}
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <a href="#">Gestion de usuarios</a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="/administrador_crear_cuenta">Agregar usuario</a>
+                            </li>
+                            <li>
+                                <a href="/administrador_listar_usuarios/0">Consultar usuarios</a>
+                            </li>
+                        </ul>
+
+                    </li>
+                    <li>
+                         <a href="#">Ver/Modificar perfil</a>
+                    </li>
+                    <li><a href="#">Gestion de anuncions</a></li>
+                    <li><a href="#">Log de auditoria</a></li>
+                    <li><a href="/cerrar_sesion">Cerrar sesion</a></li>
+                 </ul>
+                 {% elif usuario == 'estudiante' %}
+                 {% elif usuario == 'decanato' %}
+                 {% elif usuario == 'coordinacion' %}
+                {% endif %}
                 <!-- /#side-menu -->
             </div>
             <!-- /.sidebar-collapse -->

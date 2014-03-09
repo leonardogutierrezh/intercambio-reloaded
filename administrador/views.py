@@ -27,7 +27,7 @@ def crear_cuenta(request):
     if request.method == 'POST':
         seleccionado = request.POST.get('opcion')
         formulario = NuevoUsuarioForm()
-        if seleccionado == "gestor":
+        if seleccionado == "gestor" or seleccionado == "dric":
             formulario = NuevoUsuarioForm(request.POST)
             formularioUsuario = formulario
         elif seleccionado == "coordinacion":
@@ -43,7 +43,7 @@ def crear_cuenta(request):
             formulario = NuevaUniversidadExtrangeraForm(request.POST)
             formularioUniversidad = formulario
         if formulario.is_valid():
-            if seleccionado == "gestor":
+            if seleccionado == "decanato" or seleccionado == "dric":
                 nombreUsu = formulario.cleaned_data['nombre_usuario']
                 email = formulario.cleaned_data['email']
                 nombre = formulario.cleaned_data['nombre']
@@ -52,7 +52,7 @@ def crear_cuenta(request):
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name="gestor")
+                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
@@ -66,7 +66,7 @@ def crear_cuenta(request):
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name="coordinacion")
+                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
@@ -82,7 +82,7 @@ def crear_cuenta(request):
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name="estudiante")
+                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
@@ -98,7 +98,7 @@ def crear_cuenta(request):
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name="extranjero")
+                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
@@ -112,7 +112,7 @@ def crear_cuenta(request):
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name="universidad")
+                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
@@ -131,7 +131,7 @@ def crear_cuenta(request):
                 mensaje="error al enviar el mensaje"
 
     else:
-        seleccionado = "gestor"
+        seleccionado = "decanato"
     return render_to_response('administrador/crear_cuenta.html', {'formularioUsuario': formularioUsuario,
                                                                   'formularioCoordinacion': formularioCoordinacion,
                                                                   'formularioEstudiante': formularioEstudiante,
@@ -147,3 +147,7 @@ def listar_usuarios(request, creado):
 
 def editar_perfil(request):
  return True
+
+def cerrar_sesion(request):
+    logout(request)
+    return HttpResponseRedirect("/")
