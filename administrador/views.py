@@ -17,6 +17,7 @@ def inicio(request):
     return render_to_response('inicio.html', {}, context_instance=RequestContext(request))
 
 def crear_cuenta(request):
+    error=0
     formularioUsuario = NuevoUsuarioForm()
     formularioCoordinacion = NuevaCoordinacionForm()
     formularioEstudiante = NuevoEstudianteForm()
@@ -50,9 +51,12 @@ def crear_cuenta(request):
                 chars = string.ascii_letters + string.digits + '!@#$%^&*()'
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
-                user = User.objects.create_user(nombreUsu, email, password)
-                user.save()
-                tipo = Usuario.objects.create(usuario=user, tipo="gestor")
+                try:
+                    user = User.objects.create_user(nombreUsu, email, password, first_name="gestor")
+                    user.save()
+                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+                except:
+                    error=1
             elif seleccionado == "coordinacion":
                 nombreUsu = formulario.cleaned_data['nombre_usuarioCoordinacion']
                 email = formulario.cleaned_data['emailCoordinacion']
@@ -61,9 +65,12 @@ def crear_cuenta(request):
                 chars = string.ascii_letters + string.digits + '!@#$%^&*()'
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
-                user = User.objects.create_user(nombreUsu, email, password)
-                user.save()
-                tipo = Usuario.objects.create(usuario=user, tipo="postulante")
+                try:
+                    user = User.objects.create_user(nombreUsu, email, password, first_name="coordinacion")
+                    user.save()
+                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+                except:
+                    error=1
             elif seleccionado == "estudiante":
                 nombreUsu = formulario.cleaned_data['nombre_usuarioEstudiante']
                 email = formulario.cleaned_data['emailEstudiante']
@@ -74,9 +81,12 @@ def crear_cuenta(request):
                 chars = string.ascii_letters + string.digits + '!@#$%^&*()'
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
-                user = User.objects.create_user(nombreUsu, email, password)
-                user.save()
-                tipo = Usuario.objects.create(usuario=user, tipo="estudiante")
+                try:
+                    user = User.objects.create_user(nombreUsu, email, password, first_name="estudiante")
+                    user.save()
+                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+                except:
+                    error=1
             elif seleccionado == "extranjero":
                 nombreUsu = formulario.cleaned_data['nombre_usuarioExtranjero']
                 email = formulario.cleaned_data['emailExtranjero']
@@ -87,9 +97,12 @@ def crear_cuenta(request):
                 chars = string.ascii_letters + string.digits + '!@#$%^&*()'
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
-                user = User.objects.create_user(nombreUsu, email, password)
-                user.save()
-                tipo = Usuario.objects.create(usuario=user, tipo="extranjero")
+                try:
+                    user = User.objects.create_user(nombreUsu, email, password, first_name="extranjero")
+                    user.save()
+                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+                except:
+                    error=1
             elif seleccionado == "universidad":
                 nombreUsu= formulario.cleaned_data['nombre_usuarioExtranjera']
                 email = formulario.cleaned_data['emailExtranjera']
@@ -98,10 +111,13 @@ def crear_cuenta(request):
                 chars = string.ascii_letters + string.digits + '!@#$%^&*()'
                 random.seed = (os.urandom(1024))
                 password = ''.join(random.choice(chars) for i in range(length))
-                user = User.objects.create_user(nombreUsu, email, password)
-                user.save()
-                tipo = Usuario.objects.create(usuario=user, tipo="universidad")
-                return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+                try:
+                    user = User.objects.create_user(nombreUsu, email, password, first_name="universidad")
+                    user.save()
+                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+                except:
+                    error=1
+
     else:
         seleccionado = "gestor"
     return render_to_response('administrador/crear_cuenta.html', {'formularioUsuario': formularioUsuario,
@@ -109,12 +125,10 @@ def crear_cuenta(request):
                                                                   'formularioEstudiante': formularioEstudiante,
                                                                   'formularioEstudianteExtranjero': formularioEstudianteExtranjero,
                                                                   'formularioUniversidad': formularioUniversidad,
-                                                                  'seleccionado': seleccionado}, context_instance=RequestContext(request))
+                                                                  'seleccionado': seleccionado,
+                                                                  'error': error}, context_instance=RequestContext(request))
 
 def listar_usuarios(request, creado):
     lista_usuarios = []
     usuarios = User.objects.filter(is_staff=False)
-    for usuario in usuarios:
-        tipo = Usuario.objects.get(usuario=usuario)
-        tupla = (usuario, tipo)
-    return render_to_response('administrador/listar_usuarios.html', {'usuarios', lista_usuarios}, context_instance=RequestContext(request))
+    return render_to_response('administrador/listar_usuarios.html', {'usuarios': usuarios, 'creado': creado}, context_instance=RequestContext(request))

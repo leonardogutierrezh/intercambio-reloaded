@@ -1,0 +1,38 @@
+{% extends "tabla.html" %}
+{% load bootstrap %}
+{% block seccion-contenido %}
+{% if creado == '1' %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Marca creada satisfactoriamente!
+    </div>
+
+{% elif creado == '2' %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Marca editada satifactoriamente!
+    </div>
+
+{% elif creado == '3' %}
+   <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+         ¡Marca eliminada satifactoriamente!
+    </div>
+{% endif %}
+  <table class="table table-striped table-bordered table-hover" id="content">
+            <thead>
+                <th>Usuario</th>
+                <th>Tipo</th>
+                <th>Acciones</th>
+            </thead>
+        {% for usuario in usuarios %}
+            <tr>
+                <td><a href="/ver_usuario/{{ usuario.id }}/0">{{ usuario.username }}</a></td>
+                <td>{{ usuario.first_name }}</td>
+                <td><a href="#" class="btn-xs btn-default">Editar</a> <button type="button" onclick="deleteAlert({{marca.id}})" class="btn-xs btn-default btn-danger">Eliminar</button> </td>
+            </tr>
+        {% endfor %}
+        </table>
+{% endblock %}
+{% block js %}
+{% endblock %}

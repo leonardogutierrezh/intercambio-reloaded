@@ -14,8 +14,9 @@
                                 <option value="universidad">Universidad Extranjera</option>
                             </select>
                         </div>
-
-
+                    {% if error %}
+                    <span class="help-block has-error" style="color: #a94442;">El nombre de usuario ya existe</span>
+                    {% endif %}
                     </div>
                     <div id="gestor" class="col-sm-6 col-sm-offset-2 escondido">
                         {{ formularioUsuario | bootstrap }}
