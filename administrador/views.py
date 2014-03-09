@@ -7,6 +7,7 @@ from django.template import RequestContext, loader, Context, Template
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 from administrador.models import *
 from administrador.forms import *
 import os, random, string
@@ -25,7 +26,6 @@ def crear_cuenta(request):
     formularioUniversidad = NuevaUniversidadExtrangeraForm()
     if request.method == 'POST':
         seleccionado = request.POST.get('opcion')
-        print seleccionado
         formulario = NuevoUsuarioForm()
         if seleccionado == "gestor":
             formulario = NuevoUsuarioForm(request.POST)
@@ -117,6 +117,18 @@ def crear_cuenta(request):
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
                     error=1
+            asunto = "Sistema de Gestion de Intercambio"
+            mensaje = "Hola se ha creado a tu nombre una cuenta para utilizar el sistema de gestion de intercambios de la universidad simon bolivar. \n"
+            mensaje =+ "tu usuario es:" + user.username + "\n"
+            mensaje =+ "tu clave es" + password + "\n"
+            #correo = EmailMessage(asunto, mensaje, to=['contacto@asuntopais.com'])
+            correo = EmailMessage(asunto, mensaje, to=[user.email])
+            try:
+                print "enviando"
+                correo.send()
+                return HttpResponseRedirect('/exitocorreo')
+            except:
+                mensaje="error al enviar el mensaje"
 
     else:
         seleccionado = "gestor"
@@ -132,3 +144,6 @@ def listar_usuarios(request, creado):
     lista_usuarios = []
     usuarios = User.objects.filter(is_staff=False)
     return render_to_response('administrador/listar_usuarios.html', {'usuarios': usuarios, 'creado': creado}, context_instance=RequestContext(request))
+
+def editar_perfil(request):
+ return True

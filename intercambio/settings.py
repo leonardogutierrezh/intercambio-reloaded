@@ -123,6 +123,12 @@ ROOT_URLCONF = 'intercambio.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'intercambio.wsgi.application'
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'mail.turpialdevelopment.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'lgutierrez@turpialdevelopment.com'
+EMAIL_HOST_PASSWORD = 'endthen53662736'
+
 TEMPLATE_DIRS = ( os.path.join(RUTA_PROYECTO,'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
