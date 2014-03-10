@@ -151,3 +151,15 @@ def editar_perfil(request):
 def cerrar_sesion(request):
     logout(request)
     return HttpResponseRedirect("/")
+
+def recaudosExt(request):
+    parrafo = 'recaudosExt'
+    return render_to_response('recaudos.html', {'parrafo':parrafo}, context_instance=RequestContext(request))
+
+def recaudosNac(request):
+    parrafo = 'recaudosNac'
+    return render_to_response('recaudos.html',{'parrafo':parrafo}, context_instance=RequestContext(request))
+
+def recaudosAdic(request):
+    parrafo = 'recaudosAdic'
+    return render_to_response('recaudos.html',{'parrafo':parrafo}, context_instance=RequestContext(request))

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block seccion-contenido %}
+
+    <h2>Iniciar Sesion</h2> <br>
+
+    <form id='formulario' method='post' action=''> {% csrf_token %}
+        {{ error_log }}
+        {{ formulario |bootstrap }}
+    <input type='submit' class="btn btn-primary" value='Iniciar' />
+    </form>
+
+{% endblock %}

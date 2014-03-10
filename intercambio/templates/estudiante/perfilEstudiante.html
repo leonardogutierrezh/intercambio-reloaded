@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block js %}
+
+<script type="text/javascript">
+    function cambiarContrasena(){
+        if (document.getElementById('id_cambiarContra').checked) {
+            document.getElementById('id_contrasena1').disabled = false;
+            document.getElementById('id_contrasena2').disabled = false;
+        } else {
+            document.getElementById('id_contrasena1').disabled = true;
+            document.getElementById('id_contrasena2').disabled = true;
+        }
+
+    }
+</script>
+
+{% endblock %}
+
+{% block seccion-contenido %}
+
+    <h2>Perfil</h2> <br>
+
+    {% if user.first_name == "estudianteUSB" %}
+        <form id='formulario' method='post' action=''> {% csrf_token %}
+           {{ UsuarioRepetido }}
+           {{formulario.username|bootstrap }}
+           {{ formulario.cambiarContra|bootstrap}}
+           {{ ContrasenaDist }}
+           {{formulario.contrasena1|bootstrap }}
+           {{formulario.contrasena2|bootstrap }}
+           {{formulario.nombre1|bootstrap }}
+           {{formulario.nombre2|bootstrap }}
+           {{formulario.apellido1|bootstrap }}
+           {{formulario.apellido2|bootstrap }}
+           {{formulario.email|bootstrap }}
+           {{formulario.carnet|bootstrap }}
+
+        <input type='submit' class="btn btn-primary" value='Guardar' />
+        </form>
+    {% endif %}
+
+    {% if user.first_name == "estudianteExt" %}
+        <form id='formulario' method='post' action=''> {% csrf_token %}
+           {{ UsuarioRepetido }}
+           {{formulario.username|bootstrap }}
+           {{ formulario.cambiarContra|bootstrap}}
+           {{ ContrasenaDist }}
+           {{formulario.contrasena1|bootstrap }}
+           {{formulario.contrasena2|bootstrap }}
+           {{formulario.nombre1|bootstrap }}
+           {{formulario.nombre2|bootstrap }}
+           {{formulario.apellido1|bootstrap }}
+           {{formulario.apellido2|bootstrap }}
+           {{formulario.email|bootstrap }}
+           {{formulario.pasaporte|bootstrap }}
+
+        <input type='submit' class="btn btn-primary" value='Guardar' />
+        </form>
+    {% endif %}
+
+{% endblock %}

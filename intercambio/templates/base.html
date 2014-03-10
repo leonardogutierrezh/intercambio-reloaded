@@ -36,45 +36,96 @@
 
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
-                {% if usuario == 'ninguno' %}
                 <ul class="nav" id="side-menu">
+                {% if not user.is_authenticated %}
                     <li>
                         <a href="#">Entrar</a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#">Iniciar Sesion</a>
+                                <a href="/iniciarSesion">Iniciar Sesion</a>
                             </li>
                             <li>
                                 <a href="#">Registrarse</a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="/registrarEstudianteUSB">Estudiante USB</a>
+                                        </li>
+                                        <li>
+                                            <a href="/registrarEstudianteExt">Estudiante extranjero</a>
+                                        </li>
+                                    </ul>
                             </li>
                         </ul>
-                        <!-- /.nav-second-level -->
                     </li>
-                 </ul>
-                {% elif usuario == 'admin' %}
-                <ul class="nav" id="side-menu">
                     <li>
-                        <a href="#">Gestion de usuarios</a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="/administrador_crear_cuenta">Agregar usuario</a>
-                            </li>
-                            <li>
-                                <a href="/administrador_listar_usuarios/0">Consultar usuarios</a>
-                            </li>
-                        </ul>
+                        <a href="/recaudosExt">Recaudo de Estudiantes Internacionales</a>
+                    </li>
+                    <li>
+                        <a href="/recaudosNac">Recaudo de Estudiantes Nacionales</a>
+                    </li>
+                    <li>
+                        <a href="/recaudosAdic">Recaudos Adicionales</a>
+                    </li>                        <li>
+                        <a href="/#">Contacto</a>
+                    </li>
+                {% endif %}
 
-                    </li>
-                    <li>
-                         <a href="#">Ver/Modificar perfil</a>
-                    </li>
-                    <li><a href="#">Gestion de anuncions</a></li>
-                    <li><a href="#">Log de auditoria</a></li>
-                    <li><a href="/cerrar_sesion">Cerrar sesion</a></li>
-                 </ul>
-                 {% elif usuario == 'estudiante' %}
-                 {% elif usuario == 'decanato' %}
-                 {% elif usuario == 'coordinacion' %}
+                {% if user.is_authenticated %}
+                    {% if  user.first_name == 'admin' %}
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="#">Gestion de usuarios</a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/administrador_crear_cuenta">Agregar usuario</a>
+                                </li>
+                                <li>
+                                    <a href="/administrador_listar_usuarios/0">Consultar usuarios</a>
+                                </li>
+                            </ul>
+
+                        </li>
+                        <li>
+                             <a href="#">Ver/Modificar perfil</a>
+                        </li>
+                        <li><a href="#">Gestion de anuncions</a></li>
+                        <li><a href="#">Log de auditoria</a></li>
+                        <li><a href="/cerrar_sesion">Cerrar sesion</a></li>
+                     </ul>
+                     {% elif user.first_name == 'estudianteUSB' or user.first_name == 'estudianteExt' %}
+                         <li>
+                                <a href="#">Gestion de solicitudes</a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="#">Postularse</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Modificar Postulacion</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Descargar Planilla</a>
+                                        </li>
+                                        <li>
+                                            <a href="/estadoPostulacion">Ver estado solicitud</a>
+                                        </li>
+                                    </ul>
+                            </li>
+                            {% if user.first_name == 'estudianteUSB' %}
+                                <li>
+                                    <a href="/perfilEstudianteUSB">Ver/Modificar perfil</a>
+                                </li>
+                            {% elif user.first_name == 'estudianteExt' %}
+                                 <li>
+                                        <a href="/perfilEstudianteExt">Ver/Modificar perfil</a>
+                                </li>
+                            {% endif %}
+                        <li>
+                                <a href="/cerrar_sesion">Cerrar sesion</a>
+                        </li>
+
+                     {% elif user.first_name == 'decanato' %}
+                     {% elif user.first_name == 'coordinacion' %}
+                    {% endif %}
                 {% endif %}
                 <!-- /#side-menu -->
             </div>

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block seccion-contenido %}
+
+    <h2>Registro de estudiantes extranjeros</h2> <br>
+
+    <form id='formulario' method='post' action=''> {% csrf_token %}
+       {{ UsuarioRepetido }}
+       {{formulario.username|bootstrap }}
+       {{ ContrasenaDist }}
+       {{formulario.contrasena1|bootstrap }}
+       {{formulario.contrasena2|bootstrap }}
+       {{formulario.nombre1|bootstrap }}
+       {{formulario.nombre2|bootstrap }}
+       {{formulario.apellido1|bootstrap }}
+       {{formulario.apellido2|bootstrap }}
+       {{formulario.email|bootstrap }}
+       {{formulario.pasaporte|bootstrap }}
+
+    <input type='submit' class="btn btn-primary" value='Guardar' />
+    </form>
+
+{% endblock %}

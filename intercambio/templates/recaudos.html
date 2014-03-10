@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block seccion-contenido %}
+
+    {% if parrafo == "recaudosExt" %}
+        <h2>Recaudos que deben Presentar los Estudiantes Internacionales para su Postulación</h2> <br>
+
+        <p>
+            - Formulario de postulación al Programa de Intercambio de
+            Estudiantes de la USB para estudiantes internacionales
+            firmado y sellado por la Oficina de Relaciones Internacionales
+            de la universidad de origen.
+        </p>
+
+        <p>
+            - Fotocopia del Pasaporte.
+        </p>
+
+        <p>
+            - Informe académico actualizado (Transcript Record) firmado y
+            sellado por la Oficina de Relaciones Internacionales de la
+            universidad de origen.
+        </p>
+
+        <p>
+            - Curriculum Vitae.
+        </p>
+
+        <p>
+            - Carta de recomendación de un profesor de la universidad de origen.
+        </p>
+    {% endif %}
+
+    {% if parrafo == 'recaudosNac' %}
+        <h2>Recaudos que deben Presentar los Estudiantes Nacionales para su Postulación</h2> <br>
+
+        <p>
+            - Formulario de postulación al Programa de Intercambio
+            de Estudiantes de la USB para estudiantes nacionales
+            firmado y sellado por la DRIC.
+        </p>
+
+        <p>
+            - Fotocopia de la Cédula de Identidad.
+        </p>
+
+        <p>
+            - Informe académico actualizado (Transcript Record).
+        </p>
+
+        <p>
+            - Curriculum Vitae.
+        </p>
+
+        <p>
+            - Carta de motivación para los estudios en el exterior.
+        </p>
+
+        <p>
+            - Fotocopia del Carnet.
+        </p>
+    {% endif %}
+
+    {% if parrafo == 'recaudosAdic' %}
+        <h2>Requisitos Adicionales:</h2> <br>
+
+        <p>Programa SMILE</p>
+
+        <p>
+            - Student Application-Form.
+        </p>
+        <p>
+            - Student Learning Agreement.
+        </p>
+
+
+        <p>Programa de Movilidad Estudiantil CINDA:</p>
+
+        <p>
+           - Ficha de Solicitud de Participación.
+        </p>
+        <p>
+            - Ficha de Reconocimiento.
+        </p>
+
+    {% endif %}
+{% endblock %}

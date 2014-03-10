@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block seccion-contenido %}
+
+    <h2>Estado de Postulacion</h2> <br>
+
+    <p>Hola {{ estudiante.nombre1 }} {{ estudiante.apellido1 }}</p>
+    <p>El estado actual de su postulación es: {{ estudiante.estadoPostulacion }} </p>
+{% endblock %}
