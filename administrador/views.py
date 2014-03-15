@@ -140,10 +140,18 @@ def crear_cuenta(request):
                                                                   'seleccionado': seleccionado,
                                                                   'error': error}, context_instance=RequestContext(request))
 
+@login_required(login_url='/')
 def listar_usuarios(request, creado):
     lista_usuarios = []
     usuarios = User.objects.filter(is_staff=False)
     return render_to_response('administrador/listar_usuarios.html', {'usuarios': usuarios, 'creado': creado}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def ver_usuario(request, id_usuario):
+    print id_usuario
+    usuario = User.objects.get(id=id_usuario)
+    print usuario
+    return render_to_response('administrador/ver_usuario.html', {'usuario':usuario}, context_instance=RequestContext(request))
 
 def editar_perfil(request):
  return True

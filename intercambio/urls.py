@@ -28,5 +28,6 @@ urlpatterns = patterns('',
     url(r'^estadoPostulacion', 'estudiante.views.estadoPostulacion'),
     url(r'^perfilEstudianteUSB', 'estudiante.views.perfilEstudianteUSB'),
     url(r'^perfilEstudianteExt', 'estudiante.views.perfilEstudianteExt'),
+    url(r'^ver_usuario/(?P<id_usuario>\d+)/$','administrador.views.ver_usuario' ),
 
 )

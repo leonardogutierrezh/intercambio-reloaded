@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% block seccion-contenido %}
+    <div class="row">
+        <div class="col-sm-3">
+            Usuario:<br> {{ usuario.username }}
+        </div>
+        <div class="col-sm-3">
+            Nombre:<br> Poner Nombre
+        </div>
+        <div class="col-sm-3">
+            Email:<br> {{ usuario.email }}
+        </div>
+        <div class="col-sm-3">
+            Privilegio:<br> {{ usuario.first_name }}
+        </div>
+    </div>
+
+{% endblock %}
