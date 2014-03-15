@@ -24,6 +24,8 @@ class Carrera(models.Model):
     decanato = models.CharField(max_length=100, null=True)
     areaDeEstudio = models.CharField(max_length=100, null=True)
     universidad = models.ForeignKey(Universidad)
+    def __unicode__(self):
+        return self.nombre
 
 class Postulante(models.Model):
     username = models.CharField(max_length=100)

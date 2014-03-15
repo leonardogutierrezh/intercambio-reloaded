@@ -27,7 +27,7 @@ def crear_cuenta(request):
     if request.method == 'POST':
         seleccionado = request.POST.get('opcion')
         formulario = NuevoUsuarioForm()
-        if seleccionado == "gestor" or seleccionado == "dric":
+        if seleccionado == "decanato" or seleccionado == "dric":
             formulario = NuevoUsuarioForm(request.POST)
             formularioUsuario = formulario
         elif seleccionado == "coordinacion":

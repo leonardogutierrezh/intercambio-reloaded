@@ -11,24 +11,24 @@ class NuevoUsuarioForm(forms.Form):
 
 class NuevaCoordinacionForm(forms.Form):
     nombre_usuarioCoordinacion = forms.CharField(label='Nombre de usuario')
-    emailCoordinacion = forms.EmailField()
+    emailCoordinacion = forms.EmailField(label='Email')
     carreraCoordinacion = forms.ModelChoiceField(queryset= Carrera.objects.filter(universidad__nombre = 'Universidad Simon Bolivar'))
 
 class NuevaUniversidadExtrangeraForm(forms.Form):
     nombre_usuarioExtranjera = forms.CharField(label='Nombre de usuario')
-    emailExtranjera = forms.EmailField()
+    emailExtranjera = forms.EmailField(label='Email')
     nombreExtranjera = forms.CharField(label='Nombre de la universidad')
 
 class NuevoEstudianteForm(forms.Form):
     nombre_usuarioEstudiante = forms.CharField(label='Nombre de usuario')
-    emailEstudiante = forms.EmailField()
+    emailEstudiante = forms.EmailField(label='Email')
     nombreEstudiante = forms.CharField(label='Primer nombre')
     apellidoEstudiante = forms.CharField(label='Primer apellido')
     carreraEstudiante = forms.ModelChoiceField(queryset= Carrera.objects.filter(universidad__nombre = 'Universidad Simon Bolivar'))
 
 class NuevoEstudianteExtranjeroForm(forms.Form):
     nombre_usuarioExtranjero = forms.CharField(label='Nombre de usuario')
-    emailExtranjero = forms.EmailField()
+    emailExtranjero = forms.EmailField(label='Pmail')
     nombreExtranjero = forms.CharField(label='Primer nombre')
     apellidoExtranjero = forms.CharField(label='Primer apellido')
-    pasaporteExtranjero = forms.CharField()
+    pasaporteExtranjero = forms.CharField(label='Pasaporte')
