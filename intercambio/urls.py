@@ -30,7 +30,6 @@ urlpatterns = patterns('',
     url(r'^perfilEstudianteUSB', 'estudiante.views.perfilEstudianteUSB'),
     url(r'^perfilEstudianteExt', 'estudiante.views.perfilEstudianteExt'),
     url(r'^ver_usuario/(?P<id_usuario>\d+)/$','administrador.views.ver_usuario' ),
-    #url(r'^recuperarContrasena', 'administrador.views.recuperarContrasena'),
-
-
+    url(r'^postularse', 'estudiante.views.postularse'),
+    url(r'^formularioUNO', 'estudiante.views.formularioUNO'),
 )

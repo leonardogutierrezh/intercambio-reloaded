@@ -232,3 +232,42 @@ def perfilEstudianteExt(request):
         formulario = EstudianteExt_Edit_Form(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,'apellido2':estudiante.apellido2,
                                                 'email':user.email,'pasaporte':estudiante.pasaporte,'username':user.username})
     return render_to_response('estudiante/perfilEstudiante.html', {'formulario':formulario},context_instance=RequestContext(request))
+
+def postularse(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if estudiante.estadoPostulacion != "Sin postular":
+        yaPostulado = True
+    else:
+        yaPostulado = False
+    return render_to_response('estudiante/postularse.html',{'yaPostulado':yaPostulado},context_instance=RequestContext(request))
+
+def formularioUNO(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if request.method == 'POST':
+        if estudiante.estudUsb:
+            formulario = formularioUNO_formUSB(request.POST)
+            if formulario.is_valid():
+                genero = formulario.cleaned_data['genero']
+                nacionalidad = formulario.cleaned_data['nacionalidad']
+                cedula = formulario.cleaned_data['cedula']
+                estudiante.nacionalidad = nacionalidad
+                estudiante.cedula = cedula
+                estudiante.sexo = genero
+                estudiante.save()
+        else:
+            formulario = formularioUNO_formExt(request.POST)
+            if formulario.is_valid():
+                genero = formulario.cleaned_data['genero']
+                nacionalidad = formulario.cleaned_data['nacionalidad']
+                estudiante.nacionalidad = nacionalidad
+                estudiante.sexo = genero
+                estudiante.save()
+
+    else:
+        if estudiante.estudUsb:
+            formulario = formularioUNO_formUSB(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,
+                                                        'apellido2':estudiante.apellido2,'carnet':estudiante.carnet})
+        else:
+            formulario = formularioUNO_formExt(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,
+                                                        'apellido2':estudiante.apellido2,'pasaporte':estudiante.pasaporte})
+    return render_to_response('estudiante/formularioUNO.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))

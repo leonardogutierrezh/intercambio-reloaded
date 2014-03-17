@@ -70,7 +70,7 @@ class Estudiante(models.Model):
     cursoEspanol = models.CharField(max_length=100, null=True)
     antecedente = models.ForeignKey(AntecedenteAcad, null=True)
     planDeEstudio = models.ForeignKey(PlanDeEstudio, null=True)
-    estadoPostulacion = models.CharField(max_length=100, default ='Sin Postular')
+    estadoPostulacion = models.CharField(max_length=100, default ='Sin postular')
     representante = models.ForeignKey(Representante, null=True)
     idiomas = models.ManyToManyField(Idiomas, null=True)
     def __unicode__(self):
