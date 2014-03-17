@@ -192,3 +192,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
   "django.contrib.messages.context_processors.messages",
   "intercambio.context_processors.autentificar",
 )
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'intercambios.usb@gmail.com'
+EMAIL_HOST_PASSWORD = 'sgiDRICUSB'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

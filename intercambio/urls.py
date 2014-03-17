@@ -14,7 +14,8 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'administrador.views.inicio'),
+    #url(r'^$', 'administrador.views.inicio'),
+    url(r'^$', 'estudiante.views.iniciarSesion'),
     url(r'^administrador_crear_cuenta$', 'administrador.views.crear_cuenta'),
     url(r'^cerrar_sesion$', 'administrador.views.cerrar_sesion'),
     url(r'^administrador_listar_usuarios/(?P<creado>\d+)/$', 'administrador.views.listar_usuarios'),
@@ -29,5 +30,7 @@ urlpatterns = patterns('',
     url(r'^perfilEstudianteUSB', 'estudiante.views.perfilEstudianteUSB'),
     url(r'^perfilEstudianteExt', 'estudiante.views.perfilEstudianteExt'),
     url(r'^ver_usuario/(?P<id_usuario>\d+)/$','administrador.views.ver_usuario' ),
+    #url(r'^recuperarContrasena', 'administrador.views.recuperarContrasena'),
+
 
 )

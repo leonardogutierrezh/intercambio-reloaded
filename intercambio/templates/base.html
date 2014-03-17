@@ -71,8 +71,9 @@
                 {% endif %}
 
                 {% if user.is_authenticated %}
-                    {% if  user.first_name == 'admin' %}
                     <ul class="nav" id="side-menu">
+                      {% if  user.first_name == 'admin' %}
+                        <h3 style="text-align: center">Administrador</h3>
                         <li>
                             <a href="#">Gestion de usuarios</a>
                             <ul class="nav nav-second-level">
@@ -93,6 +94,7 @@
                         <li><a href="/cerrar_sesion">Cerrar sesion</a></li>
                      </ul>
                      {% elif user.first_name == 'estudianteUSB' or user.first_name == 'estudianteExt' %}
+                         <h3 style="text-align: center">Estudiante</h3>
                          <li>
                                 <a href="#">Gestion de solicitudes</a>
                                     <ul class="nav nav-second-level">
@@ -124,7 +126,9 @@
                         </li>
 
                      {% elif user.first_name == 'decanato' %}
+                        <h3 style="text-align: center">Decanato</h3>
                      {% elif user.first_name == 'coordinacion' %}
+                        <h3 style="text-align: center">Coordinacion</h3>
                     {% endif %}
                 {% endif %}
                 <!-- /#side-menu -->

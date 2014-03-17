@@ -10,6 +10,8 @@ from estudiante.models import *
 from estudiante.forms import *
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMessage, EmailMultiAlternatives
+import os, random, string
 
 def registrarEstudianteUSB(request):
     if request.method == 'POST':
@@ -83,20 +85,52 @@ def registrarEstudianteExt(request):
 
 def iniciarSesion(request):
     if request.method == 'POST':
-        formulario = AuthenticationForm(request.POST)
-        if formulario.is_valid:
+        if 'iniciar' in request.POST:
+            formulario = AuthenticationForm(request.POST)
+            if formulario.is_valid:
+                usuario = request.POST['username']
+                clave = request.POST['password']
+                acceso = authenticate(username=usuario, password=clave)
+                if acceso is not None:
+                    login(request,acceso)
+                    #return HttpResponseRedirect('/index')
+                    print 'hice login'
+                    return render_to_response('index.html', context_instance=RequestContext(request))
+                else:
+                    formulario = AuthenticationForm()
+                    error_log = "Nombre de usuario o contrasena incorrectos **"
+                    return render_to_response('iniciarSesion.html',{'formulario':formulario,'error_log':error_log}, context_instance=RequestContext(request))
+        if 'recuperar' in request.POST:
+            formulario = AuthenticationForm(request.POST)
             usuario = request.POST['username']
-            clave = request.POST['password']
-            acceso = authenticate(username=usuario, password=clave)
-            if acceso is not None:
-                login(request,acceso)
-                #return HttpResponseRedirect('/index')
-                print 'hice login'
-                return render_to_response('index.html', context_instance=RequestContext(request))
-            else:
-                formulario = AuthenticationForm()
-                error_log = "Nombre de usuario o contrasena incorrectos **"
-                return render_to_response('iniciarSesion.html',{'formulario':formulario,'error_log':error_log}, context_instance=RequestContext(request))
+            try:
+                user = User.objects.get(username=usuario)
+            except:
+                mensajeRecuperar = "Nombre de usuario no existe. Trate de nuevo"
+                return render_to_response('iniciarSesion.html', {'formulario':formulario,'mensajeRecuperar':mensajeRecuperar}, context_instance=RequestContext(request))
+            length = 13
+            chars = string.ascii_letters + string.digits + '!@#$%^&*()'
+            random.seed = (os.urandom(1024))
+            password = ''.join(random.choice(chars) for i in range(length))
+
+            titulo = 'Recuperacion contrasena Sistema Intercambio'
+            contenido = "Buenos dias, \n"
+            contenido += "La nueva contrasena para su usuario: " + user.username + "\n"
+            contenido += "es: " + password
+            correo = EmailMessage(titulo, contenido, to=['andelnunez@gmail.com'])
+            try:
+                correo.send()
+                mensaje = "Email enviado"
+                mensajeCorreo = "Se le ha enviado un correo con su nueva contrasena"
+                user.set_password(password)
+                user.save()
+                return render_to_response('iniciarSesion.html', {'formulario':formulario,'mensajeCorreo':mensajeCorreo}, context_instance=RequestContext(request))
+            except:
+                mensaje= 'Error enviando email'
+                mensajeErrorCorreo = "Ha ocurrido un error. Favor intente de nuevo"
+                return render_to_response('iniciarSesion.html', {'formulario':formulario,'mensajeErrorCorreo':mensajeErrorCorreo}, context_instance=RequestContext(request))
+
+
     else:
         formulario = AuthenticationForm()
     return render_to_response('iniciarSesion.html', {'formulario':formulario}, context_instance=RequestContext(request))
