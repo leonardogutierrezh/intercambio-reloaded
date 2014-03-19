@@ -12,7 +12,7 @@ class NuevoUsuarioForm(forms.Form):
 class NuevaCoordinacionForm(forms.Form):
     nombre_usuarioCoordinacion = forms.CharField(label='Nombre de usuario')
     emailCoordinacion = forms.EmailField(label='Email')
-    carreraCoordinacion = forms.ModelChoiceField(queryset= Carrera.objects.filter(universidad__nombre = 'Universidad Simon Bolivar'), label="Carrera")
+    carreraCoordinacion = forms.ModelChoiceField(queryset= CarreraUsb.objects.all(), label="Carrera")
 
 class NuevaUniversidadExtrangeraForm(forms.Form):
     nombre_usuarioExtranjera = forms.CharField(label='Nombre de usuario')
