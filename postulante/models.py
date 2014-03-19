@@ -25,6 +25,14 @@ class Carrera(models.Model):
     def __unicode__(self):
         return self.nombre
 
+class CarreraUsb(models.Model):
+    nombre = models.CharField(max_length=100)
+    codigo = models.CharField(max_length=100)
+    decanato = models.CharField(max_length=100, null=True)
+    areaDeEstudio = models.CharField(max_length=100, null=True)
+    def __unicode__(self):
+        return self.nombre
+
 from estudiante.models import Estudiante
 
 class Postulante(models.Model):
