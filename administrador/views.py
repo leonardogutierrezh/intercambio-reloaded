@@ -77,6 +77,7 @@ def crear_cuenta(request):
                 nombre = formulario.cleaned_data['nombreEstudiante']
                 apellido = formulario.cleaned_data['apellidoEstudiante']
                 carrera = formulario.cleaned_data['carreraEstudiante']
+                carnet = formulario.cleaned_data['carnet']
                 length = 13
                 chars = string.ascii_letters + string.digits + '!@#$%^&*()'
                 random.seed = (os.urandom(1024))
@@ -84,6 +85,8 @@ def crear_cuenta(request):
                 try:
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
+                    estudiante = Estudiante.objects.create(user=user, nombre1=nombre,
+                                                           nombre2="", apellido1=apellido, carnet=carnet, carrera=carrera)
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
                     error=1

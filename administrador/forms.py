@@ -12,7 +12,7 @@ class NuevoUsuarioForm(forms.Form):
 class NuevaCoordinacionForm(forms.Form):
     nombre_usuarioCoordinacion = forms.CharField(label='Nombre de usuario')
     emailCoordinacion = forms.EmailField(label='Email')
-    carreraCoordinacion = forms.ModelChoiceField(queryset= Carrera.objects.filter(universidad__nombre = 'Universidad Simon Bolivar'))
+    carreraCoordinacion = forms.ModelChoiceField(queryset= Carrera.objects.filter(universidad__nombre = 'Universidad Simon Bolivar'), label="Carrera")
 
 class NuevaUniversidadExtrangeraForm(forms.Form):
     nombre_usuarioExtranjera = forms.CharField(label='Nombre de usuario')
@@ -24,7 +24,8 @@ class NuevoEstudianteForm(forms.Form):
     emailEstudiante = forms.EmailField(label='Email')
     nombreEstudiante = forms.CharField(label='Primer nombre')
     apellidoEstudiante = forms.CharField(label='Primer apellido')
-    carreraEstudiante = forms.ModelChoiceField(queryset= Carrera.objects.filter(universidad__nombre = 'Universidad Simon Bolivar'))
+    carnet = forms.CharField(label='Carnet')
+    carreraEstudiante = forms.ModelChoiceField(queryset= Carrera.objects.filter(universidad__nombre = 'Universidad Simon Bolivar'), label="Carrera")
 
 class NuevoEstudianteExtranjeroForm(forms.Form):
     nombre_usuarioExtranjero = forms.CharField(label='Nombre de usuario')
