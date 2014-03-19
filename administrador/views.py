@@ -59,7 +59,7 @@ def crear_cuenta(request):
                     user.save()
                     gestor = Gestor.objects.create(usuario=user, nombre=nombre)
                     gestor.save()
-                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+
                 except:
                     error=1
             elif seleccionado == "coordinacion":
@@ -75,7 +75,7 @@ def crear_cuenta(request):
                     user.save()
                     coordinacion = Postulante.objects.create(usuario=user, tipo="coordinacion", carrera=carrera)
                     coordinacion.save()
-                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+
                 except:
                     error=1
             elif seleccionado == "estudiante":
@@ -95,7 +95,7 @@ def crear_cuenta(request):
                     estudiante = Estudiante.objects.create(user=user, nombre1=nombre,
                                                            nombre2="", apellido1=apellido, apellido2="", carnet=carnet, carrera_usb=carrera, estudUsb=True, email=email)
                     estudiante.save()
-                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+
                 except:
                     error=1
             elif seleccionado == "extranjero":
@@ -113,7 +113,7 @@ def crear_cuenta(request):
                     user.save()
                     extranjero = Estudiante.objects.create(user=user, nombre1=nombre, nombre2="", apellido1=apellido, apellido2="", email=email, pasaporte=pasaporte)
                     extranjero.save()
-                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+
                 except:
                     error=1
             elif seleccionado == "universidad":
@@ -128,7 +128,7 @@ def crear_cuenta(request):
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
                     postulante = Postulante.objects.create(usuario=user, tipo="uniextranjera")
-                    return  HttpResponseRedirect("/administrador_listar_usuarios/1")
+
                 except:
                     error=1
             asunto = "Sistema de Gestion de Intercambio"
@@ -140,7 +140,7 @@ def crear_cuenta(request):
             try:
                 print "enviando"
                 correo.send()
-                return HttpResponseRedirect('/exitocorreo')
+                return HttpResponseRedirect('/administrador_listar_usuarios/1')
             except:
                 mensaje="error al enviar el mensaje"
 
@@ -162,10 +162,19 @@ def listar_usuarios(request, creado):
 
 @login_required(login_url='/')
 def ver_usuario(request, id_usuario):
-    print id_usuario
+    perfil = ""
     usuario = User.objects.get(id=id_usuario)
-    print usuario
-    return render_to_response('administrador/ver_usuario.html', {'usuario':usuario}, context_instance=RequestContext(request))
+    print usuario.first_name
+
+    if usuario.first_name == "decanato" or usuario.first_name == "dric":
+        perfil = Gestor.objects.get(usuario=usuario)
+    elif usuario.first_name == "coordinacion":
+        perfil = Postulante.objects.get(usuario=usuario)
+    elif usuario.first_name == "estudiante" or usuario.first_name == "extranjero":
+        perfil = Estudiante.objects.get(user=usuario)
+    elif usuario.first_name == "universidad":
+        pass
+    return render_to_response('administrador/ver_usuario.html', {'usuario':usuario, 'perfil': perfil}, context_instance=RequestContext(request))
 
 def editar_perfil(request):
  return True

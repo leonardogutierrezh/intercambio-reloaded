@@ -39,7 +39,7 @@ class Postulante(models.Model):
     usuario = models.ForeignKey(User)
     tipo = models.CharField(max_length=100)
     universidad = models.ForeignKey(Universidad, null=True, blank=True)
-    carrera = models.ForeignKey(Carrera, null=True, blank=True)
+    carrera = models.ForeignKey(CarreraUsb, null=True, blank=True)
 
 class Postulacion(models.Model):
     username = models.ForeignKey(Estudiante)

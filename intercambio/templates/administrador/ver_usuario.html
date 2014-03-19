@@ -6,7 +6,15 @@
             Usuario:<br> {{ usuario.username }}
         </div>
         <div class="col-sm-3">
-            Nombre:<br> Poner Nombre
+            Nombre:<br>{% if usuario.first_name == "decanato" or usuario.first_name == "dric" %}
+                            {{ perfil.nombre }}
+                        {% elif usuario.first_name == "coordinacion" %}
+                            {{ perfil.carrera }}
+                        {% elif usuario.first_name == "estudiante" or usuario.first_name == "extranjero" %}
+                            {{ perfil.nombre1 }} {{ perfil.apellido1 }}
+                        {% elif usuario.first_name == "universidad" %}
+                            nada aun
+                        {% endif %}
         </div>
         <div class="col-sm-3">
             Email:<br> {{ usuario.email }}
