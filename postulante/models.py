@@ -16,8 +16,6 @@ class PlanDeEstudio(models.Model):
     nombreMateriaUniv = models.CharField(max_length=100)
     creditosUniv = models.IntegerField()
 
-from estudiante.models import Estudiante
-
 class Carrera(models.Model):
     nombre = models.CharField(max_length=100)
     codigo = models.CharField(max_length=100)
@@ -26,6 +24,8 @@ class Carrera(models.Model):
     universidad = models.ForeignKey(Universidad)
     def __unicode__(self):
         return self.nombre
+
+from estudiante.models import Estudiante
 
 class Postulante(models.Model):
     username = models.CharField(max_length=100)
