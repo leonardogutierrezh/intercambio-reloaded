@@ -47,7 +47,7 @@ class Estudiante(models.Model):
 
     fechaCreacion = models.DateField(auto_now=True)
     origen = models.CharField(max_length=100, null=True)
-    carrera = models.ForeignKey(Carrera)
+    #carrera = models.ForeignKey(Carrera)
     sexo = models.CharField(max_length=100, null=True)
     urbanizacion = models.CharField(max_length=100, null=True)
     calle = models.CharField(max_length=100, null=True)
