@@ -5,8 +5,8 @@ from django.contrib import admin
 from administrador.models import *
 
 class Gestor(models.Model):
-    username = models.CharField(max_length=100)
-    contrasena = models.CharField(max_length=100)
+    usuario = models.ForeignKey(User)
+    nombre = models.CharField(max_length=100)
 
 class Noticas(models.Model):
     gestor = models.ForeignKey(Gestor)

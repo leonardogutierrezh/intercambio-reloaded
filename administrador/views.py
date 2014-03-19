@@ -9,7 +9,10 @@ from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from administrador.models import *
+from estudiante.models import *
 from administrador.forms import *
+from gestor.models import *
+from postulante.models import *
 import os, random, string
 import datetime
 # Create your views here.
@@ -54,6 +57,8 @@ def crear_cuenta(request):
                 try:
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
+                    gestor = Gestor.objects.create(usuario=user, nombre=nombre)
+                    gestor.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
                     error=1
@@ -68,6 +73,8 @@ def crear_cuenta(request):
                 try:
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
+                    coordinacion = Postulante.objects.create(usuario=user, tipo="coordinacion", carrera=carrera)
+                    coordinacion.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
                     error=1
@@ -86,7 +93,8 @@ def crear_cuenta(request):
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
                     estudiante = Estudiante.objects.create(user=user, nombre1=nombre,
-                                                           nombre2="", apellido1=apellido, carnet=carnet, carrera=carrera)
+                                                           nombre2="", apellido1=apellido, apellido2="", carnet=carnet, carrera_usb=carrera, estudUsb=True, email=email)
+                    estudiante.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
                     error=1
@@ -103,6 +111,8 @@ def crear_cuenta(request):
                 try:
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
+                    extranjero = Estudiante.objects.create(user=user, nombre1=nombre, nombre2="", apellido1=apellido, apellido2="", email=email, pasaporte=pasaporte)
+                    extranjero.save()
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
                     error=1
@@ -117,13 +127,14 @@ def crear_cuenta(request):
                 try:
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
+                    postulante = Postulante.objects.create(usuario=user, tipo="uniextranjera")
                     return  HttpResponseRedirect("/administrador_listar_usuarios/1")
                 except:
                     error=1
             asunto = "Sistema de Gestion de Intercambio"
             mensaje = "Hola se ha creado a tu nombre una cuenta para utilizar el sistema de gestion de intercambios de la universidad simon bolivar. \n"
-            mensaje =+ "tu usuario es:" + user.username + "\n"
-            mensaje =+ "tu clave es" + password + "\n"
+            mensaje = mensaje + "tu usuario es:" + user.username + "\n"
+            mensaje = mensaje + "tu clave es" + password + "\n"
             #correo = EmailMessage(asunto, mensaje, to=['contacto@asuntopais.com'])
             correo = EmailMessage(asunto, mensaje, to=[user.email])
             try:

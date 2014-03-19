@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from django.db import models
 from administrador.models import *
-from postulante.models import Universidad, Carrera
+from postulante.models import Universidad, Carrera, CarreraUsb
 
 class NuevoUsuarioForm(forms.Form):
     nombre_usuario = forms.CharField(label='Nombre de usuario')
@@ -25,11 +25,11 @@ class NuevoEstudianteForm(forms.Form):
     nombreEstudiante = forms.CharField(label='Primer nombre')
     apellidoEstudiante = forms.CharField(label='Primer apellido')
     carnet = forms.CharField(label='Carnet')
-    carreraEstudiante = forms.ModelChoiceField(queryset= Carrera.objects.filter(universidad__nombre = 'Universidad Simon Bolivar'), label="Carrera")
+    carreraEstudiante = forms.ModelChoiceField(queryset= CarreraUsb.objects.all(), label="Carrera")
 
 class NuevoEstudianteExtranjeroForm(forms.Form):
     nombre_usuarioExtranjero = forms.CharField(label='Nombre de usuario')
-    emailExtranjero = forms.EmailField(label='Pmail')
+    emailExtranjero = forms.EmailField(label='Email')
     nombreExtranjero = forms.CharField(label='Primer nombre')
     apellidoExtranjero = forms.CharField(label='Primer apellido')
     pasaporteExtranjero = forms.CharField(label='Pasaporte')
