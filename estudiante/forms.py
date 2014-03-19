@@ -59,24 +59,62 @@ class formularioUNO_formUSB(forms.Form):
         ('femenino', 'Femenino'),
         ('masculino', 'Masculino'),
     )
-    nombre1 = forms.CharField(max_length=50, label="Primer nombre" ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
-    nombre2 = forms.CharField(max_length=50, label="Segundo nombre", required=False ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
-    apellido1 = forms.CharField(max_length=50, label="Primer apellido" ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
-    apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
+    nombre1 = forms.CharField(max_length=50, label="Primer nombre", required=False)
+    nombre2 = forms.CharField(max_length=50, label="Segundo nombre", required=False)
+    apellido1 = forms.CharField(max_length=50, label="Primer apellido" , required=False)
+    apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False)
     genero = forms.ChoiceField(choices=genero_choices)
     nacionalidad = forms.CharField(max_length=50)
     cedula = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}))
-    carnet = forms.CharField(max_length=8 ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
+    carnet = forms.CharField(max_length=8 , required=False)
 
 class formularioUNO_formExt(forms.Form):
     genero_choices = (
         ('femenino', 'Femenino'),
         ('masculino', 'Masculino'),
     )
-    nombre1 = forms.CharField(max_length=50, label="Primer nombre" ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
-    nombre2 = forms.CharField(max_length=50, label="Segundo nombre", required=False ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
-    apellido1 = forms.CharField(max_length=50, label="Primer apellido" ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
-    apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False ,widget=forms.TextInput(attrs={'disabled':'disabled'}))
+    nombre1 = forms.CharField(max_length=50, label="Primer nombre" , required=False)
+    nombre2 = forms.CharField(max_length=50, label="Segundo nombre", required=False )
+    apellido1 = forms.CharField(max_length=50, label="Primer apellido" , required=False)
+    apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False)
     genero = forms.ChoiceField(choices=genero_choices)
     nacionalidad = forms.CharField(max_length=50)
-    pasaporte = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'disabled':'disabled'}))
+    pasaporte = forms.CharField(max_length=50, required=False)
+
+class formularioDOS_form(forms.Form):
+    calle = forms.CharField(max_length=50)
+    edificio  = forms.CharField(max_length=50)
+    apartamento = forms.CharField(max_length=50, label="Apartamento/Nro Casa")
+    codigo_postal = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}))
+
+class formularioTRES_form(forms.Form):
+    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono celular")
+    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono casa")
+    email = forms.EmailField()
+
+class formularioCUATRO_formUSB(forms.Form):
+    programa_choices = (
+        ('bilaterales', 'Convenios bilaterales'),
+    )
+    programa= forms.ChoiceField(choices=programa_choices)
+
+class formularioCUATRO_formExt(forms.Form):
+    programa_choices = (
+        ('bilaterales', 'Convenios bilaterales'),
+    )
+    programa= forms.ChoiceField(choices=programa_choices)
+
+class formularioCINCO_formUSB(forms.Form):
+    indice = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Indice academico")
+
+class formularioCINCO_formExt(forms.Form):
+    anoIngreso = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Ano ingreso a la carrera")
+
+class formularioSEIS_form(forms.Form):
+    apellidos = forms.CharField(max_length=50)
+    nombres = forms.CharField(max_length=50)
+    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono celular")
+    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono casa")
+    email = forms.EmailField()
+    rel_estudiante = forms.CharField(max_length=50, label="Relacion con el estudiante")
+    direccion = forms.CharField(max_length=500)

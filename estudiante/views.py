@@ -235,15 +235,19 @@ def perfilEstudianteExt(request):
 
 def postularse(request):
     estudiante = Estudiante.objects.get(user=request.user)
-    if estudiante.estadoPostulacion != "Sin postular":
+    print 'esta postulado' + estudiante.estadoPostulacion
+    if estudiante.estadoPostulacion != 'Sin postular':
+        print 'true'
         yaPostulado = True
     else:
         yaPostulado = False
+        print 'false'
     return render_to_response('estudiante/postularse.html',{'yaPostulado':yaPostulado},context_instance=RequestContext(request))
 
 def formularioUNO(request):
     estudiante = Estudiante.objects.get(user=request.user)
     if request.method == 'POST':
+        ## Si se trata de un estudianteUSB
         if estudiante.estudUsb:
             formulario = formularioUNO_formUSB(request.POST)
             if formulario.is_valid():
@@ -254,6 +258,9 @@ def formularioUNO(request):
                 estudiante.cedula = cedula
                 estudiante.sexo = genero
                 estudiante.save()
+
+                return HttpResponseRedirect('/formularioDOS')
+        ## Si se trata de un estudiante Extranjero
         else:
             formulario = formularioUNO_formExt(request.POST)
             if formulario.is_valid():
@@ -263,11 +270,98 @@ def formularioUNO(request):
                 estudiante.sexo = genero
                 estudiante.save()
 
+                return HttpResponseRedirect('/formularioDOS')
     else:
         if estudiante.estudUsb:
             formulario = formularioUNO_formUSB(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,
-                                                        'apellido2':estudiante.apellido2,'carnet':estudiante.carnet})
+                                                        'apellido2':estudiante.apellido2,'carnet':estudiante.carnet,'genero':estudiante.sexo,
+                                                        'nacionalidad':estudiante.nacionalidad,'cedula':estudiante.cedula})
         else:
             formulario = formularioUNO_formExt(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,
-                                                        'apellido2':estudiante.apellido2,'pasaporte':estudiante.pasaporte})
+                                                        'apellido2':estudiante.apellido2,'pasaporte':estudiante.pasaporte,'genero':estudiante.sexo,
+                                                        'nacionalidad':estudiante.nacionalidad})
     return render_to_response('estudiante/formularioUNO.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
+
+def formularioDOS(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if request.method == 'POST':
+        formulario = formularioDOS_form(request.POST)
+        if formulario.is_valid():
+            calle = formulario.cleaned_data['calle']
+            edificio = formulario.cleaned_data['edificio']
+            apartamento = formulario.cleaned_data['apartamento']
+            codigopostal = formulario.cleaned_data['codigo_postal']
+
+            estudiante.calle = calle
+            estudiante.edificio = edificio
+            estudiante.apartamento = apartamento
+            estudiante.codigopostal = codigopostal
+            estudiante.save()
+
+            return HttpResponseRedirect('/formularioTRES')
+    else:
+        formulario = formularioDOS_form(initial={'calle':estudiante.calle,'edificio':estudiante.edificio,'apartamento':estudiante.apartamento,
+                                                        'codigo_postal':estudiante.codigopostal})
+    return render_to_response('estudiante/formularioDOS.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
+
+def formularioTRES(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if request.method == 'POST':
+        formulario = formularioTRES_form(request.POST)
+        if formulario.is_valid():
+            cel = formulario.cleaned_data['cel']
+            tel_casa = formulario.cleaned_data['tel_casa']
+
+            estudiante.telfCel = cel
+            estudiante.telfCasa = tel_casa
+            estudiante.save()
+
+            return HttpResponseRedirect('/formularioCUATRO')
+    else:
+        formulario = formularioTRES_form(initial={'cel':estudiante.telfCel,'tel_casa':estudiante.telfCasa,'email':request.user.email})
+    return render_to_response('estudiante/formularioTRES.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
+
+def formularioCUATRO(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if request.method == 'POST':
+        return HttpResponseRedirect('/formularioCINCO')
+    else:
+        if estudiante.estudUsb:
+            formulario = formularioCUATRO_formUSB()
+        else:
+            formulario = formularioCUATRO_formExt()
+    return render_to_response('estudiante/formularioCUATRO.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
+
+def formularioCINCO(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if request.method == 'POST':
+        return HttpResponseRedirect('/formularioSEIS')
+    else:
+        if estudiante.estudUsb:
+            formulario = formularioCINCO_formUSB()
+        else:
+            formulario = formularioCINCO_formExt()
+    return render_to_response('estudiante/formularioCINCO.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
+
+def formularioSEIS(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if request.method == 'POST':
+        formulario = formularioSEIS_form(request.POST)
+        if formulario.is_valid():
+            apellidos = formulario.cleaned_data['apellidos']
+            nombres = formulario.cleaned_data['nombres']
+            cel = formulario.cleaned_data['cel']
+            tel_casa = formulario.cleaned_data['tel_casa']
+            email = formulario.cleaned_data['email']
+            rel_estudiante = formulario.cleaned_data['rel_estudiante']
+            direccion = formulario.cleaned_data['direccion']
+
+            representante = Representante.objects.create(apellido=apellidos,nombre=nombres,telefCasa=tel_casa,telefCel=cel,email=email,tipoRelacion=rel_estudiante,direccion=direccion)
+            representante.save()
+
+            estudiante.representante = representante
+            estudiante.save()
+            return HttpResponseRedirect('/postularse')
+    else:
+        formulario = formularioSEIS_form()
+    return render_to_response('estudiante/formularioCINCO.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
