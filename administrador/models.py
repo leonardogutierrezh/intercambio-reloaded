@@ -5,6 +5,8 @@ from django.contrib import admin
 
 class Pais(models.Model):
     nombre = models.CharField(max_length=100)
+    def __unicode__(self):
+        return self.nombre
 
 class Universidad(models.Model):
     nombre = models.CharField(max_length=100)

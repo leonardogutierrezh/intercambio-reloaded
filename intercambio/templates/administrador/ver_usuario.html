@@ -14,7 +14,7 @@
                         {% elif usuario.first_name == "estudiante" or usuario.first_name == "extranjero" %}
                             {{ perfil.nombre1 }} {{ perfil.apellido1 }}
                         {% elif usuario.first_name == "universidad" %}
-                            nada aun
+                            {{ perfil.universidad.nombre }}
                         {% endif %}
         </div>
         <div class="col-sm-3">

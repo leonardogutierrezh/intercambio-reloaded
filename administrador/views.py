@@ -120,6 +120,7 @@ def crear_cuenta(request):
                 nombreUsu= formulario.cleaned_data['nombre_usuarioExtranjera']
                 email = formulario.cleaned_data['emailExtranjera']
                 nombre = formulario.cleaned_data['nombreExtranjera']
+                pais = formulario.cleaned_data['pais']
                 length = 13
                 chars = string.ascii_letters + string.digits + '!@#$%^&*()'
                 random.seed = (os.urandom(1024))
@@ -127,7 +128,9 @@ def crear_cuenta(request):
                 try:
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
-                    postulante = Postulante.objects.create(usuario=user, tipo="uniextranjera")
+                    universidad = Universidad.objects.create(nombre=nombre, pais=pais)
+                    universidad.save()
+                    postulante = Postulante.objects.create(usuario=user, tipo="uniextranjera", universidad=universidad)
 
                 except:
                     error=1
@@ -173,7 +176,7 @@ def ver_usuario(request, id_usuario):
     elif usuario.first_name == "estudiante" or usuario.first_name == "extranjero":
         perfil = Estudiante.objects.get(user=usuario)
     elif usuario.first_name == "universidad":
-        pass
+        perfil = Postulante.objects.get(usuario=usuario)
     return render_to_response('administrador/ver_usuario.html', {'usuario':usuario, 'perfil': perfil}, context_instance=RequestContext(request))
 
 def editar_perfil(request):
