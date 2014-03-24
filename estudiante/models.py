@@ -74,6 +74,7 @@ class Estudiante(models.Model):
     estadoPostulacion = models.CharField(max_length=100, default ='Sin postular')
     representante = models.ForeignKey(Representante, null=True, blank=True)
     idiomas = models.ManyToManyField(Idiomas, null=True, blank=True)
+    financiamiento = models.ForeignKey(Financiamiento, null=True, blank=True)
     def __unicode__(self):
         return self.user.username
 

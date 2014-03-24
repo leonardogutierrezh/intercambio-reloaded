@@ -4,6 +4,7 @@ from django.db import models
 from django import forms
 from django.contrib.auth.models import User
 from estudiante.models import *
+from postulante.models import *
 from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.extras.widgets import SelectDateWidget
 from django.forms.widgets import CheckboxSelectMultiple
@@ -18,6 +19,7 @@ class EstudianteUSB_Form(forms.Form):
     username = forms.CharField(max_length=50, label="Nombre de usuario")
     contrasena1 = forms.CharField(widget=forms.PasswordInput,label="Contrasena")
     contrasena2 = forms.CharField(widget=forms.PasswordInput,label="Contrasena de nuevo")
+    carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())
 
 class EstudianteExt_Form(forms.Form):
     nombre1 = forms.CharField(max_length=50, label="Primer nombre")
@@ -82,8 +84,9 @@ class formularioUNO_formExt(forms.Form):
     pasaporte = forms.CharField(max_length=50, required=False)
 
 class formularioDOS_form(forms.Form):
+    urbanizacion = forms.CharField(max_length=100, label='Urb / Sector / Barrio')
     calle = forms.CharField(max_length=50)
-    edificio  = forms.CharField(max_length=50)
+    edificio  = forms.CharField(max_length=50, label='Edificio / Casa')
     apartamento = forms.CharField(max_length=50, label="Apartamento/Nro Casa")
     codigo_postal = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}))
 
@@ -105,12 +108,29 @@ class formularioCUATRO_formExt(forms.Form):
     programa= forms.ChoiceField(choices=programa_choices)
 
 class formularioCINCO_formUSB(forms.Form):
-    indice = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Indice academico")
+    carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())
+    creditos = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Numero de créditos aprobados hasta el momento")
+    indice = forms.FloatField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Indice academico")
 
 class formularioCINCO_formExt(forms.Form):
     anoIngreso = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Ano ingreso a la carrera")
 
 class formularioSEIS_form(forms.Form):
+    ingreso_choices = (
+        ('personal', 'Personal'),
+        ('familiar', 'Familiar'),
+        ('otro', 'Otro'),
+        )
+    ayuda_choices = (
+        ('si','Si'),
+        ('no','No'),
+    )
+    fuente_ingreso= forms.ChoiceField(choices=ingreso_choices,label='Principal fuente de ingresos:')
+    detalle_fuente = forms.CharField(max_length=50,label='Especifique')
+    ayuda = forms.ChoiceField(choices=ayuda_choices,label='¿Recibe algún tipo de ayuda económica?:')
+    detalle_ayuda = forms.CharField(max_length=50,label='Especifique')
+
+class formularioSIETE_form(forms.Form):
     apellidos = forms.CharField(max_length=50)
     nombres = forms.CharField(max_length=50)
     cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono celular")

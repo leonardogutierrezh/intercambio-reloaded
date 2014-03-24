@@ -16,9 +16,11 @@
 
 {% block seccion-contenido %}
     <div class="container">
+        <h3>Paso 1.3: Datos de contacto</h3>
         <form id='formulario' method='post' action=''> {% csrf_token %}
             {{ formulario | bootstrap }}
-            <input type='submit' class="btn btn-primary" value='Guardar' />
+            <input type='submit' class="btn btn-primary" value='Atras' name="atras" />
+            <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
         </form>
     </div>
 {% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block js %}
+<script>
+    function numero(e) {
+        var codigo;
+        codigo = (document.all) ? e.keyCode : e.which;
+        if (codigo > 31 && (codigo < 48 || codigo > 57) ) {
+            return false;
+        }
+        return true;
+    }
+</script>
+{% endblock %}
+
+{% block seccion-contenido %}
+<div class="container">
+    <h3>Paso 1.7: Contacto en caso de emergencia</h3>
+    <form id='formulario' method='post' action=''> {% csrf_token %}
+        {{ formulario | bootstrap }}
+        <input type='submit' class="btn btn-primary" value='Atras' name="atras" />
+        <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
+    </form>
+</div>
+{% endblock %}
