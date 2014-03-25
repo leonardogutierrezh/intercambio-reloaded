@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import admin
+from countries.models import *
 
 class Pais(models.Model):
     nombre = models.CharField(max_length=100)

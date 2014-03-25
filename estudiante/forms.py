@@ -142,3 +142,17 @@ class formularioSIETE_form(forms.Form):
     email = forms.EmailField()
     rel_estudiante = forms.CharField(max_length=50, label="Relacion con el estudiante")
     direccion = forms.CharField(max_length=500)
+
+class documentosRequeridosUSB_form(forms.Form):
+    foto = forms.ImageField()
+    informe = forms.FileField()
+    carta = forms.FileField()
+    planilla = forms.FileField(required=False)
+    certificado = forms.FileField(required=False)
+
+class documentosRequeridosExt_form(forms.Form):
+    foto = forms.ImageField()
+    informe = forms.FileField()
+    carta = forms.FileField()
+    planilla = forms.FileField(required=False)
+    certificado = forms.FileField(required=False)

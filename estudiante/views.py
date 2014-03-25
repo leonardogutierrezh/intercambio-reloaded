@@ -477,3 +477,19 @@ def formularioSIETE(request):
                                                        'email':estudiante.representante.email,'rel_estudiante':estudiante.representante.tipoRelacion,
                                                        'direccion':estudiante.representante.direccion})
     return render_to_response('estudiante/formularioSIETE.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
+
+def documentosRequeridos(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if request.method == 'POST':
+        if estudiante.estudUsb:
+            formulario = documentosRequeridosUSB_form(request.POST,request.FILES)
+            if formulario.is_valid():
+                print 'valido'
+        else:
+            formulario = documentosRequeridosExt_form(request.POST,request.FILES)
+    else:
+        if estudiante.estudUsb:
+            formulario = documentosRequeridosUSB_form()
+        else:
+            formulario = documentosRequeridosExt_form()
+    return render_to_response('estudiante/documentosRequeridos.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))

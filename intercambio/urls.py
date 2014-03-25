@@ -38,4 +38,6 @@ urlpatterns = patterns('',
     url(r'^formularioCINCO', 'estudiante.views.formularioCINCO'),
     url(r'^formularioSEIS', 'estudiante.views.formularioSEIS'),
     url(r'^formularioSIETE', 'estudiante.views.formularioSIETE'),
+    url(r'^documentosRequeridos', 'estudiante.views.documentosRequeridos'),
+
 )
