@@ -151,6 +151,7 @@ INSTALLED_APPS = (
     'administrador',
     'bootstrapform',
     'estudiante',
+    'countries',
 )
 
 # A sample logging configuration. The only tangible logging

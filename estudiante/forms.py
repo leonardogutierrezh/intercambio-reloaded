@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.models import User
 from estudiante.models import *
 from postulante.models import *
+from countries.models import *
 from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.extras.widgets import SelectDateWidget
 from django.forms.widgets import CheckboxSelectMultiple
@@ -66,8 +67,8 @@ class formularioUNO_formUSB(forms.Form):
     apellido1 = forms.CharField(max_length=50, label="Primer apellido" , required=False)
     apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False)
     genero = forms.ChoiceField(choices=genero_choices)
-    fecha = forms.ChoiceField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
-    nacionalidad = forms.CharField(max_length=50)
+    fecha = forms.CharField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
+    nacionalidad = forms.ModelChoiceField(queryset=Country.objects.all())
     cedula = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}))
     carnet = forms.CharField(max_length=8 , required=False)
 
@@ -81,8 +82,8 @@ class formularioUNO_formExt(forms.Form):
     apellido1 = forms.CharField(max_length=50, label="Primer apellido" , required=False)
     apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False)
     genero = forms.ChoiceField(choices=genero_choices)
-    fecha = forms.ChoiceField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
-    nacionalidad = forms.CharField(max_length=50)
+    fecha = forms.CharField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
+    nacionalidad = forms.ModelChoiceField(queryset=Country.objects.all())
     pasaporte = forms.CharField(max_length=50, required=False)
 
 class formularioDOS_form(forms.Form):

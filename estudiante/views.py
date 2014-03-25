@@ -8,6 +8,7 @@ from django.template import RequestContext, loader, Context, Template
 from django.contrib.auth.decorators import login_required
 from estudiante.models import *
 from estudiante.forms import *
+from countries.models import *
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage, EmailMultiAlternatives
@@ -38,9 +39,11 @@ def registrarEstudianteUSB(request):
                 ContrasenaDist = "Las contrasenas deben coincidir **"
                 return render_to_response('estudiante/registrarEstudianteUSB.html', {'formulario': formulario,'ContrasenaDist':ContrasenaDist},context_instance=RequestContext(request))
 
+            nacionalidad = Country.objects.get(iso='VE')
+
             user = User.objects.create_user(username,email,contrasena1)
             user.first_name = "estudianteUSB"
-            estudiante = Estudiante.objects.create(user=user,nombre1=nombre1,nombre2=nombre2,apellido1=apellido1,apellido2=apellido2,email=email,carnet=carnet,estudUsb=True,carrera_usb=carrera)
+            estudiante = Estudiante.objects.create(user=user,nombre1=nombre1,nombre2=nombre2,apellido1=apellido1,apellido2=apellido2,email=email,carnet=carnet,estudUsb=True,carrera_usb=carrera,nacionalidad=nacionalidad)
             user.save()
             estudiante.save()
 
@@ -255,9 +258,11 @@ def formularioUNO(request):
                 genero = formulario.cleaned_data['genero']
                 nacionalidad = formulario.cleaned_data['nacionalidad']
                 cedula = formulario.cleaned_data['cedula']
+                fecha = formulario.cleaned_data['fecha']
                 estudiante.nacionalidad = nacionalidad
                 estudiante.cedula = cedula
                 estudiante.sexo = genero
+                estudiante.fechaNacimiento = fecha
                 estudiante.save()
 
                 return HttpResponseRedirect('/formularioDOS')
@@ -267,8 +272,10 @@ def formularioUNO(request):
             if formulario.is_valid():
                 genero = formulario.cleaned_data['genero']
                 nacionalidad = formulario.cleaned_data['nacionalidad']
+                fecha = formulario.cleaned_data['fecha']
                 estudiante.nacionalidad = nacionalidad
                 estudiante.sexo = genero
+                estudiante.fechaNacimiento = fecha
                 estudiante.save()
 
                 return HttpResponseRedirect('/formularioDOS')
@@ -276,11 +283,11 @@ def formularioUNO(request):
         if estudiante.estudUsb:
             formulario = formularioUNO_formUSB(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,
                                                         'apellido2':estudiante.apellido2,'carnet':estudiante.carnet,'genero':estudiante.sexo,
-                                                        'nacionalidad':estudiante.nacionalidad,'cedula':estudiante.cedula})
+                                                        'nacionalidad':estudiante.nacionalidad,'cedula':estudiante.cedula,'fecha':estudiante.fechaNacimiento})
         else:
             formulario = formularioUNO_formExt(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,
                                                         'apellido2':estudiante.apellido2,'pasaporte':estudiante.pasaporte,'genero':estudiante.sexo,
-                                                        'nacionalidad':estudiante.nacionalidad})
+                                                        'nacionalidad':estudiante.nacionalidad,'fecha':estudiante.fechaNacimiento})
     return render_to_response('estudiante/formularioUNO.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
 
 def formularioDOS(request):

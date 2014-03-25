@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import admin
 from postulante.models import *
+from countries.models import *
 
 class AntecedenteAcad(models.Model):
     indice = models.FloatField()
@@ -61,7 +62,7 @@ class Estudiante(models.Model):
     telfCasa = models.IntegerField(null=True, blank=True)
     fax = models.IntegerField(null=True, blank=True)
     fechaNacimiento = models.CharField(max_length=100, null=True, blank=True)
-    nacionalidad = models.CharField(max_length=100, null=True, blank=True)
+    nacionalidad = models.ForeignKey(Country, null=True, blank=True)
     comentario = models.CharField(max_length=100, null=True, blank=True)
     cedula = models.IntegerField(max_length=50, null=True, blank=True)
     pasaporte = models.CharField(max_length=100, null=True, blank=True)
