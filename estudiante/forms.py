@@ -66,6 +66,7 @@ class formularioUNO_formUSB(forms.Form):
     apellido1 = forms.CharField(max_length=50, label="Primer apellido" , required=False)
     apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False)
     genero = forms.ChoiceField(choices=genero_choices)
+    fecha = forms.ChoiceField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
     nacionalidad = forms.CharField(max_length=50)
     cedula = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}))
     carnet = forms.CharField(max_length=8 , required=False)
@@ -80,6 +81,7 @@ class formularioUNO_formExt(forms.Form):
     apellido1 = forms.CharField(max_length=50, label="Primer apellido" , required=False)
     apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False)
     genero = forms.ChoiceField(choices=genero_choices)
+    fecha = forms.ChoiceField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
     nacionalidad = forms.CharField(max_length=50)
     pasaporte = forms.CharField(max_length=50, required=False)
 
@@ -114,6 +116,7 @@ class formularioCINCO_formUSB(forms.Form):
 
 class formularioCINCO_formExt(forms.Form):
     anoIngreso = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Ano ingreso a la carrera")
+    anosAprob = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Cantidad de años aprobados hasta la fecha")
 
 class formularioSEIS_form(forms.Form):
     ingreso_choices = (

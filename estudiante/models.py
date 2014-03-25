@@ -75,6 +75,10 @@ class Estudiante(models.Model):
     representante = models.ForeignKey(Representante, null=True, blank=True)
     idiomas = models.ManyToManyField(Idiomas, null=True, blank=True)
     financiamiento = models.ForeignKey(Financiamiento, null=True, blank=True)
+    primerPaso = models.BooleanField(default=False)
+    segundoPaso = models.BooleanField(default=False)
+    tercerPaso = models.BooleanField(default=False)
+    cuartoPaso = models.BooleanField(default=False)
     def __unicode__(self):
         return self.user.username
 

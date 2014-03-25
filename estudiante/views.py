@@ -354,7 +354,7 @@ def formularioCINCO(request):
                 creditos = formulario.cleaned_data['creditos']
 
                 if estudiante.antecedente == None:
-                    antecedente = AntecedenteAcad.objects.create(indice=indice,creditosAprobados=creditos,anoIngreso='08',anosAprob='20')
+                    antecedente = AntecedenteAcad.objects.create(indice=indice,creditosAprobados=creditos,anoIngreso=0,anosAprob=0)
                     antecedente.save()
                     estudiante.antecedente = antecedente
                 else:
@@ -368,11 +368,25 @@ def formularioCINCO(request):
                 if 'siguiente' in request.POST:
                     return HttpResponseRedirect('/formularioSEIS')
         else:
+            formulario = formularioCINCO_formExt(request.POST)
+            if formulario.is_valid():
+                anoIngreso = formulario.cleaned_data['anoIngreso']
+                anosAprob = formulario.cleaned_data['anosAprob']
 
-            if 'atras' in request.POST:
-                return HttpResponseRedirect('/formularioCUATRO')
-            if 'siguiente' in request.POST:
-                return HttpResponseRedirect('/formularioSEIS')
+                if estudiante.antecedente == None:
+                    antecedente = AntecedenteAcad.objects.create(indice=0,creditosAprobados=0,anoIngreso=anoIngreso,anosAprob=anosAprob)
+                    antecedente.save()
+                    estudiante.antecedente = antecedente
+                else:
+                    estudiante.antecedente.anoIngreso = anoIngreso
+                    estudiante.antecedente.anosAprob = anosAprob
+                    estudiante.antecedente.save()
+                estudiante.save()
+
+                if 'atras' in request.POST:
+                    return HttpResponseRedirect('/formularioCUATRO')
+                if 'siguiente' in request.POST:
+                    return HttpResponseRedirect('/formularioSEIS')
     else:
         if estudiante.estudUsb:
             if estudiante.antecedente == None:
@@ -380,7 +394,10 @@ def formularioCINCO(request):
             else:
                 formulario = formularioCINCO_formUSB(initial={'carrera':estudiante.carrera_usb,'indice':estudiante.antecedente.indice,'creditos':estudiante.antecedente.creditosAprobados})
         else:
-            formulario = formularioCINCO_formExt()
+            if estudiante.antecedente == None:
+                formulario = formularioCINCO_formExt()
+            else:
+                formulario = formularioCINCO_formExt(initial={'anoIngreso':estudiante.antecedente.anoIngreso,'anosAprob':estudiante.antecedente.anosAprob})
     return render_to_response('estudiante/formularioCINCO.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
 
 def formularioSEIS(request):
@@ -434,6 +451,11 @@ def formularioSIETE(request):
             representante.save()
 
             estudiante.representante = representante
+            estudiante.primerPaso = True
+
+            if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+                estudiante.estadoPostulacion = 'Postulado'
+
             estudiante.save()
             if 'atras' in request.POST:
                 return HttpResponseRedirect('/formularioSEIS')
