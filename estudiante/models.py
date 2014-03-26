@@ -76,6 +76,7 @@ class Estudiante(models.Model):
     representante = models.ForeignKey(Representante, null=True, blank=True)
     idiomas = models.ManyToManyField(Idiomas, null=True, blank=True)
     financiamiento = models.ForeignKey(Financiamiento, null=True, blank=True)
+
     primerPaso = models.BooleanField(default=False)
     segundoPaso = models.BooleanField(default=False)
     tercerPaso = models.BooleanField(default=False)
@@ -94,3 +95,5 @@ class UniversidadAsignada(models.Model):
     nombreEstud = models.ForeignKey(Estudiante)
     nombreUniv = models.CharField(max_length=100)           ## VER
 
+class DocumentosRequeridos(models.Model):
+    foto = models.ImageField(upload_to='cargas', null=True, blank=True)

@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from django.conf import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -19,6 +20,9 @@ urlpatterns = patterns('',
     url(r'^administrador_crear_cuenta$', 'administrador.views.crear_cuenta'),
     url(r'^cerrar_sesion$', 'administrador.views.cerrar_sesion'),
     url(r'^administrador_listar_usuarios/(?P<creado>\d+)/$', 'administrador.views.listar_usuarios'),
+
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT,}),
 
     url(r'^registrarEstudianteUSB', 'estudiante.views.registrarEstudianteUSB'),
     url(r'^registrarEstudianteExt', 'estudiante.views.registrarEstudianteExt'),
@@ -39,5 +43,7 @@ urlpatterns = patterns('',
     url(r'^formularioSEIS', 'estudiante.views.formularioSEIS'),
     url(r'^formularioSIETE', 'estudiante.views.formularioSIETE'),
     url(r'^documentosRequeridos', 'estudiante.views.documentosRequeridos'),
+
+
 
 )

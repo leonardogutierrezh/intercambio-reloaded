@@ -145,14 +145,14 @@ class formularioSIETE_form(forms.Form):
 
 class documentosRequeridosUSB_form(forms.Form):
     foto = forms.ImageField()
-    informe = forms.FileField()
-    carta = forms.FileField()
-    planilla = forms.FileField(required=False)
-    certificado = forms.FileField(required=False)
+    informe = forms.FileField(label='Informe académico')
+    carta = forms.FileField(label='Carta de motivación')
+    planilla = forms.FileField(required=False,label='*Planilla CINDA/SMILE')
+    certificado = forms.FileField(required=False,label='**Certificado de idiomas')
 
 class documentosRequeridosExt_form(forms.Form):
     foto = forms.ImageField()
-    informe = forms.FileField()
-    carta = forms.FileField()
-    planilla = forms.FileField(required=False)
-    certificado = forms.FileField(required=False)
+    informe = forms.FileField(label='Informe académico')
+    carta = forms.FileField(label='Carta de motivación')
+    planilla = forms.FileField(required=False,label='*Planilla CINDA/SMILE')
+    certificado = forms.FileField(required=False,label='**Certificado de idiomas')

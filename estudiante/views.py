@@ -484,7 +484,11 @@ def documentosRequeridos(request):
         if estudiante.estudUsb:
             formulario = documentosRequeridosUSB_form(request.POST,request.FILES)
             if formulario.is_valid():
-                print 'valido'
+                foto = formulario.cleaned_data['foto']
+                doc = DocumentosRequeridos.objects.create(foto=foto)
+                doc.save()
+
+                return HttpResponseRedirect('/postularse')
         else:
             formulario = documentosRequeridosExt_form(request.POST,request.FILES)
     else:
