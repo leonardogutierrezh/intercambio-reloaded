@@ -43,7 +43,7 @@ urlpatterns = patterns('',
     url(r'^formularioSEIS', 'estudiante.views.formularioSEIS'),
     url(r'^formularioSIETE', 'estudiante.views.formularioSIETE'),
     url(r'^documentosRequeridos', 'estudiante.views.documentosRequeridos'),
-
+    url(r'^planEstudio', 'estudiante.views.planEstudio'),
 
 
 )

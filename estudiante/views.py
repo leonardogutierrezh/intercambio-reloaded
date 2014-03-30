@@ -485,15 +485,49 @@ def documentosRequeridos(request):
             formulario = documentosRequeridosUSB_form(request.POST,request.FILES)
             if formulario.is_valid():
                 foto = formulario.cleaned_data['foto']
-                doc = DocumentosRequeridos.objects.create(foto=foto)
-                doc.save()
+                informe = formulario.cleaned_data['informe']
+                carta = formulario.cleaned_data['carta']
+                planilla = formulario.cleaned_data['planilla']
+                certificado = formulario.cleaned_data['certificado']
+
+                if estudiante.documentos == None:
+                    doc = DocumentosRequeridos.objects.create(foto=foto,informe=informe,carta=carta,planilla=planilla,certificado=certificado)
+                    doc.save()
+                    estudiante.documentos = doc
+                else:
+                    estudiante.documentos.foto = foto
+                    estudiante.documentos.informe = informe
+                    estudiante.documentos.carta = carta
+                    estudiante.documentos.planilla = planilla
+                    estudiante.documentos.certificado = certificado
+                    estudiante.documentos.save()
+
+                estudiante.segundoPaso = True
+                if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+                    estudiante.estadoPostulacion = 'Postulado'
+                estudiante.save()
 
                 return HttpResponseRedirect('/postularse')
         else:
             formulario = documentosRequeridosExt_form(request.POST,request.FILES)
     else:
         if estudiante.estudUsb:
-            formulario = documentosRequeridosUSB_form()
+            if estudiante.documentos == None:
+                formulario = documentosRequeridosUSB_form()
+            else:
+                formulario =  documentosRequeridosUSB_form(initial={'foto':estudiante.documentos.foto,'informe':estudiante.documentos.informe,
+                                                                    'carta':estudiante.documentos.carta,'planilla':estudiante.documentos.planilla,
+                                                                    'certificado':estudiante.documentos.certificado})
         else:
             formulario = documentosRequeridosExt_form()
     return render_to_response('estudiante/documentosRequeridos.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
+
+def planEstudio(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    materias = MateriaUSB.objects.all()
+    if request.method == 'POST':
+        print '-------------------------------'
+        lista = request.POST.getlist('lista_materias')
+        print lista
+    return render_to_response('estudiante/planEstudio.html',{'materias':materias,'estudiante':estudiante},context_instance=RequestContext(request))
+

@@ -15,6 +15,14 @@ class AntecedenteAcad(models.Model):
     coordMovilidad = models.CharField(max_length=100, null=True)
     coordAcademico = models.CharField(max_length=100, null=True)
 
+class DocumentosRequeridos(models.Model):
+    foto = models.ImageField(upload_to='cargas')
+    informe = models.ImageField(upload_to='cargas')
+    carta = models.ImageField(upload_to='cargas')
+    planilla = models.ImageField(upload_to='cargas')
+    certificado = models.ImageField(upload_to='cargas', null=True, blank=True)
+    curriculum = models.ImageField(upload_to='cargas', null=True, blank=True)
+
 class Representante(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
@@ -76,7 +84,7 @@ class Estudiante(models.Model):
     representante = models.ForeignKey(Representante, null=True, blank=True)
     idiomas = models.ManyToManyField(Idiomas, null=True, blank=True)
     financiamiento = models.ForeignKey(Financiamiento, null=True, blank=True)
-
+    documentos = models.ForeignKey(DocumentosRequeridos, null=True, blank=True)
     primerPaso = models.BooleanField(default=False)
     segundoPaso = models.BooleanField(default=False)
     tercerPaso = models.BooleanField(default=False)
@@ -95,5 +103,4 @@ class UniversidadAsignada(models.Model):
     nombreEstud = models.ForeignKey(Estudiante)
     nombreUniv = models.CharField(max_length=100)           ## VER
 
-class DocumentosRequeridos(models.Model):
-    foto = models.ImageField(upload_to='cargas', null=True, blank=True)
+

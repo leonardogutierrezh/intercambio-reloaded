@@ -4,18 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib import admin
 from administrador.models import *
 
-class MateriaUSB(models.Model):
-    cod_carrera = models.CharField(max_length=100)
-    nombre = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=100)
-    creditos = models.IntegerField()
-
-class PlanDeEstudio(models.Model):
-    materiaUsb = models.ForeignKey(MateriaUSB)
-    codigoUniv = models.CharField(max_length=100)
-    nombreMateriaUniv = models.CharField(max_length=100)
-    creditosUniv = models.IntegerField()
-
 class Carrera(models.Model):
     nombre = models.CharField(max_length=100)
     codigo = models.CharField(max_length=100)
@@ -32,6 +20,18 @@ class CarreraUsb(models.Model):
     areaDeEstudio = models.CharField(max_length=100, null=True)
     def __unicode__(self):
         return self.nombre
+
+class MateriaUSB(models.Model):
+    cod_carrera = models.ManyToManyField(CarreraUsb)
+    nombre = models.CharField(max_length=100)
+    codigo = models.CharField(max_length=100)
+    creditos = models.IntegerField()
+
+class PlanDeEstudio(models.Model):
+    materiaUsb = models.ForeignKey(MateriaUSB)
+    codigoUniv = models.CharField(max_length=100)
+    nombreMateriaUniv = models.CharField(max_length=100)
+    creditosUniv = models.IntegerField()
 
 from estudiante.models import Estudiante
 
