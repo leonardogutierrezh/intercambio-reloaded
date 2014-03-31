@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block js %}
+    <script>
+        function agregar_materia() {
+            var contador = document.getElementById('count').value;
+            contador = parseInt(contador) + 1;
+            var fila = 'fila' + contador;
+            var cant = 'cant' + contador;
+            var rate = 'rate' + contador;
+            var amount = 'amount' + contador;
+            document.getElementById('count').value = contador;
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"list\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option><input type=\"hidden\" id=\"hidden_cred{{materia.id}}\" name=\"cred{{materia.id}}\" value=\"{{materia.creditos}}\" /><input type=\"hidden\" id=\"hidden_nombre{{materia.id}}\" name=\"nombre{{materia.id}}\" value=\"{{materia.nombre}}\" />{% endfor %}</select></td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>");
+        }
+    </script>
+
+{% endblock %}
+
+{% block seccion-contenido %}
+<div class="container">
+    <h3>Paso 3: Plan de estudio</h3>
+    <input type="hidden" id="count" name="count" value="0"/>
+
+        <table id="tabla_materias" class="content table table-hover table-condensed"    >
+            <thead>
+                <th>Codigo USB</th>
+                <th>Nombre USB</th>
+                <th>Creditos USB</th>
+                <th>Codigo Univ. Destino</th>
+                <th>Nombre Univ. Destino</th>
+                <th>Creditos Univ. Destino</th>
+            </thead>
+
+            <tr>
+                <td>
+                    <select name="lista_materias" id="list" class="form-control">
+                    {% for materia in materias %}
+                        <option value="{{materia.id}}">{{materia.codigo}}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+                <td><input type="text" id="cred{{materia.id}}" name="cred{{materia.id}}" class="form-control"/></td>
+                <td><input type="text" id="nombre{{materia.id}}" name="nombre{{materia.id}}" class="form-control"/></td>
+                <td><input type="text" name='cod_des' class="form-control"> </input> </td>
+                <td><input type="text" class="form-control"> </input></td>
+                <td><input type="text" class="form-control"> </input></td>
+            </tr>
+        </table>
+        <button id="boton_agregar" onclick="agregar_materia()">Agregar</button>
+        <input type='submit' class="btn btn-primary" value='Guardar' />
+
+</div>
+
+
+</div>
+{% endblock %}
