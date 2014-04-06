@@ -180,7 +180,24 @@ def ver_usuario(request, id_usuario):
     return render_to_response('administrador/ver_usuario.html', {'usuario':usuario, 'perfil': perfil}, context_instance=RequestContext(request))
 
 def editar_perfil(request):
- return True
+    usuario = request.user
+    creado= 0
+    perfil = Administrador.objects.get(usuario=usuario)
+    if request.method == 'POST':
+        formulario = EditarPerfilForm(request.POST)
+        if formulario.is_valid():
+            nombre = formulario.cleaned_data['nombre']
+            email = formulario.cleaned_data['email']
+            us = formulario.cleaned_data['usuario']
+            perfil.nombre = nombre
+            perfil.email = email
+            usuario.username = us
+            perfil.save()
+            usuario.save()
+            creado= '2'
+    else:
+        formulario = EditarPerfilForm(initial={'nombre': perfil.nombre, 'email': perfil.email, 'usuario': usuario.username})
+    return render_to_response('administrador/editar_perfil.html', {'formulario': formulario, 'creado': creado}, context_instance=RequestContext(request))
 
 def cerrar_sesion(request):
     logout(request)
@@ -197,3 +214,11 @@ def recaudosNac(request):
 def recaudosAdic(request):
     parrafo = 'recaudosAdic'
     return render_to_response('recaudos.html',{'parrafo':parrafo}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def eliminar_usuario(request, id_usuario):
+    admin = request.user
+    if admin.first_name == 'admin':
+        usuario = User.objects.get(id=id_usuario)
+        usuario.delete()
+    return HttpResponseRedirect('/administrador_listar_usuarios/3')

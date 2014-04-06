@@ -19,5 +19,7 @@ class Usuario(models.Model):
 
 class Administrador(models.Model):
     username = models.CharField(max_length=100)
-    contrasena = models.CharField(max_length=100)
+    usuario = models.ForeignKey(User)
+    email = models.EmailField()
+    nombre = models.CharField(max_length=200)
 

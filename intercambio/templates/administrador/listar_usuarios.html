@@ -29,10 +29,26 @@
             <tr>
                 <td><a href="/ver_usuario/{{ usuario.id }}">{{ usuario.username }}</a></td>
                 <td>{{ usuario.first_name }}</td>
-                <td><a href="#" class="btn-xs btn-default">Editar</a> <button type="button" onclick="deleteAlert({{marca.id}})" class="btn-xs btn-default btn-danger">Eliminar</button> </td>
+                <td><a href="#" class="btn-xs btn-default">Editar</a> <button type="button" onclick="deleteAlert({{usuario.id}})" class="btn-xs btn-default btn-danger">Eliminar</button> </td>
             </tr>
         {% endfor %}
         </table>
 {% endblock %}
 {% block js %}
+<script type="text/javascript">
+        	function deleteAlert(id)
+        	{
+        		var r=confirm("¿Esta seguro que desea eliminar?");
+        		if (r==true)
+        	  {
+        			var string1 = "/administrador_eliminar_usuario/";
+        		  window.location.assign(string1 + id)
+          	}
+        		else
+          	{
+
+          	}
+        		document.getElementById("demo").innerHTML=x;
+        }
+    </script>
 {% endblock %}

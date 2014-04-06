@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     url(r'^administrador_crear_cuenta$', 'administrador.views.crear_cuenta'),
     url(r'^cerrar_sesion$', 'administrador.views.cerrar_sesion'),
     url(r'^administrador_listar_usuarios/(?P<creado>\d+)/$', 'administrador.views.listar_usuarios'),
+    url(r'^administrador_eliminar_usuario/(?P<id_usuario>\d+)/$', 'administrador.views.eliminar_usuario'),
+    url(r'^administrador_editar_perfil/', 'administrador.views.editar_perfil'),
 
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT,}),

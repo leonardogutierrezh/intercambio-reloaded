@@ -34,3 +34,8 @@ class NuevoEstudianteExtranjeroForm(forms.Form):
     nombreExtranjero = forms.CharField(label='Primer nombre')
     apellidoExtranjero = forms.CharField(label='Primer apellido')
     pasaporteExtranjero = forms.CharField(label='Pasaporte')
+
+class EditarPerfilForm(forms.Form):
+    nombre = forms.CharField(label='Nombre Completo')
+    email = forms.EmailField()
+    usuario = forms.CharField()
