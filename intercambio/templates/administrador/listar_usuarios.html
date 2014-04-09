@@ -29,7 +29,7 @@
             <tr>
                 <td><a href="/ver_usuario/{{ usuario.id }}">{{ usuario.username }}</a></td>
                 <td>{{ usuario.first_name }}</td>
-                <td><a href="#" class="btn-xs btn-default">Editar</a> <button type="button" onclick="deleteAlert({{usuario.id}})" class="btn-xs btn-default btn-danger">Eliminar</button> </td>
+                <td><a href="/administrador_editar_usuario/{{ usuario.id }}" class="btn-xs btn-default">Editar</a> <button type="button" onclick="deleteAlert({{usuario.id}})" class="btn-xs btn-default btn-danger">Eliminar</button> </td>
             </tr>
         {% endfor %}
         </table>

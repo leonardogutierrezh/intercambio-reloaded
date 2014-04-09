@@ -23,3 +23,7 @@ class Administrador(models.Model):
     email = models.EmailField()
     nombre = models.CharField(max_length=200)
 
+class Log(models.Model):
+    suceso = models.CharField(max_length=200)
+    usuario = models.ForeignKey(User)
+    fecha = models.DateField(auto_now=True)

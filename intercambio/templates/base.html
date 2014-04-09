@@ -90,7 +90,19 @@
                              <a href="/administrador_editar_perfil/">Ver/Modificar perfil</a>
                         </li>
                         <li><a href="#">Gestion de anuncions</a></li>
-                        <li><a href="#">Log de auditoria</a></li>
+                        <li><a href="/administrador_ver_log/">Log de auditoria</a></li>
+                        <li>
+                            <a href="#">Gestion de Universidades</a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/administrador_crear_universidad">Agregar universidad</a>
+                                </li>
+                                <li>
+                                    <a href="/administrador_listar_usuarios/0">Consultar universidades</a>
+                                </li>
+                            </ul>
+
+                        </li>
                         <li><a href="/cerrar_sesion">Cerrar sesion</a></li>
                      </ul>
                      {% elif user.first_name == 'estudianteUSB' or user.first_name == 'estudianteExt' %}
