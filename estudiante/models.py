@@ -79,7 +79,7 @@ class Estudiante(models.Model):
     univOrigen = models.ForeignKey(Universidad, null=True, blank=True)
     cursoEspanol = models.CharField(max_length=100, null=True, blank=True)
     antecedente = models.ForeignKey(AntecedenteAcad, null=True, blank=True)
-    planDeEstudio = models.ForeignKey(PlanDeEstudio, null=True, blank=True)
+    planDeEstudio = models.ManyToManyField(PlanDeEstudio, null=True, blank=True)
     estadoPostulacion = models.CharField(max_length=100, default ='Sin postular')
     representante = models.ForeignKey(Representante, null=True, blank=True)
     idiomas = models.ManyToManyField(Idiomas, null=True, blank=True)

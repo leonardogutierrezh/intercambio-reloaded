@@ -26,6 +26,8 @@ class MateriaUSB(models.Model):
     nombre = models.CharField(max_length=100)
     codigo = models.CharField(max_length=100)
     creditos = models.IntegerField()
+    def __unicode__(self):
+        return self.codigo
 
 class PlanDeEstudio(models.Model):
     materiaUsb = models.ForeignKey(MateriaUSB)

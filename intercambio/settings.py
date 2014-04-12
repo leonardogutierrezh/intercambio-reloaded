@@ -152,6 +152,8 @@ INSTALLED_APPS = (
     'bootstrapform',
     'estudiante',
     'countries',
+
+    'wkhtmltopdf',
 )
 
 # A sample logging configuration. The only tangible logging
