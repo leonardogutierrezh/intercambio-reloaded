@@ -650,7 +650,7 @@ def descargarPlanilla(request):
     p.drawString( 70, 330, "- Tipo de programa: " )
     p.drawString( 70, 310, "- Nombre de la universidad destino: " )
     p.drawString( 70, 290, "- Nombre del programa: " )
-    p.drawString( 70, 270, "- Fechas tentativas de Inicio y Fin (segun calendario de la Universidad de Destino): " )
+    p.drawString( 70, 270, "- Fechas tentativas de inicio y fin (segun calendario de la universidad de destino): " )
     p.drawString( 90, 260, "Inicio: ")
     p.drawString( 250, 260, "Fin: ")
 
@@ -663,7 +663,7 @@ def descargarPlanilla(request):
     p.drawString( 70, 185, "- Tipo de programa: " )
     p.drawString( 70, 165, "- Nombre de la universidad destino: " )
     p.drawString( 70, 145, "- Nombre del programa: " )
-    p.drawString( 70, 125, "- Fechas tentativas de Inicio y Fin (segun calendario de la Universidad de Destino): " )
+    p.drawString( 70, 125, "- Fechas tentativas de inicio y fin (segun calendario de la universidad de destino): " )
     p.drawString( 90, 115, "Inicio: ")
     p.drawString( 250, 115, "Fin: ")
 
@@ -675,12 +675,40 @@ def descargarPlanilla(request):
     p.setFont("Helvetica",7)
     p.drawString( 90, 755, "UNIVERSIDAD SIMON BOLIVAR")
     p.drawString( 120, 745, "RECTORADO")
-    p.drawString( 60, 735, "Direccion de Relaciones Internacionales y de Cooperacion")
-    p.drawString( 283, 745, "Coordinacion de Apoyo a los Programas de Intercambio")
-    p.drawString( 330, 735, "Programa de Intercambio de Estudiantes")
+    p.drawString( 60, 735, "Direccion de relaciones internacionales y de cooperacion")
+    p.drawString( 283, 745, "Coordinacion de apoyo a los programas de intercambio")
+    p.drawString( 330, 735, "Programa de intercambio de estudiantes")
 
+    p.showPage()
 
-    # Close the PDF object cleanly, and we're done.
+    ## Segunda pagina
+    p.setFont("Helvetica",11)
+    p.drawString( 68, 750, "INFORMACION ACADEMICA:")
+    p.setFont("Helvetica",8)
+    p.drawString( 70, 720, "Nro de creditos aprobados a la fecha de postulacion: " )
+    p.drawString( 320, 720, "Decanato: " )
+    p.drawString( 70, 700, "Carrera que estudia en la universidad: " )
+    p.drawString( 70, 680, "Area de estudio: " )
+    p.drawString( 320, 680, "Indice academico a la fecha de postulacion: " )
+    p.showPage()
+
+    ## Proxima pagina
+    p.setFont("Helvetica",8)
+    p.drawString( 100, 690, "Firma del solicitante: ____________________ ")
+    p.drawString( 320, 690, "Fecha del solicitud: ")
+    p.setFont("Helvetica",7)
+    p.drawString( 140, 660, "El estudiante firmante declara que los datos y documentos suministrados son veridicos y asume cumplir ")
+    p.drawString( 190, 650, "cabalmente con las normas del programa de intercambio estudiantil.")
+    p.rect(50,610,6.8*inch,2*inch)
+
+    p.setFont("Helvetica",11)
+    p.drawString( 100, 560, "**Esta seccion debe ser llenada exclusivamente por la coordinacion docente**")
+    p.drawString( 110, 510, "Opinion de la coordinacion Docente sobre esta solicitud (explicacion breve):")
+    p.setFont("Helvetica",8)
+    p.drawString( 70, 475, "Muy favorable: " )
+    p.drawString( 70, 455, "Favorable: " )
+    p.drawString( 70, 435, "Con reservas: " )
+    p.rect(50,415,6.8*inch,1.7*inch)
     p.showPage()
     p.save()
 

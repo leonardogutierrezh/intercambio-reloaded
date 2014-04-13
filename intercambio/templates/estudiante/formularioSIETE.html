@@ -18,9 +18,31 @@
 <div class="container">
     <h3>Paso 1.7: Contacto en caso de emergencia</h3>
     <form id='formulario' method='post' action=''> {% csrf_token %}
-        {{ formulario | bootstrap }}
-        <input type='submit' class="btn btn-primary" value='Atras' name="atras" />
-        <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
+            <div class="row">
+
+                    <div class="col-md-5 col-sm-10">
+
+                            {{ formulario.apellidos | bootstrap }}
+                            {{ formulario.cel | bootstrap }}
+                            {{ formulario.email | bootstrap }}
+                            {{ formulario.direccion | bootstrap }}
+                    </div>
+                    <div class="col-md-5 col-sm-10">
+                            {{ formulario.nombres | bootstrap }}
+                            {{ formulario.tel_casa | bootstrap }}
+                            {{ formulario.rel_estudiante | bootstrap }}
+                    </div>
+            </div>
+
+            <div class="row">
+                <div class="final col-md-4 col-md-push-4 col-sm-4 col-sm-push-4">
+                    <input type='submit' class="btn btn-primary col-md-3" value='Atras' name="atras" />
+                </div>
+                <div class="final col-md-1 col-md-push-1 col-sm-1 col-sm-push-1">
+                    <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
+                </div>
+            </div>
     </form>
 </div>
 {% endblock %}
+
