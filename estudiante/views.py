@@ -542,9 +542,11 @@ def planEstudio(request):
     estudiante = Estudiante.objects.get(user=request.user)
     materias = MateriaUSB.objects.all()
     if request.method == 'POST':
-        print '------------------------------- POST'
+        if len(estudiante.planDeEstudio.all()) != 0:
+            print 'es diferente que cero'
+            for planEst in estudiante.planDeEstudio.all():
+                planEst.delete()
         lista_materias = request.POST.getlist('lista_materias')
-        print "tamano de lista ", len(lista_materias)
         contador = request.POST.get('count')
 
         aux = 0

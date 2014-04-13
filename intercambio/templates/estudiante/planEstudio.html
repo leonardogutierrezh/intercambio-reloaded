@@ -7,7 +7,7 @@
             var contador = document.getElementById('count').value;
             contador = parseInt(contador) + 1;
             document.getElementById('count').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button>Eliminar</button></td></tr>");
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
     </script>
     <script>
@@ -15,9 +15,14 @@
             var contador = document.getElementById('count').value;
             contador = parseInt(contador) + 1;
             document.getElementById('count').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button>Eliminar</button></td></tr>");
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+        }
+        function eliminarFila(btn){
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
         }
     </script>
+
 
 {% endblock %}
 
@@ -54,7 +59,7 @@
                         <td><input type="text" name="cod_des_0" class="form-control" value="{{planEst.codigoUniv}}"> </input> </td>
                         <td><input type="text" name="nom_des_0" class="form-control" value="{{planEst.nombreMateriaUniv}}"> </input></td>
                         <td><input type="text" name="cred_des_0" class="form-control" value="{{planEst.creditosUniv}}"> </input></td>
-                        <td><button>Eliminar</button></td>
+                        <td><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
                     </tr>
                 {% endfor %}
             {% else %}
@@ -71,7 +76,7 @@
                     <td><input type="text" name="cod_des_0" class="form-control"> </input> </td>
                     <td><input type="text" name="nom_des_0" class="form-control"> </input></td>
                     <td><input type="text" name="cred_des_0" class="form-control"> </input></td>
-                    <td><button>Eliminar</button></td>
+                    <td><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
                 </tr>
             {% endif %}
 
