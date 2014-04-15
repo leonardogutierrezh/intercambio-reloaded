@@ -3,25 +3,35 @@
 
 {% block js %}
     <script>
-        function agregar_materia() {
+        function agregar_materiaCON() {
             var contador = document.getElementById('count').value;
             contador = parseInt(contador) + 1;
-            var fila = 'fila' + contador;
-            var cant = 'cant' + contador;
-            var rate = 'rate' + contador;
-            var amount = 'amount' + contador;
             document.getElementById('count').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"list\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" name='cod_des' class=\"form-control\"></td><td><input type=\"text\" class=\"form-control\"></td><td><input type=\"text\" class=\"form-control\"></td></tr>");
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
     </script>
+    <script>
+        function agregar_materiaSIN() {
+            var contador = document.getElementById('count').value;
+            contador = parseInt(contador) + 1;
+            document.getElementById('count').value = contador;
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+        }
+        function eliminarFila(btn){
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+
 
 {% endblock %}
 
 {% block seccion-contenido %}
 <div class="container">
     <h3>Paso 3: Plan de estudio</h3>
-    <input type="hidden" id="count" name="count" value="0"/>
+    <input type="hidden" id="count" name="count" {% if hayPlan %} value="{{tamano}}" {% else %} value="0" {% endif %}/>
 
+    <form class="" id='formulario_invoice' method='post' action=''>{% csrf_token %}
         <table id="tabla_materias" class="content table table-hover table-condensed"    >
             <thead>
                 <th>Codigo USB</th>
@@ -30,26 +40,55 @@
                 <th>Codigo Univ. Destino</th>
                 <th>Nombre Univ. Destino</th>
                 <th>Creditos Univ. Destino</th>
+                <th>Eliminar</th>
             </thead>
 
-            <tr>
-                <td>
-                    <select name="lista_materias" id="list" class="form-control">
-                    {% for materia in materias %}
-                        <option value="{{materia.id}}">{{materia.codigo}}</option>
-                    {% endfor %}
-                    </select>
-                </td>
-                <td><input type="text" id="cred{{materia.id}}" class="form-control"/></td>
-                <td><input type="text" id="nombre{{materia.id}}" class="form-control"/></td>
-                <td><input type="text" name='cod_des' class="form-control"> </input> </td>
-                <td><input type="text" class="form-control"> </input></td>
-                <td><input type="text" class="form-control"> </input></td>
-            </tr>
-        </table>
-        <button id="boton_agregar" onclick="agregar_materia()" class="btn btn-primary">Agregar Materia</button>
-        <input type='submit' class="btn btn-primary" value='Guardar' />
 
+            {% if hayPlan %}
+                {% for planEst in estudiante.planDeEstudio.all %}
+                    <tr>
+                        <td>
+                            <select name="lista_materias" id="listCON" class="form-control">
+                            {% for materia in materias %}
+                                <option value="{{materia.id}}" {% if planEst.materiaUsb.codigo == materia.codigo %}selected{%endif%}>{{materia.codigo}}</option>
+                            {% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="text" id="cred{{materia.id}}" class="form-control"/></td>
+                        <td><input type="text" id="nombre{{materia.id}}" class="form-control"/></td>
+                        <td><input type="text" name="cod_des_0" class="form-control" value="{{planEst.codigoUniv}}"> </input> </td>
+                        <td><input type="text" name="nom_des_0" class="form-control" value="{{planEst.nombreMateriaUniv}}"> </input></td>
+                        <td><input type="text" name="cred_des_0" class="form-control" value="{{planEst.creditosUniv}}"> </input></td>
+                        <td><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>
+                        <select name="lista_materias" id="listSIN" class="form-control">
+                            {% for materia in materias %}
+                            <option value="{{materia.id}}" >{{materia.codigo}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input type="text" id="cred_mat" class="form-control"/></td>
+                    <td><input type="text" id="nombre_mat" class="form-control"/></td>
+                    <td><input type="text" name="cod_des_0" class="form-control"> </input> </td>
+                    <td><input type="text" name="nom_des_0" class="form-control"> </input></td>
+                    <td><input type="text" name="cred_des_0" class="form-control"> </input></td>
+                    <td><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                </tr>
+            {% endif %}
+
+        </table>
+
+        <input type='submit' class="btn btn-primary" value='Guardar' />
+    </form>
+    {% if hayPlan %}
+        <button id="boton_agregarCON" onclick="agregar_materiaCON()" class="btn btn-primary">Agregar Materia</button>
+    {% else %}
+        <button id="boton_agregarSIN" onclick="agregar_materiaSIN()" class="btn btn-primary">Agregar Materia</button>
+    {% endif %}
 </div>
 
 

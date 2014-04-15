@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.models import User
 from estudiante.models import *
 from postulante.models import *
+from administrador.models import *
 from countries.models import *
 from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.extras.widgets import SelectDateWidget
@@ -99,16 +100,10 @@ class formularioTRES_form(forms.Form):
     email = forms.EmailField()
 
 class formularioCUATRO_formUSB(forms.Form):
-    programa_choices = (
-        ('bilaterales', 'Convenios bilaterales'),
-    )
-    programa= forms.ChoiceField(choices=programa_choices)
+    programa= forms.ModelChoiceField(queryset=ProgramaIntercambio.objects.all())
 
 class formularioCUATRO_formExt(forms.Form):
-    programa_choices = (
-        ('bilaterales', 'Convenios bilaterales'),
-    )
-    programa= forms.ChoiceField(choices=programa_choices)
+    programa= forms.ModelChoiceField(queryset=ProgramaIntercambio.objects.all())
 
 class formularioCINCO_formUSB(forms.Form):
     carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())

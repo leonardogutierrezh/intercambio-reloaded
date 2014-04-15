@@ -14,6 +14,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 import os, random, string
 
+######################################
+import html5lib
+import ho.pisa as pisa
+import cStringIO as StringIO
+import cgi
+from django.template.loader import render_to_string
+from reportlab.lib.units import inch
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Image
+
 def registrarEstudianteUSB(request):
     if request.method == 'POST':
         formulario = EstudianteUSB_Form(request.POST)
@@ -246,7 +256,7 @@ def postularse(request):
     else:
         yaPostulado = False
         print 'false'
-    return render_to_response('estudiante/postularse.html',{'yaPostulado':yaPostulado},context_instance=RequestContext(request))
+    return render_to_response('estudiante/postularse.html',{'yaPostulado':yaPostulado,'estudiante':estudiante},context_instance=RequestContext(request))
 
 def formularioUNO(request):
     estudiante = Estudiante.objects.get(user=request.user)
@@ -467,7 +477,10 @@ def formularioSIETE(request):
             if 'atras' in request.POST:
                 return HttpResponseRedirect('/formularioSEIS')
             if 'siguiente' in request.POST:
-                return HttpResponseRedirect('/postularse')
+                if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+                    return HttpResponseRedirect('/postularse')
+                else:
+                    return HttpResponseRedirect('/documentosRequeridos')
     else:
         if estudiante.representante == None:
             formulario = formularioSIETE_form()
@@ -507,7 +520,10 @@ def documentosRequeridos(request):
                     estudiante.estadoPostulacion = 'Postulado'
                 estudiante.save()
 
-                return HttpResponseRedirect('/postularse')
+                if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+                    return HttpResponseRedirect('/postularse')
+                else:
+                    return HttpResponseRedirect('/planEstudio')
         else:
             formulario = documentosRequeridosExt_form(request.POST,request.FILES)
     else:
@@ -526,8 +542,178 @@ def planEstudio(request):
     estudiante = Estudiante.objects.get(user=request.user)
     materias = MateriaUSB.objects.all()
     if request.method == 'POST':
-        print '-------------------------------'
-        lista = request.POST.getlist('lista_materias')
-        print lista
-    return render_to_response('estudiante/planEstudio.html',{'materias':materias,'estudiante':estudiante},context_instance=RequestContext(request))
+        if len(estudiante.planDeEstudio.all()) != 0:
+            print 'es diferente que cero'
+            for planEst in estudiante.planDeEstudio.all():
+                planEst.delete()
+        lista_materias = request.POST.getlist('lista_materias')
+        contador = request.POST.get('count')
+
+        aux = 0
+        for lista in lista_materias:
+            print lista
+            materia = MateriaUSB.objects.get(id=int(lista))
+            existe = True
+            while existe:
+                print 'entre en existe'
+                cod_destino = "cod_des_" + str(aux)
+                nom_destino = "nom_des_" + str(aux)
+                cred_destino = "cred_des_" + str(aux)
+                print request.POST.get(cod_destino)
+                if request.POST.get(cod_destino) != None:
+                    print 'aqui entre otra vez'
+                    codigoUniv = request.POST.get(cod_destino)
+                    nombreMateriaUniv = request.POST.get(nom_destino)
+                    creditosUniv = int(request.POST.get(cred_destino))
+                    existe = False
+                    aux = aux + 1
+                else:
+                    aux = aux + 1
+            plan = PlanDeEstudio.objects.create(materiaUsb = materia, codigoUniv=codigoUniv, nombreMateriaUniv=nombreMateriaUniv, creditosUniv=creditosUniv)
+            plan.save()
+
+            estudiante.planDeEstudio.add(plan)
+        estudiante.tercerPaso = True
+        if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+            estudiante.estadoPostulacion = 'Postulado'
+
+        estudiante.save()
+        if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+            return  HttpResponseRedirect('/dominioIdiomas')
+        else:
+            return HttpResponseRedirect('/postularse')
+    if len(estudiante.planDeEstudio.all()) == 0:
+        hayPlan = False
+    else:
+        hayPlan = True
+    return render_to_response('estudiante/planEstudio.html',{'materias':materias,'estudiante':estudiante,'hayPlan':hayPlan,'tamano':len(estudiante.planDeEstudio.all())-1},context_instance=RequestContext(request))
+
+def dominioIdiomas(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    idiomas = Idioma.objects.all()
+    if request.method == 'POST':
+        return  HttpResponseRedirect('/postularse')
+    return render_to_response('estudiante/dominioIdiomas.html',{'estudiante':estudiante,'idiomas':idiomas},context_instance=RequestContext(request))
+
+def descargar(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    # if not(estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso):
+    #    return render_to_response('estudiante/noPostuladoAun.html',context_instance=RequestContext(request))
+
+def descargarPlanilla(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Planilla Postulacion.pdf"'
+
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
+
+
+    p.setFont("Helvetica",11)
+    p.drawString( 68, 690, "FORMULARIO DE POSTULACION AL PROGRAMA DE INTERCAMBIO DE ESTUDIANTES ")
+    p.setFont("Helvetica",10)
+    p.drawString( 70, 660, "DATOS PERSONALES ")
+    p.setFont("Helvetica",8)
+    if estudiante.nombre2 != None:
+        p.drawString( 70, 630, "- Nombre completo: " + estudiante.nombre1 + estudiante.nombre2 + estudiante.apellido1 + estudiante.apellido2)
+    else:
+        p.drawString( 70, 630, "- Nombre completo: " + estudiante.nombre1 + estudiante.apellido1 + estudiante.apellido2)
+    p.drawString( 70, 610, "- Genero: " )
+    p.drawString( 320, 610, "- Fecha de nacimiento: " )
+    p.drawString( 70, 590, "- Email: " + request.user.email)
+    p.drawString( 320, 590, "- Nacionalidad: " )
+    p.drawString( 70, 570, "- Cedula de identidad: " )
+    p.drawString( 320, 570, "- Tlf. Celular: " )
+    if estudiante.estudUsb:
+        p.drawString( 70, 550, "- Carne estudiantil USB: " + estudiante.carnet)
+    else:
+        p.drawString( 70, 550, "- Carne estudiantil USB: ")
+    p.drawString( 320, 550, "- Tlf. Habitacion: " )
+    p.drawString( 70, 530, "- Domicilio actual: " )
+
+    p.drawString( 90, 520, "- Urb/Sector/Barrio: " )
+    p.drawString( 320, 520, "- Nombre (Edificio|Casa): " )
+    p.drawString( 90, 500, "- Calle: " )
+    p.drawString( 320, 500, "- Apartamento|Nro.Casa: " )
+    p.drawString( 90, 480, "- Ciudad: " )
+    p.drawString( 320, 480, "- Estado: " )
+    p.drawString( 90, 460, "- Codigo postal: " )
+
+    p.setFont("Helvetica",11)
+    p.drawString( 68, 400, "IDENTIFICACION DEL PROGRAMA Y LAPSO DE ESTUDIO EN INTERCAMBIO:")
+    p.drawString( 80, 375, "Primera opcion " )
+    p.drawString( 78, 373, "_____________" )
+
+    p.setFont("Helvetica",8)
+    p.drawString( 70, 350, "- Pais destino: " )
+    p.drawString( 310, 350, "- Duracion del programa: " )
+    p.drawString( 70, 330, "- Tipo de programa: " )
+    p.drawString( 70, 310, "- Nombre de la universidad destino: " )
+    p.drawString( 70, 290, "- Nombre del programa: " )
+    p.drawString( 70, 270, "- Fechas tentativas de inicio y fin (segun calendario de la universidad de destino): " )
+    p.drawString( 90, 260, "Inicio: ")
+    p.drawString( 250, 260, "Fin: ")
+
+    p.setFont("Helvetica",11)
+    p.drawString( 80, 230, "Segunda opcion " )
+    p.drawString( 78, 228, "______________" )
+    p.setFont("Helvetica",8)
+    p.drawString( 70, 205, "- Pais destino: " )
+    p.drawString( 310, 205, "- Duracion del programa: " )
+    p.drawString( 70, 185, "- Tipo de programa: " )
+    p.drawString( 70, 165, "- Nombre de la universidad destino: " )
+    p.drawString( 70, 145, "- Nombre del programa: " )
+    p.drawString( 70, 125, "- Fechas tentativas de inicio y fin (segun calendario de la universidad de destino): " )
+    p.drawString( 90, 115, "Inicio: ")
+    p.drawString( 250, 115, "Fin: ")
+
+
+    p.rect(50,450,6.8*inch,3.2*inch)
+    p.rect(50,80,6.8*inch,4.8*inch)
+
+    p.drawInlineImage("./intercambio/static/img/cebollaUSB.jpg", 110, 770, 0.8*inch, 0.5*inch)
+    p.setFont("Helvetica",7)
+    p.drawString( 90, 755, "UNIVERSIDAD SIMON BOLIVAR")
+    p.drawString( 120, 745, "RECTORADO")
+    p.drawString( 60, 735, "Direccion de relaciones internacionales y de cooperacion")
+    p.drawString( 283, 745, "Coordinacion de apoyo a los programas de intercambio")
+    p.drawString( 330, 735, "Programa de intercambio de estudiantes")
+
+    p.showPage()
+
+    ## Segunda pagina
+    p.setFont("Helvetica",11)
+    p.drawString( 68, 750, "INFORMACION ACADEMICA:")
+    p.setFont("Helvetica",8)
+    p.drawString( 70, 720, "Nro de creditos aprobados a la fecha de postulacion: " )
+    p.drawString( 320, 720, "Decanato: " )
+    p.drawString( 70, 700, "Carrera que estudia en la universidad: " )
+    p.drawString( 70, 680, "Area de estudio: " )
+    p.drawString( 320, 680, "Indice academico a la fecha de postulacion: " )
+    p.showPage()
+
+    ## Proxima pagina
+    p.setFont("Helvetica",8)
+    p.drawString( 100, 690, "Firma del solicitante: ____________________ ")
+    p.drawString( 320, 690, "Fecha del solicitud: ")
+    p.setFont("Helvetica",7)
+    p.drawString( 140, 660, "El estudiante firmante declara que los datos y documentos suministrados son veridicos y asume cumplir ")
+    p.drawString( 190, 650, "cabalmente con las normas del programa de intercambio estudiantil.")
+    p.rect(50,610,6.8*inch,2*inch)
+
+    p.setFont("Helvetica",11)
+    p.drawString( 100, 560, "**Esta seccion debe ser llenada exclusivamente por la coordinacion docente**")
+    p.drawString( 110, 510, "Opinion de la coordinacion Docente sobre esta solicitud (explicacion breve):")
+    p.setFont("Helvetica",8)
+    p.drawString( 70, 475, "Muy favorable: " )
+    p.drawString( 70, 455, "Favorable: " )
+    p.drawString( 70, 435, "Con reservas: " )
+    p.rect(50,415,6.8*inch,1.7*inch)
+    p.showPage()
+    p.save()
+
+    return response
+
 

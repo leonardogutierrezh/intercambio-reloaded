@@ -11,7 +11,10 @@ class Pais(models.Model):
 
 class Universidad(models.Model):
     nombre = models.CharField(max_length=100)
-    pais = models.ForeignKey(Pais)
+    pais = models.ForeignKey(Country)
+    nombre = models.CharField(max_length=100)
+    def __unicode__(self):
+        return self.nombre
 
 class Usuario(models.Model):
     usuario = models.ForeignKey(User)
@@ -27,3 +30,12 @@ class Log(models.Model):
     suceso = models.CharField(max_length=200)
     usuario = models.ForeignKey(User)
     fecha = models.DateField(auto_now=True)
+
+class Idioma(models.Model):
+    nombre = models.CharField(max_length=100)
+
+class ProgramaIntercambio(models.Model):
+    nombre = models.CharField(max_length=100)
+    universidad = models.ManyToManyField(Universidad)
+    def __unicode__(self):
+        return self.nombre

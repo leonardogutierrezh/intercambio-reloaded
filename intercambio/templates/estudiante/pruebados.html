@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block js %}
+<style>
+    .form-signin {
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function (){
+        //Aqui asignamos el click al elemento <a>
+        $("#recuperar_contrasena").click(function (){
+            document.getElementById('iniciar_sesion').style.display = 'none';
+            document.getElementById('div_recuperar').style.display = 'block';
+        })
+    })
+</script>
+{% endblock %}
+
+
+{% block seccion-contenido %}
+{% if mensajeRecuperar == "Nombre de usuario no existe. Trate de nuevo" or mensajeErrorCorreo == "Ha ocurrido un error. Favor intente de nuevo" %}
+<div class="container" id="iniciar_sesion" style="display: none">
+    <h2 class="form-signin">Iniciar sesión</h2>
+
+    <form id='formulario' class="form-signin" method='post' action='' > {% csrf_token %}
+        <p style="color: red"> {{ mensajeCorreo }} </p>
+        <p style="color: red">  {{ error_log }} </p>
+        {{ formulario |bootstrap }}
+        <p><a id="recuperar_contrasena">Recuperar contraseña</a></p>
+        <input type='submit' class="btn btn-primary" value='Iniciar' name="iniciar"/>
+    </form>
+</div>
+
+<div class="container" id="div_recuperar" style="display: block">
+    <h2 class="form-signin">Recuperar contraseña</h2>
+
+    <form id='formulario' class="form-signin" method='post' action=''> {% csrf_token %}
+        <p style="color: red"> {{ mensajeRecuperar }} </p>
+        <p style="color: red"> {{ mensajeErrorCorreo }} </p>
+        {{ formulario.username |bootstrap }}
+        <input type='submit' class="btn btn-primary" value='Recuperar contraseña' name="recuperar" />
+    </form>
+</div>
+{% else %}
+<div class="container" id="iniciar_sesion">
+    <h2 class="form-signin">Iniciar sesión</h2>
+
+    <form id='formulario' class="form-signin" method='post' action=''> {% csrf_token %}
+        <p style="color: red"> {{ mensajeCorreo }} </p>
+        <p style="color: red">  {{ error_log }} </p>
+        {{ formulario |bootstrap }}
+        <p><a id="recuperar_contrasena">Recuperar contraseña</a></p>
+        <input type='submit' class="btn btn-primary" value='Iniciar' name="iniciar"/>
+    </form>
+</div>
+
+<div class="container" id="div_recuperar" style="display: none">
+    <h2 class="form-signin">Recuperar contraseña</h2>
+
+    <form id='formulario' class="form-signin" method='post' action=''> {% csrf_token %}
+        {{ formulario.username |bootstrap }}
+        <input type='submit' class="btn btn-primary" value='Recuperar contraseña' name="recuperar" />
+    </form>
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+
