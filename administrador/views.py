@@ -181,8 +181,10 @@ def ver_usuario(request, id_usuario):
         perfil = Postulante.objects.get(usuario=usuario)
     return render_to_response('administrador/ver_usuario.html', {'usuario':usuario, 'perfil': perfil}, context_instance=RequestContext(request))
 
+@login_required(login_url='/')
 def editar_perfil(request):
     usuario = request.user
+    print usuario.check_password('123')
     creado= 0
     if Administrador.objects.filter(usuario=usuario):
         perfil = Administrador.objects.get(usuario=usuario)
@@ -198,8 +200,26 @@ def editar_perfil(request):
             perfil.email = email
             usuario.username = us
             perfil.save()
-            usuario.save()
+            try:
+                usuario.save()
+            except:
+                creado = "5"
+                return render_to_response('administrador/editar_perfil.html', {'formulario': formulario, 'creado': creado}, context_instance=RequestContext(request))
             creado= '2'
+            if request.POST.get('vieja') != "":
+                creado= '3'
+            if usuario.check_password(request.POST.get('vieja')):
+                print 'entreeeeeeeeeeeeee'
+                nueva = request.POST.get('nueva')
+                repetida = request.POST.get('repetida')
+                print nueva
+                print repetida
+                creado = "4"
+                if nueva == repetida:
+                    print 'iguales'
+                    usuario.set_password(nueva)
+                    usuario.save()
+                    creado= "2"
             Log.objects.create(usuario=usuario, suceso="Perfil modificado")
     else:
         formulario = EditarPerfilForm(initial={'nombre': perfil.nombre, 'email': perfil.email, 'usuario': usuario.username})
