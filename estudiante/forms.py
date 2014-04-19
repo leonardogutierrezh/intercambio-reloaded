@@ -10,6 +10,7 @@ from countries.models import *
 from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.extras.widgets import SelectDateWidget
 from django.forms.widgets import CheckboxSelectMultiple
+import magic
 
 class EstudianteUSB_Form(forms.Form):
     nombre1 = forms.CharField(max_length=50, label="Primer nombre")
@@ -144,6 +145,7 @@ class documentosRequeridosUSB_form(forms.Form):
     carta = forms.FileField(label='Carta de motivación')
     planilla = forms.FileField(required=False,label='*Planilla CINDA/SMILE')
     certificado = forms.FileField(required=False,label='**Certificado de idiomas')
+
 
 class documentosRequeridosExt_form(forms.Form):
     foto = forms.ImageField()
