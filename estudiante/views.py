@@ -168,6 +168,7 @@ def perfilEstudianteUSB(request):
             email = formulario.cleaned_data['email']
             carnet = formulario.cleaned_data['carnet']
             username = formulario.cleaned_data['username']
+            carrera = formulario.cleaned_data['carrera']
 
             if user.username != username:
                 aux = User.objects.filter(username=username)
@@ -191,6 +192,7 @@ def perfilEstudianteUSB(request):
             estudiante.apellido1 = apellido1
             estudiante.apellido2 = apellido2
             estudiante.carnet = carnet
+            estudiante.carrera_usb = carrera
 
             user.save()
             estudiante.save()
@@ -198,7 +200,8 @@ def perfilEstudianteUSB(request):
             return render_to_response('index.html', context_instance=RequestContext(request))
     else:
         formulario = EstudianteUSB_Edit_Form(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,'apellido2':estudiante.apellido2,
-                                                'email':user.email,'carnet':estudiante.carnet,'username':user.username})
+                                                'email':user.email,'carnet':estudiante.carnet,'username':user.username,
+                                                'carrera':estudiante.carrera_usb})
     return render_to_response('estudiante/perfilEstudiante.html', {'formulario':formulario},context_instance=RequestContext(request))
 
 def perfilEstudianteExt(request):

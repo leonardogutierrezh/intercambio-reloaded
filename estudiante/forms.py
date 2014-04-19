@@ -46,6 +46,7 @@ class EstudianteUSB_Edit_Form(forms.Form):
     cambiarContra = forms.BooleanField(label="Cambiar contrasena", widget=forms.CheckboxInput(attrs={'onClick':'cambiarContrasena()'}), required=False)
     contrasena1 = forms.CharField(widget=forms.PasswordInput(attrs={'disabled':'disabled'}),label="Contrasena", required=False)
     contrasena2 = forms.CharField(widget=forms.PasswordInput(attrs={'disabled':'disabled'}),label="Contrasena de nuevo", required=False)
+    carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())
 
 class EstudianteExt_Edit_Form(forms.Form):
     nombre1 = forms.CharField(max_length=50, label="Primer nombre")
