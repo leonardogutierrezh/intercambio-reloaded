@@ -546,32 +546,24 @@ def planEstudio(request):
         if len(estudiante.planDeEstudio.all()) != 0:
             for planEst in estudiante.planDeEstudio.all():
                 planEst.delete()
+            estudiante.tercerPaso = False
         lista_materias = request.POST.getlist('lista_materias')
         contador = int(request.POST.get('count'))
 
         aux = 0
         num = 0
-        print 'longitud de lista materias ', len(lista_materias)
-        print 'contador ', contador
-
 
         for lista in lista_materias:
-            print 'entre en materia'
             materia = MateriaUSB.objects.get(id=int(lista))
-            print 'materia ' + materia.nombre
             ## Encontrando el numero de fila fila
             check = 'check_' + str(aux)
-            print check
             if not(request.POST.get(check)):
                 existe = True
                 while existe:
                     aux = aux + 1
                     check = 'check_' + str(aux)
                     if request.POST.get(check):
-                        print check
                         existe = False
-                        print 'auxiliar',aux
-            print 'la materia es: ', aux
             cod_destino = "cod_des_" + str(aux)
             nom_destino = "nom_des_" + str(aux)
             cred_destino = "cred_des_" + str(aux)
@@ -579,7 +571,6 @@ def planEstudio(request):
             codigoUniv = request.POST.get(cod_destino)
             nombreMateriaUniv = request.POST.get(nom_destino)
             creditosUniv = int(request.POST.get(cred_destino))
-            print 'TODO --- ' + codigoUniv +  ' ' + nombreMateriaUniv + ' ' + str(creditosUniv)
 
             plan = PlanDeEstudio.objects.create(materiaUsb = materia, codigoUniv=codigoUniv, nombreMateriaUniv=nombreMateriaUniv, creditosUniv=creditosUniv, auxiliar =num)
             plan.save()
@@ -587,16 +578,17 @@ def planEstudio(request):
             num = num + 1
             aux = aux + 1
 
-        estudiante.tercerPaso = True
+            estudiante.tercerPaso = True
+
         if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
             estudiante.estadoPostulacion = 'Postulado'
 
         estudiante.save()
 
         if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
-            return  HttpResponseRedirect('/dominioIdiomas')
+            return  HttpResponseRedirect('/postularse')
         else:
-            return HttpResponseRedirect('/postularse')
+            return HttpResponseRedirect('/dominioIdiomas')
     if len(estudiante.planDeEstudio.all()) == 0:
         hayPlan = False
     else:
@@ -607,8 +599,58 @@ def dominioIdiomas(request):
     estudiante = Estudiante.objects.get(user=request.user)
     idiomas = Idioma.objects.all()
     if request.method == 'POST':
+        if len(estudiante.idiomas.all()) != 0:
+            for idioma in estudiante.idiomas.all():
+                idioma.delete()
+            estudiante.cuartoPaso = False
+
+        lista_idiomas = request.POST.getlist('lista_idiomas')
+        contador = int(request.POST.get('count'))
+
+        aux = 0
+        num = 0
+
+        for lista in lista_idiomas:
+            print 'id ', lista
+            idioma = Idioma.objects.get(id=int(lista))
+            ## Encontrando el numero de fila fila
+            check = 'check_' + str(aux)
+            if not(request.POST.get(check)):
+                existe = True
+                while existe:
+                    aux = aux + 1
+                    check = 'check_' + str(aux)
+                    if request.POST.get(check):
+                        existe = False
+            verbal = "verbal_" + str(aux)
+            escrito = "escrito_" + str(aux)
+            auditivo = "auditivo_" + str(aux)
+
+            verbal_idioma = request.POST.get(verbal)
+            escrito_idioma = request.POST.get(escrito)
+            auditivo_idioma = request.POST.get(auditivo)
+
+            domIdioma = ManejoIdiomas.objects.create(idioma=idioma,verbal=verbal_idioma,escrito=escrito_idioma,auditivo=auditivo_idioma,auxiliar=num)
+            domIdioma.save()
+            estudiante.idiomas.add(domIdioma)
+            num = num + 1
+            aux = aux + 1
+
+            estudiante.cuartoPaso = True
+
+        if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+            estudiante.estadoPostulacion = 'Postulado'
+
+        estudiante.save()
+
         return  HttpResponseRedirect('/postularse')
-    return render_to_response('estudiante/dominioIdiomas.html',{'estudiante':estudiante,'idiomas':idiomas},context_instance=RequestContext(request))
+
+    tam = len(estudiante.idiomas.all())
+    if tam == 0:
+        hayIdioma = False
+    else:
+        hayIdioma = True
+    return render_to_response('estudiante/dominioIdiomas.html',{'estudiante':estudiante,'idiomas':idiomas,'hayIdioma':hayIdioma,'tamano':tam-1},context_instance=RequestContext(request))
 
 def descargar(request):
     estudiante = Estudiante.objects.get(user=request.user)

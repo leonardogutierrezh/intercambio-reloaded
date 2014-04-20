@@ -17,6 +17,7 @@
             document.getElementById('count_sin').value = contador;
             $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
+
         function eliminarFila(btn){
             var row = btn.parentNode.parentNode;
             row.parentNode.removeChild(row);

@@ -7,7 +7,7 @@
         var contador = document.getElementById('count').value;
         contador = parseInt(contador) + 1;
         document.getElementById('count').value = contador;
-        $("#tabla_idiomas").append("<tr><td><select name=\"lista_idiomas\" id=\"listCON\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button>Eliminar</button></td></tr>");
+        $("#tabla_idiomas").append("<tr><td><select name=\"lista_idiomas\" class=\"form-control\"> {% for idioma in idiomas %}<option value=\"{{idioma.id}}\">{{idioma.nombre}}</option>{% endfor %}</select></td><td><select class=\"form-control\" name='verbal_" + contador + "'> <option value=\"basico\">Básico</option> <option value=\"intermedio\">Intermedio</option> <option value=\"avanzado\">Avanzado</option> </select></td><td><select class=\"form-control\" name='escrito_" + contador + "'><option value=\"basico\">Básico</option><option value=\"intermedio\">Intermedio</option><option value=\"avanzado\">Avanzado</option></select></td><td><select class=\"form-control\" name='auditivo_" + contador + "'><option value=\"basico\">Básico</option><option value=\"intermedio\">Intermedio</option><option value=\"avanzado\">Avanzado</option></select>  </td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button> </td></td></tr>");
     }
 </script>
 <script>
@@ -15,7 +15,12 @@
         var contador = document.getElementById('count').value;
         contador = parseInt(contador) + 1;
         document.getElementById('count').value = contador;
-        $("#tabla_idiomas").append("<tr><td><select name=\"lista_idiomas\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button>Eliminar</button></td></tr>");
+        $("#tabla_idiomas").append("<tr><td><select name=\"lista_idiomas\" class=\"form-control\"> {% for idioma in idiomas %}<option value=\"{{idioma.id}}\">{{idioma.nombre}}</option>{% endfor %}</select></td><td><select class=\"form-control\" name='verbal_" + contador + "'> <option value=\"basico\">Básico</option> <option value=\"intermedio\">Intermedio</option> <option value=\"avanzado\">Avanzado</option> </select></td><td><select class=\"form-control\" name='escrito_" + contador + "'><option value=\"basico\">Básico</option><option value=\"intermedio\">Intermedio</option><option value=\"avanzado\">Avanzado</option></select></td><td><select class=\"form-control\" name='auditivo_" + contador + "'><option value=\"basico\">Básico</option><option value=\"intermedio\">Intermedio</option><option value=\"avanzado\">Avanzado</option></select>  </td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button> </td></td></tr>");
+    }
+
+    function eliminarFila(btn){
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
     }
 </script>
 
@@ -24,9 +29,9 @@
 {% block seccion-contenido %}
 <div class="container">
     <h3>Paso 4: Dominio de idiomas</h3>
-    <input type="hidden" id="count" name="count" {% if hayPlan %} value="{{tamano}}" {% else %} value="0" {% endif %}/>
 
     <form class="" id='formulario_invoice' method='post' action=''>{% csrf_token %}
+        <input type="hidden" id="count" name="count" {% if hayIdioma %} value="{{tamano}}" {% else %} value="0" {% endif %}/>
         <table id="tabla_idiomas" class="content table table-hover table-condensed"    >
             <thead>
             <th>Idioma que maneja</th>
@@ -38,52 +43,70 @@
 
 
             {% if hayIdioma %}
-            {% for planEst in estudiante.planDeEstudio.all %}
-                <tr>
-                    <td>
-                        <select name="lista_idiomas" id="listCON" class="form-control">
-                            {% for materia in materias %}
-                            <option value="{{materia.id}}" {% if planEst.materiaUsb.codigo == materia.codigo %}selected{%endif%}>{{materia.codigo}}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td><input type="text" id="cred{{materia.id}}" class="form-control"/></td>
-                    <td><input type="text" id="nombre{{materia.id}}" class="form-control"/></td>
-                    <td><input type="text" name="cod_des_0" class="form-control" value="{{planEst.codigoUniv}}"> </input> </td>
-                    <td><button>Eliminar</button></td>
-                </tr>
-            {% endfor %}
+                {% for manejoIdioma in estudiante.idiomas.all %}
+                    <tr>
+                        <td>
+                            <select name="lista_idiomas" class="form-control">
+                                {% for idioma in idiomas %}
+                                    <option value="{{idioma.id}}" {% if idioma.id == manejoIdioma.idioma.id %}selected{%endif%}>{{idioma.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select name="verbal_{{manejoIdioma.auxiliar}}" class="form-control">
+                            <option value="basico" {% if manejoIdioma.verbal == 'basico'%} selected {%endif%}>Básico</option>
+                            <option value="intermedio" {% if manejoIdioma.verbal == 'intermedio'%} selected {%endif%}>Intermedio</option>
+                            <option value="avanzado" {% if manejoIdioma.verbal == 'avanzado'%} selected {%endif%}>Avanzado</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="escrito_{{manejoIdioma.auxiliar}}"  class="form-control">
+                                <option value="basico" {% if manejoIdioma.escrito == 'basico' %} selected {%endif%}>Básico</option>
+                                <option value="intermedio" {% if manejoIdioma.escrito == 'intermedio' %} selected {%endif%}>Intermedio</option>
+                                <option value="avanzado" {% if manejoIdioma.escrito == 'avanzado' %} selected {%endif%}>Avanzado</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="auditivo_{{manejoIdioma.auxiliar}}" class="form-control">
+                                <option value="basico" {% if manejoIdioma.auditivo == 'basico' %} selected {%endif%}>Básico</option>
+                                <option value="intermedio" {% if manejoIdioma.auditivo == 'intermedio' %} selected {%endif%}>Intermedio</option>
+                                <option value="avanzado" {% if manejoIdioma.auditivo == 'avanzado' %} selected {%endif%}>Avanzado</option>
+                            </select>
+                        </td>
+                        <td><input type="checkbox" name="check_{{manejoIdioma.auxiliar}}" checked hidden="True"/> <button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    </tr>
+                {% endfor %}
             {% else %}
             <tr>
                 <td>
-                    <select name="lista_idiomas" id="listSIN" class="form-control">
+                    <select name="lista_idiomas"  class="form-control">
                         {% for idioma in idiomas %}
                         <option value="{{idioma.id}}" >{{idioma.nombre}}</option>
                         {% endfor %}
                     </select>
                 </td>
                 <td>
-                    <select name="verbal_0" id="verbal_SIN" class="form-control">
+                    <select name="verbal_0" class="form-control">
                     <option value="basico">Básico</option>
                     <option value="intermedio">Intermedio</option>
                     <option value="avanzado">Avanzado</option>
                     </select>
                 </td>
                 <td>
-                    <select name="escrito_0" id="escrito_SIN" class="form-control">
+                    <select name="escrito_0"  class="form-control">
                         <option value="basico">Básico</option>
                         <option value="intermedio">Intermedio</option>
                         <option value="avanzado">Avanzado</option>
                     </select>
                 </td>
                 <td>
-                    <select name="auditivo_0" id="auditivo_SIN" class="form-control">
+                    <select name="auditivo_0" class="form-control">
                         <option value="basico">Básico</option>
                         <option value="intermedio">Intermedio</option>
                         <option value="avanzado">Avanzado</option>
                     </select>
                 </td>
-                <td><button>Eliminar</button></td>
+                <td><input type="checkbox" name="check_0" checked hidden="True"/> <button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
             </tr>
             {% endif %}
         </table>
