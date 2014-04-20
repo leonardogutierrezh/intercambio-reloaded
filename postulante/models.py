@@ -34,6 +34,7 @@ class PlanDeEstudio(models.Model):
     codigoUniv = models.CharField(max_length=100)
     nombreMateriaUniv = models.CharField(max_length=100)
     creditosUniv = models.IntegerField()
+    auxiliar = models.CharField(max_length=10)
 
 from estudiante.models import Estudiante
 

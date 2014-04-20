@@ -4,18 +4,18 @@
 {% block js %}
     <script>
         function agregar_materiaCON() {
-            var contador = document.getElementById('count').value;
+            var contador = document.getElementById('count_con').value;
             contador = parseInt(contador) + 1;
-            document.getElementById('count').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+            document.getElementById('count_con').value = contador;
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
     </script>
     <script>
         function agregar_materiaSIN() {
-            var contador = document.getElementById('count').value;
+            var contador = document.getElementById('count_sin').value;
             contador = parseInt(contador) + 1;
-            document.getElementById('count').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+            document.getElementById('count_sin').value = contador;
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
         function eliminarFila(btn){
             var row = btn.parentNode.parentNode;
@@ -29,9 +29,13 @@
 {% block seccion-contenido %}
 <div class="container">
     <h3>Paso 3: Plan de estudio</h3>
-    <input type="hidden" id="count" name="count" {% if hayPlan %} value="{{tamano}}" {% else %} value="0" {% endif %}/>
 
     <form class="" id='formulario_invoice' method='post' action=''>{% csrf_token %}
+        {% if hayPlan %}
+            <input type="hidden" id="count_con" name="count"  value="{{tamano}}" />
+        {% else %}
+            <input type="hidden" id="count_sin" name="count"  value="0" />
+        {% endif %}
         <table id="tabla_materias" class="content table table-hover table-condensed"    >
             <thead>
                 <th>Codigo USB</th>
@@ -54,12 +58,12 @@
                             {% endfor %}
                             </select>
                         </td>
-                        <td><input type="text" id="cred{{materia.id}}" class="form-control"/></td>
-                        <td><input type="text" id="nombre{{materia.id}}" class="form-control"/></td>
-                        <td><input type="text" name="cod_des_0" class="form-control" value="{{planEst.codigoUniv}}"> </input> </td>
-                        <td><input type="text" name="nom_des_0" class="form-control" value="{{planEst.nombreMateriaUniv}}"> </input></td>
-                        <td><input type="text" name="cred_des_0" class="form-control" value="{{planEst.creditosUniv}}"> </input></td>
-                        <td><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><input type="text" value="{{planEst.materiaUsb.nombre}}" class="form-control"/></td>
+                        <td><input type="text" value="{{planEst.materiaUsb.creditos}}" class="form-control"/></td>
+                        <td><input type="text" name='cod_des_{{planEst.auxiliar}}' class="form-control" value="{{planEst.codigoUniv}}"> </input> </td>
+                        <td><input type="text" name="nom_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.nombreMateriaUniv}}"> </input></td>
+                        <td><input type="text" name="cred_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.creditosUniv}}"> </input></td>
+                        <td><input type="checkbox" name="check_{{planEst.auxiliar}}" checked hidden="True"/> <button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
                     </tr>
                 {% endfor %}
             {% else %}
@@ -76,7 +80,7 @@
                     <td><input type="text" name="cod_des_0" class="form-control"> </input> </td>
                     <td><input type="text" name="nom_des_0" class="form-control"> </input></td>
                     <td><input type="text" name="cred_des_0" class="form-control"> </input></td>
-                    <td><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    <td><input type="checkbox" name="check_0" checked hidden="True"/> <button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
                 </tr>
             {% endif %}
 

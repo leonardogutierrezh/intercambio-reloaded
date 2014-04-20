@@ -252,13 +252,10 @@ def perfilEstudianteExt(request):
 
 def postularse(request):
     estudiante = Estudiante.objects.get(user=request.user)
-    print 'esta postulado' + estudiante.estadoPostulacion
     if estudiante.estadoPostulacion != 'Sin postular':
-        print 'true'
         yaPostulado = True
     else:
         yaPostulado = False
-        print 'false'
     return render_to_response('estudiante/postularse.html',{'yaPostulado':yaPostulado,'estudiante':estudiante},context_instance=RequestContext(request))
 
 def formularioUNO(request):
@@ -547,48 +544,55 @@ def planEstudio(request):
     materias = MateriaUSB.objects.all()
     if request.method == 'POST':
         if len(estudiante.planDeEstudio.all()) != 0:
-            print 'es diferente que cero'
             for planEst in estudiante.planDeEstudio.all():
                 planEst.delete()
         lista_materias = request.POST.getlist('lista_materias')
-        contador = request.POST.get('count')
+        contador = int(request.POST.get('count'))
 
         aux = 0
-        print 'contadorrrrrrrrrrr --------------------------------------'
-        print 'contador',contador
-        for cont in contador:
-            print 'aqui'
-            print lista_materias[cont]
+        num = 0
+        print 'longitud de lista materias ', len(lista_materias)
+        print 'contador ', contador
+
 
         for lista in lista_materias:
-            print lista
+            print 'entre en materia'
             materia = MateriaUSB.objects.get(id=int(lista))
-            existe = True
-            while existe:
-                #print 'entre en existe'
-                cod_destino = "cod_des_" + str(aux)
-                nom_destino = "nom_des_" + str(aux)
-                cred_destino = "cred_des_" + str(aux)
-                #print request.POST.get(cod_destino)
-                if request.POST.get(cod_destino) != None:
-                    #print 'aqui entre otra vez'
-                    codigoUniv = request.POST.get(cod_destino)
-                    nombreMateriaUniv = request.POST.get(nom_destino)
-                    creditosUniv = int(request.POST.get(cred_destino))
-                    existe = False
+            print 'materia ' + materia.nombre
+            ## Encontrando el numero de fila fila
+            check = 'check_' + str(aux)
+            print check
+            if not(request.POST.get(check)):
+                existe = True
+                while existe:
                     aux = aux + 1
-                else:
-                    aux = aux + 1
-            plan = PlanDeEstudio.objects.create(materiaUsb = materia, codigoUniv=codigoUniv, nombreMateriaUniv=nombreMateriaUniv, creditosUniv=creditosUniv)
-            plan.save()
+                    check = 'check_' + str(aux)
+                    if request.POST.get(check):
+                        print check
+                        existe = False
+                        print 'auxiliar',aux
+            print 'la materia es: ', aux
+            cod_destino = "cod_des_" + str(aux)
+            nom_destino = "nom_des_" + str(aux)
+            cred_destino = "cred_des_" + str(aux)
 
+            codigoUniv = request.POST.get(cod_destino)
+            nombreMateriaUniv = request.POST.get(nom_destino)
+            creditosUniv = int(request.POST.get(cred_destino))
+            print 'TODO --- ' + codigoUniv +  ' ' + nombreMateriaUniv + ' ' + str(creditosUniv)
+
+            plan = PlanDeEstudio.objects.create(materiaUsb = materia, codigoUniv=codigoUniv, nombreMateriaUniv=nombreMateriaUniv, creditosUniv=creditosUniv, auxiliar =num)
+            plan.save()
             estudiante.planDeEstudio.add(plan)
+            num = num + 1
+            aux = aux + 1
 
         estudiante.tercerPaso = True
         if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
             estudiante.estadoPostulacion = 'Postulado'
 
         estudiante.save()
+
         if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
             return  HttpResponseRedirect('/dominioIdiomas')
         else:
