@@ -7,7 +7,7 @@
             var contador = document.getElementById('count_con').value;
             contador = parseInt(contador) + 1;
             document.getElementById('count_con').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" onkeypress='return numero(event)' onkeyup='return numero(event)' name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
     </script>
     <script>
@@ -15,12 +15,20 @@
             var contador = document.getElementById('count_sin').value;
             contador = parseInt(contador) + 1;
             document.getElementById('count_sin').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" onkeypress='return numero(event)' onkeyup='return numero(event)' name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
 
         function eliminarFila(btn){
             var row = btn.parentNode.parentNode;
             row.parentNode.removeChild(row);
+        }
+        function numero(e) {
+            var codigo;
+            codigo = (document.all) ? e.keyCode : e.which;
+            if (codigo > 31 && (codigo < 48 || codigo > 57) ) {
+                return false;
+            }
+            return true;
         }
     </script>
 
@@ -63,7 +71,7 @@
                         <td><input type="text" value="{{planEst.materiaUsb.creditos}}" class="form-control"/></td>
                         <td><input type="text" name='cod_des_{{planEst.auxiliar}}' class="form-control" value="{{planEst.codigoUniv}}"> </input> </td>
                         <td><input type="text" name="nom_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.nombreMateriaUniv}}"> </input></td>
-                        <td><input type="text" name="cred_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.creditosUniv}}"> </input></td>
+                        <td><input type="text" name="cred_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.creditosUniv}}" onkeypress='return numero(event)' onkeyup='return numero(event)'> </input></td>
                         <td><input type="checkbox" name="check_{{planEst.auxiliar}}" checked hidden="True"/> <button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
                     </tr>
                 {% endfor %}
@@ -80,7 +88,7 @@
                     <td><input type="text" id="nombre_mat" class="form-control"/></td>
                     <td><input type="text" name="cod_des_0" class="form-control"> </input> </td>
                     <td><input type="text" name="nom_des_0" class="form-control"> </input></td>
-                    <td><input type="text" name="cred_des_0" class="form-control"> </input></td>
+                    <td><input type="text" name="cred_des_0" class="form-control" onkeypress='return numero(event)' onkeyup='return numero(event)' > </input></td>
                     <td><input type="checkbox" name="check_0" checked hidden="True"/> <button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
                 </tr>
             {% endif %}

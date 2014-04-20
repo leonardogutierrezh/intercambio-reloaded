@@ -7,9 +7,16 @@
 {% block seccion-contenido %}
 <div class="container">
     <h3>2. Documentos Requeridos</h3>
-    <form id='formulario' enctype='multipart/form-data' method='post' action=''> {% csrf_token %}
-        {{ formulario | bootstrap }}
-        <input type='submit' class="btn btn-primary" value='Guardar' />
-    </form>
+    <br>
+    <div class="row">
+        <div class="col-md-6 col-md-push-1 col-sm-3">
+
+        <form id='formulario' enctype='multipart/form-data' method='post' action=''> {% csrf_token %}
+            {{ formulario | bootstrap }}
+            <br>
+            <input type='submit' class="btn btn-primary" value='Guardar' />
+        </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
