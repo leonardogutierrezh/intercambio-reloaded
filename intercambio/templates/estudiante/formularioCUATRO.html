@@ -117,6 +117,7 @@
         <form id='formulario' method='post' action=''> {% csrf_token %}
                 <div class="row">
                     <div class="col-md-5 col-sm-10">
+                        <h4 style="text-align: center;">Primera Opcion</h4>
                         {{ formulario.programaUno | bootstrap }}
                         <div id="paises">
                             {% if hayOpcion %}
@@ -156,6 +157,7 @@
                         </div>
                     </div>
                     <div class="col-md-5 col-sm-10">
+                        <h4 style="text-align: center;">Segunda Opcion</h4>
                         {{ formulario.programaDos | bootstrap }}
                         <div id="paises_2">
                             {% if hayOpcion %}
@@ -196,8 +198,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <input type='submit' class="btn btn-primary" value='Atras' name="atras" />
-                    <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
+                    <div class="row">
+                        <div class="final col-md-4 col-md-push-4 col-sm-4 col-sm-push-4">
+                            <input type='submit' class="btn btn-primary col-md-3" value='Atras' name="atras" />
+                        </div>
+                        <div class="final col-md-1 col-md-push-1 col-sm-1 col-sm-push-1">
+                            <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
+                        </div>
+                    </div>
                 </div>
         </form>
     </div>
