@@ -2,6 +2,7 @@
 {% load bootstrap %}
 
 {% block js %}
+
 <script>
     function numero(e) {
           var codigo;
@@ -15,6 +16,7 @@
 
 <script>
 	function verPais(btn){
+        document.getElementById('divPROGRAMA1').style.display = 'none';
         var id = $(btn).val();
         console.log(id);
         $.ajax({
@@ -49,7 +51,7 @@
                 console.log(data);
                 var paises = "";
                 var uni = "";
-                paises += '<label>Pais</label><select id="paises_prog" onchange="verUnivDos(this)" onclick="verUnivDos(this)" class=" form-control">';
+                paises += '<label>Pais</label><select id="paises_prog_dos" onchange="verUnivDos(this)" onclick="verUnivDos(this)" class=" form-control">';
                 for(var i=0; i<data.length; i++){
                     paises += '<option value="' + data[i].pk + '">'+ data[i].fields.printable_name +'</option> ';
                 }
@@ -72,7 +74,7 @@
             success: function(data){
                 console.log(data);
                 var uni = "";
-                uni += '<label>Universidad</label><select id="uni_prog" class=" form-control">';
+                uni += '<label>Universidad</label><select id="uni_prog" name="uni1" class=" form-control">';
                 for(var i=0; i<data.length; i++){
                     uni += '<option value="' + data[i].pk + '">'+ data[i].fields.nombre +'</option> ';
                 }
@@ -95,7 +97,7 @@
             success: function(data){
                 console.log(data);
                 var uni = "";
-                uni += '<label>Universidad</label><select id="uni_prog" class=" form-control">';
+                uni += '<label>Universidad</label><select id="uni_prog_dos" name="uni2" class=" form-control">';
                 for(var i=0; i<data.length; i++){
                     uni += '<option value="' + data[i].pk + '">'+ data[i].fields.nombre +'</option> ';
                 }
@@ -106,60 +108,97 @@
         });
     }
 </script>
+
 {% endblock %}
 
 {% block seccion-contenido %}
     <div class="container">
         <h3>Paso 1.4: Programas</h3>
         <form id='formulario' method='post' action=''> {% csrf_token %}
-            <div class="row">
-                <div class="col-md-5 col-sm-10">
-                    {{ formulario.programaUno | bootstrap }}
-                    <div id="paises"></div><br>
-                    <div id="divPROGRAMA1" style="display:none">
-                        <div  id="uni_1"></div><br>
-                        {{ formulario.tipoProgramaUno | bootstrap }}
-                        <div class="col-md-7 col-sm-10">
-                            {{ formulario.fechaInicioUno | bootstrap }}
+                <div class="row">
+                    <div class="col-md-5 col-sm-10">
+                        {{ formulario.programaUno | bootstrap }}
+                        <div id="paises">
+                            {% if hayOpcion %}
+                                    <label>Pais </label>
+                                    <select id="paises_prog" onchange="verUnivDos(this)" onclick="verUnivDos(this)" class=" form-control">
+                                        {% for pais_1 in paises1 %}
+                                            <option value="{{pais_1.id}}" {%if pais_1.iso == estudiante.primeraOpcion.univ.pais.iso %} selected {% endif %}>{{pais_1.printable_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                            {% endif %}
+                        </div><br>
+                        <div id="divPROGRAMA1" style="display:block">
+                            <div  id="uni_1">
+                                {% if hayOpcion %}
+                                    <label>Universidad</label>
+                                    <select id="uni_prog" name="uni1" class=" form-control">
+                                        {% for univer in universidades1 %}
+                                            <option value="{{univer.id}}" {%if univer.id == estudiante.primeraOpcion.univ.id %} selected {% endif %}>{{univer.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </div><br>
+                            {{ formulario.tipoProgramaUno | bootstrap }}
+                            <div class="col-md-7 col-sm-10">
+                                {{ formulario.fechaInicioUno | bootstrap }}
+                            </div>
+                            <div class="col-md-4 col-sm-10">
+                                {{ formulario.anoInicioUno | bootstrap }}
+                            </div>
+                            <div class="col-md-7 col-sm-10">
+                                {{ formulario.fechaFinUno | bootstrap }}
+                            </div>
+                            <div class="col-md-4 col-sm-10">
+                                {{ formulario.anoFinUno | bootstrap }}
+                            </div>
+                            {{ formulario.duracionUno | bootstrap }}
                         </div>
-                        <div class="col-md-4 col-sm-10">
-                            {{ formulario.anoInicioUno | bootstrap }}
+                    </div>
+                    <div class="col-md-5 col-sm-10">
+                        {{ formulario.programaDos | bootstrap }}
+                        <div id="paises_2">
+                            {% if hayOpcion %}
+                                    <label>Pais</label>
+                                    <select id="paises_prog_dos" onchange="verUniv(this)" onclick="verUniv(this)" class=" form-control">
+                                        {% for pais_2 in paises2 %}
+                                            <option value="{{pais_2.id}}" {%if pais_2.iso == estudiante.segundaOpcion.univ.pais.iso %} selected {% endif %}>{{pais_2.printable_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                            {% endif %}
+                        </div><br>
+                        <div id="divPROGRAMA2" style="display: block;">
+                            <div  id="uni_2">
+                                {% if hayOpcion %}
+                                    <label>Universidad</label>
+                                    <select id="uni_prog_dos" name="uni2" class=" form-control">
+                                        {% for univer in universidades2 %}
+                                            <option value="{{univer.id}}" {%if univer.id == estudiante.segundaOpcion.univ.id %} selected {% endif %}>{{univer.nombre}}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            </div><br>
+                            {{ formulario.tipoProgramaDos | bootstrap }}
+                            <div class="col-md-7 col-sm-10">
+                            {{ formulario.fechaInicioDos | bootstrap }}
+                            </div>
+                            <div class="col-md-4 col-sm-10">
+                            {{ formulario.anoInicioDos | bootstrap }}
+                            </div>
+                            <div class="col-md-7 col-sm-10">
+                            {{ formulario.fechaFinDos | bootstrap }}
+                            </div>
+                            <div class="col-md-4 col-sm-10">
+                            {{ formulario.anoFinDos | bootstrap }}
+                            </div>
+                            {{ formulario.duracionDos | bootstrap }}
                         </div>
-                        <div class="col-md-7 col-sm-10">
-                            {{ formulario.fechaFinUno | bootstrap }}
-                        </div>
-                        <div class="col-md-4 col-sm-10">
-                            {{ formulario.anoFinUno | bootstrap }}
-                        </div>
-                        {{ formulario.duracionUno | bootstrap }}
                     </div>
                 </div>
-                <div class="col-md-5 col-sm-10">
-                    {{ formulario.programaDos | bootstrap }}
-                    <div id="paises_2"></div><br>
-                    <div id="divPROGRAMA2" style="display: none;">
-                        <div  id="uni_2"></div><br>
-                        {{ formulario.tipoProgramaDos | bootstrap }}
-                        <div class="col-md-7 col-sm-10">
-                        {{ formulario.fechaInicioDos | bootstrap }}
-                        </div>
-                        <div class="col-md-4 col-sm-10">
-                        {{ formulario.anoInicioDos | bootstrap }}
-                        </div>
-                        <div class="col-md-7 col-sm-10">
-                        {{ formulario.fechaFinDos | bootstrap }}
-                        </div>
-                        <div class="col-md-4 col-sm-10">
-                        {{ formulario.anoFinDos | bootstrap }}
-                        </div>
-                        {{ formulario.duracionDos | bootstrap }}
-                    </div>
+                <div class="row">
+                    <input type='submit' class="btn btn-primary" value='Atras' name="atras" />
+                    <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
                 </div>
-            </div>
-            <div class="row">
-                <input type='submit' class="btn btn-primary" value='Atras' name="atras" />
-                <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
-            </div>
         </form>
     </div>
     <div id='datos'>

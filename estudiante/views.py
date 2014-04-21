@@ -18,6 +18,7 @@ from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Image
 from django.core import serializers
+from administrador.models import Universidad
 
 def registrarEstudianteUSB(request):
     if request.method == 'POST':
@@ -344,17 +345,108 @@ def formularioTRES(request):
 
 def formularioCUATRO(request):
     estudiante = Estudiante.objects.get(user=request.user)
+
     if request.method == 'POST':
-        if 'atras' in request.POST:
-            return HttpResponseRedirect('/formularioTRES')
-        if 'siguiente' in request.POST:
-            return HttpResponseRedirect('/formularioCINCO')
+        if estudiante.estudUsb:
+            formulario = formularioCUATRO_formUSB(request.POST)
+            if formulario.is_valid():
+
+                prog1 = formulario.cleaned_data['programaUno']
+                uni1 = request.POST.get('uni1')
+                tipoProgramaUno = formulario.cleaned_data['tipoProgramaUno']
+                fechaInicioUno = formulario.cleaned_data['fechaInicioUno']
+                anoInicioUno = formulario.cleaned_data['anoInicioUno']
+                fechaFinUno = formulario.cleaned_data['fechaFinUno']
+                anoFinUno = formulario.cleaned_data['anoFinUno']
+                duracionUno = formulario.cleaned_data['duracionUno']
+
+                prog2 = formulario.cleaned_data['programaDos']
+                uni2 = request.POST.get('uni2')
+                tipoProgramaDos = formulario.cleaned_data['tipoProgramaDos']
+                fechaInicioDos = formulario.cleaned_data['fechaInicioDos']
+                anoInicioDos = formulario.cleaned_data['anoInicioDos']
+                fechaFinDos = formulario.cleaned_data['fechaFinDos']
+                anoFinDos = formulario.cleaned_data['anoFinDos']
+                duracionDos = formulario.cleaned_data['duracionDos']
+
+
+                if estudiante.primeraOpcion == None:
+                    universidad = Universidad.objects.get(id=int(uni1))
+                    primeraOpcion = OpcionUNO.objects.create(programa=prog1,univ=universidad,
+                                                            tipoPrograma=tipoProgramaUno,fechaInicio=fechaInicioUno,anoInicio=anoInicioUno,
+                                                            fechaFin=fechaFinUno,anoFin=anoFinUno,duracion=duracionUno)
+                    primeraOpcion.save()
+                    universidad = Universidad.objects.get(id=int(uni2))
+                    segundaOpcion = OpcionDOS.objects.create(programa=prog2,univ=universidad,
+                                                            tipoPrograma=tipoProgramaDos,fechaInicio=fechaInicioDos,anoInicio=anoInicioDos,
+                                                            fechaFin=fechaFinDos,anoFin=anoFinDos,duracion=duracionDos)
+                    segundaOpcion.save()
+                    estudiante.primeraOpcion = primeraOpcion
+                    estudiante.segundaOpcion = segundaOpcion
+                else:
+                    universidad = Universidad.objects.get(id=int(uni1))
+                    estudiante.primeraOpcion.programa = prog1
+                    estudiante.primeraOpcion.univ = universidad
+                    estudiante.primeraOpcion.tipoPrograma = tipoProgramaUno
+                    estudiante.primeraOpcion.fechaInicio = fechaInicioUno
+                    estudiante.primeraOpcion.anoInicio = anoInicioUno
+                    estudiante.primeraOpcion.fechaFin = fechaFinUno
+                    estudiante.primeraOpcion.anoFin = anoFinUno
+                    estudiante.primeraOpcion.duracion = duracionUno
+                    estudiante.primeraOpcion.save()
+                    estudiante.segundaOpcion.programa = prog2
+                    universidad = Universidad.objects.get(id=int(uni2))
+                    estudiante.segundaOpcion.univ = universidad
+                    estudiante.segundaOpcion.tipoPrograma = tipoProgramaDos
+                    estudiante.segundaOpcion.fechaInicio = fechaInicioDos
+                    estudiante.segundaOpcion.anoInicio = anoInicioDos
+                    estudiante.segundaOpcion.fechaFin = fechaFinDos
+                    estudiante.segundaOpcion.anoFin = anoFinDos
+                    estudiante.segundaOpcion.duracion = duracionDos
+                    estudiante.segundaOpcion.save()
+                estudiante.save()
+
+                if 'atras' in request.POST:
+                    return HttpResponseRedirect('/formularioTRES')
+                if 'siguiente' in request.POST:
+                    return HttpResponseRedirect('/formularioCINCO')
+        else:
+            formulario = formularioCUATRO_formExt(request.POST)
+            if 'atras' in request.POST:
+                return HttpResponseRedirect('/formularioTRES')
+            if 'siguiente' in request.POST:
+                return HttpResponseRedirect('/formularioCINCO')
     else:
         if estudiante.estudUsb:
-            formulario = formularioCUATRO_formUSB()
+            if estudiante.primeraOpcion == None:
+                formulario = formularioCUATRO_formUSB()
+            else:
+                formulario = formularioCUATRO_formUSB(initial={'programaUno':estudiante.primeraOpcion.programa,'tipoProgramaUno':estudiante.primeraOpcion.tipoPrograma,
+                                                               'fechaInicioUno':estudiante.primeraOpcion.fechaInicio,
+                                                               'anoInicioUno':estudiante.primeraOpcion.anoInicio,
+                                                               'fechaFinUno':estudiante.primeraOpcion.fechaFin,
+                                                               'anoFinUno':estudiante.primeraOpcion.anoFin,
+                                                               'duracionUno':estudiante.primeraOpcion.duracion,
+                                                               'programaDos':estudiante.segundaOpcion.programa,'tipoProgramaDos':estudiante.segundaOpcion.tipoPrograma,
+                                                               'fechaInicioDos':estudiante.segundaOpcion.fechaInicio,
+                                                               'anoInicioDos':estudiante.segundaOpcion.anoInicio,
+                                                               'fechaFinDos':estudiante.segundaOpcion.fechaFin,
+                                                               'anoFinDos':estudiante.segundaOpcion.anoFin,
+                                                               'duracionDos':estudiante.segundaOpcion.duracion})
+                hayOpcion = True
+                universidades1 = Universidad.objects.filter(programa = estudiante.primeraOpcion.programa)
+                paises1 = []
+                for uni in universidades1:
+                    if not(uni.pais in paises1):
+                        paises1.append(uni.pais)
+                universidades2 = Universidad.objects.filter(programa = estudiante.segundaOpcion.programa)
+                paises2 = []
+                for uni in universidades2:
+                    if not(uni.pais in paises2):
+                        paises2.append(uni.pais)
+                return render_to_response('estudiante/formularioCUATRO.html',{'formulario':formulario,'estudiante':estudiante,'hayOpcion':hayOpcion,'universidades1':universidades1,'paises1':paises1,'universidades2':universidades2,'paises2':paises2},context_instance=RequestContext(request))
         else:
             formulario = formularioCUATRO_formExt()
-
     return render_to_response('estudiante/formularioCUATRO.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
 
 def formularioCINCO(request):
@@ -876,35 +968,24 @@ def descargarPlanilla(request):
 def ajaxConvenio(request):
     modo = request.GET['modo']
     if modo == 'convenio':
-        print 'holis'
         id_convenio = request.GET['id']
         universidades = Universidad.objects.filter(programa__id=id_convenio)
         paises = []
         for uni in universidades:
-            paises.append(uni.pais)
+            if not(uni.pais in paises):
+                paises.append(uni.pais)
         data = serializers.serialize('json',paises,fields=('printable_name','name'))
         return HttpResponse(data,mimetype='application/json')
     if modo == 'pais':
-        print 'andel esta aqui'
         id_pais = request.GET['name']
-        print 'holaaaaaa '
-        print id_pais
-
         pais =Country.objects.get(iso=id_pais)
-        print pais.printable_name
-
         universidades = Universidad.objects.filter(pais=pais)
         data = serializers.serialize('json',universidades,fields=('nombre'))
-        print data
         return HttpResponse(data,mimetype='application/json')
 
 def ajaxConvenioPais(request):
     id_pais = request.GET['name']
-    print 'holaaaaaa '
-
     pais =Country.objects.get(iso=id_pais)
-    print pais.printable_name
-
     universidades = Universidad.objects.filter(pais=pais)
     data = serializers.serialize('json',universidades,fields=('nombre'))
     return HttpResponse(data,mimetype='application/json')

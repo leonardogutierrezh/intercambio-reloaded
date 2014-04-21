@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import admin
 from postulante.models import *
 from countries.models import *
-from administrador.models import Idioma
+from administrador.models import Idioma,Universidad
+
 class AntecedenteAcad(models.Model):
     indice = models.FloatField()
     creditosAprobados = models.IntegerField()
@@ -44,6 +45,26 @@ class ManejoIdiomas(models.Model):
     escrito = models.CharField(max_length=30)
     auditivo = models.CharField(max_length=30)
     auxiliar = models.CharField(max_length=10)
+
+class OpcionUNO(models.Model):
+    programa = models.ForeignKey(ProgramaIntercambio)
+    univ = models.ForeignKey(Universidad)
+    tipoPrograma = models.CharField(max_length=50)
+    fechaInicio = models.CharField(max_length=50)
+    anoInicio = models.CharField(max_length=50)
+    fechaFin = models.CharField(max_length=50)
+    anoFin = models.CharField(max_length=50)
+    duracion = models.CharField(max_length=50)
+
+class OpcionDOS(models.Model):
+    programa = models.ForeignKey(ProgramaIntercambio)
+    univ = models.ForeignKey(Universidad)
+    tipoPrograma = models.CharField(max_length=50)
+    fechaInicio = models.CharField(max_length=50)
+    anoInicio = models.CharField(max_length=50)
+    fechaFin = models.CharField(max_length=50)
+    anoFin = models.CharField(max_length=50)
+    duracion = models.CharField(max_length=50)
 
 class Estudiante(models.Model):
     user = models.ForeignKey(User)
@@ -90,6 +111,9 @@ class Estudiante(models.Model):
     segundoPaso = models.BooleanField(default=False)
     tercerPaso = models.BooleanField(default=False)
     cuartoPaso = models.BooleanField(default=False)
+    primeraOpcion = models.ForeignKey(OpcionUNO,null=True,blank=True)
+    segundaOpcion = models.ForeignKey(OpcionDOS,null=True,blank=True)
+
     def __unicode__(self):
         return self.user.username
 
