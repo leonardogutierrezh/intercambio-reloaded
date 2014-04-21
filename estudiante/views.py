@@ -13,16 +13,11 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 import os, random, string
-
-######################################
-import html5lib
-import ho.pisa as pisa
-import cStringIO as StringIO
-import cgi
 from django.template.loader import render_to_string
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Image
+from django.core import serializers
 
 def registrarEstudianteUSB(request):
     if request.method == 'POST':
@@ -659,7 +654,7 @@ def descargar(request):
 
 def descargarPlanilla(request):
     estudiante = Estudiante.objects.get(user=request.user)
-    if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+    if estudiante.primerPaso and estudiante.segundoPaso and  estudiante.tercerPaso and estudiante.cuartoPaso:
         # Create the HttpResponse object with the appropriate PDF headers.
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="Planilla Postulacion.pdf"'
@@ -767,6 +762,16 @@ def descargarPlanilla(request):
             p.rect(240,470,55,180)      #Cuadro de denominacion a credito USB
             p.rect(295,470,55,180)       #Cuadro de codigo a denominacion Ext
             p.rect(485,470,55,180)      #Cuadro de denominacion a credito Ext
+            p.setFont("Helvetica",8)
+            y=620
+            for plan in estudiante.planDeEstudio.all():
+                p.drawString( 55, y, plan.materiaUsb.codigo )
+                p.drawString( 110, y, plan.materiaUsb.nombre )
+                p.drawString( 250, y, str(plan.materiaUsb.creditos) )
+                p.drawString( 300, y, plan.codigoUniv )
+                p.drawString( 355, y, plan.nombreMateriaUniv )
+                p.drawString( 495, y, str(plan.creditosUniv) )
+                y = y - 10
             p.drawString( 100, 435, "Aprobacion coordinacion carrera:               ________________________________  " )
             p.rect(50,420,6.8*inch,375)      #Cuadro completo informacion academica
         else:
@@ -803,11 +808,14 @@ def descargarPlanilla(request):
         p.setFont("Helvetica",11)
         p.drawString( 68, 390, "FUENTE DE FINANCIAMIENTO DEL ESTUDIANTE" )
         p.setFont("Helvetica",8)
-        p.drawString( 70, 370, "- Principal fuente de ingresos: " )
-        p.drawString( 320, 370, "- Otros: " )
+        p.drawString( 70, 370, "- Principal fuente de ingresos: " + estudiante.financiamiento.fuente )
+        p.drawString( 320, 370, "- Otros: " + estudiante.financiamiento.descripcionFuente)
         p.drawString( 70, 350, "- Recibe ayuda economica por: " )
-        p.drawString( 70, 340, "parte de la universidad u otro organismo?: " )
-        p.drawString( 320, 350, "- Especifique: " )
+        if estudiante.financiamiento.ayuda:
+            p.drawString( 70, 340, "parte de la universidad u otro organismo?: Si")
+        else:
+            p.drawString( 70, 340, "parte de la universidad u otro organismo?: No")
+        p.drawString( 320, 350, "- Especifique: " + estudiante.financiamiento.descripcionAyuda)
         p.rect(50,320,6.8*inch,95)      #Cuadro completo de fuente financiamiento
 
         p.setFont("Helvetica",11)
@@ -822,14 +830,22 @@ def descargarPlanilla(request):
         p.rect(50,170,190,123)
         p.rect(240,170,90,123)
         p.rect(240,170,195,123)
+        y = 260
+        p.setFont("Helvetica",8)
+        for idioma in estudiante.idiomas.all():
+            p.drawString( 60, y, idioma.idioma.nombre )
+            p.drawString( 250, y, idioma.verbal)
+            p.drawString( 340, y, idioma.escrito)
+            p.drawString( 445, y, idioma.auditivo)
+            y = y-10
 
         p.setFont("Helvetica",11)
         p.drawString( 68, 150, "DATOS DE CONTACTO EN CASO DE EMERGENCIA" )
         p.setFont("Helvetica",8)
-        p.drawString( 70, 130, "- Nombre contacto: " )
-        p.drawString( 70, 110, "- Tlf. Habitacion contacto: " )
-        p.drawString( 70, 90, "- Relacion con el estudiante: " )
-        p.drawString( 70, 70, "- Domicilio contacto: " )
+        p.drawString( 70, 130, "- Nombre contacto: " + estudiante.representante.nombre + " " + estudiante.representante.apellido)
+        p.drawString( 70, 110, "- Tlf. Habitacion contacto: " + str(estudiante.representante.telefCasa))
+        p.drawString( 70, 90, "- Relacion con el estudiante: " + estudiante.representante.tipoRelacion)
+        p.drawString( 70, 70, "- Domicilio contacto: " + estudiante.representante.direccion)
         p.rect(50,50,6.8*inch,115)      #Cuadro completo de contacto emergencia
         p.showPage()
 
@@ -856,4 +872,40 @@ def descargarPlanilla(request):
         return response
     else:
         return render_to_response('estudiante/noPostuladoAun.html',{},context_instance=RequestContext(request))
+
+def ajaxConvenio(request):
+    modo = request.GET['modo']
+    if modo == 'convenio':
+        print 'holis'
+        id_convenio = request.GET['id']
+        universidades = Universidad.objects.filter(programa__id=id_convenio)
+        paises = []
+        for uni in universidades:
+            paises.append(uni.pais)
+        data = serializers.serialize('json',paises,fields=('printable_name','name'))
+        return HttpResponse(data,mimetype='application/json')
+    if modo == 'pais':
+        print 'andel esta aqui'
+        id_pais = request.GET['name']
+        print 'holaaaaaa '
+        print id_pais
+
+        pais =Country.objects.get(iso=id_pais)
+        print pais.printable_name
+
+        universidades = Universidad.objects.filter(pais=pais)
+        data = serializers.serialize('json',universidades,fields=('nombre'))
+        print data
+        return HttpResponse(data,mimetype='application/json')
+
+def ajaxConvenioPais(request):
+    id_pais = request.GET['name']
+    print 'holaaaaaa '
+
+    pais =Country.objects.get(iso=id_pais)
+    print pais.printable_name
+
+    universidades = Universidad.objects.filter(pais=pais)
+    data = serializers.serialize('json',universidades,fields=('nombre'))
+    return HttpResponse(data,mimetype='application/json')
 

@@ -50,6 +50,8 @@ urlpatterns = patterns('',
     url(r'^planEstudio', 'estudiante.views.planEstudio'),
     url(r'^dominioIdiomas', 'estudiante.views.dominioIdiomas'),
     url(r'^descargarPlanilla', 'estudiante.views.descargarPlanilla'),
+    url(r'^ajaxConvenio', 'estudiante.views.ajaxConvenio'),
+    url(r'^ajaxConvenioPais', 'estudiante.views.ajaxConvenioPais'),
 
 
 )

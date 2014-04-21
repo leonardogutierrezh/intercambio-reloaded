@@ -12,15 +12,157 @@
           return true;
     }
 </script>
+
+<script>
+	function verPais(btn){
+        var id = $(btn).val();
+        console.log(id);
+        $.ajax({
+            data : {'modo':'convenio','id':id},
+            url: '/ajaxConvenio/',
+            type: 'get',
+            success: function(data){
+                console.log(data);
+                var paises = "";
+                var uni = "";
+                paises += '<label>Pais</label><select id="paises_prog" onchange="verUniv(this)" onclick="verUniv(this)" class=" form-control">';
+                for(var i=0; i<data.length; i++){
+                    paises += '<option value="' + data[i].pk + '">'+ data[i].fields.printable_name +'</option> ';
+                }
+                paises += '</select>';
+            $('#paises').html(paises);
+
+            }
+        });
+	}
+</script>
+
+<script>
+	function verPais_Dos(btn){
+        var id = $(btn).val();
+        console.log(id);
+        $.ajax({
+            data : {'modo':'convenio','id':id},
+            url: '/ajaxConvenio/',
+            type: 'get',
+            success: function(data){
+                console.log(data);
+                var paises = "";
+                var uni = "";
+                paises += '<label>Pais</label><select id="paises_prog" onchange="verUnivDos(this)" onclick="verUnivDos(this)" class=" form-control">';
+                for(var i=0; i<data.length; i++){
+                    paises += '<option value="' + data[i].pk + '">'+ data[i].fields.printable_name +'</option> ';
+                }
+                paises += '</select>';
+            $('#paises_2').html(paises);
+
+            }
+        });
+	}
+</script>
+
+<script>
+    function verUniv(btn){
+       var name = $(btn).val();
+       console.log('el id es: ' + name);
+       $.ajax({
+            data : {'modo':'pais','name':name},
+            url: '/ajaxConvenioPais/',
+            type: 'get',
+            success: function(data){
+                console.log(data);
+                var uni = "";
+                uni += '<label>Universidad</label><select id="uni_prog" class=" form-control">';
+                for(var i=0; i<data.length; i++){
+                    uni += '<option value="' + data[i].pk + '">'+ data[i].fields.nombre +'</option> ';
+                }
+                uni += '</select>';
+            $('#uni_1').html(uni);
+            document.getElementById('divPROGRAMA1').style.display = 'block';
+            }
+        });
+    }
+</script>
+
+<script>
+    function verUnivDos(btn){
+       var name = $(btn).val();
+       console.log('el id es: ' + name);
+       $.ajax({
+            data : {'modo':'pais','name':name},
+            url: '/ajaxConvenioPais/',
+            type: 'get',
+            success: function(data){
+                console.log(data);
+                var uni = "";
+                uni += '<label>Universidad</label><select id="uni_prog" class=" form-control">';
+                for(var i=0; i<data.length; i++){
+                    uni += '<option value="' + data[i].pk + '">'+ data[i].fields.nombre +'</option> ';
+                }
+                uni += '</select>';
+            $('#uni_2').html(uni);
+            document.getElementById('divPROGRAMA2').style.display = 'block';
+            }
+        });
+    }
+</script>
 {% endblock %}
 
 {% block seccion-contenido %}
     <div class="container">
         <h3>Paso 1.4: Programas</h3>
         <form id='formulario' method='post' action=''> {% csrf_token %}
-            {{ formulario | bootstrap }}
-            <input type='submit' class="btn btn-primary" value='Atras' name="atras" />
-            <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
+            <div class="row">
+                <div class="col-md-5 col-sm-10">
+                    {{ formulario.programaUno | bootstrap }}
+                    <div id="paises"></div><br>
+                    <div id="divPROGRAMA1" style="display:none">
+                        <div  id="uni_1"></div><br>
+                        {{ formulario.tipoProgramaUno | bootstrap }}
+                        <div class="col-md-7 col-sm-10">
+                            {{ formulario.fechaInicioUno | bootstrap }}
+                        </div>
+                        <div class="col-md-4 col-sm-10">
+                            {{ formulario.anoInicioUno | bootstrap }}
+                        </div>
+                        <div class="col-md-7 col-sm-10">
+                            {{ formulario.fechaFinUno | bootstrap }}
+                        </div>
+                        <div class="col-md-4 col-sm-10">
+                            {{ formulario.anoFinUno | bootstrap }}
+                        </div>
+                        {{ formulario.duracionUno | bootstrap }}
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-10">
+                    {{ formulario.programaDos | bootstrap }}
+                    <div id="paises_2"></div><br>
+                    <div id="divPROGRAMA2" style="display: none;">
+                        <div  id="uni_2"></div><br>
+                        {{ formulario.tipoProgramaDos | bootstrap }}
+                        <div class="col-md-7 col-sm-10">
+                        {{ formulario.fechaInicioDos | bootstrap }}
+                        </div>
+                        <div class="col-md-4 col-sm-10">
+                        {{ formulario.anoInicioDos | bootstrap }}
+                        </div>
+                        <div class="col-md-7 col-sm-10">
+                        {{ formulario.fechaFinDos | bootstrap }}
+                        </div>
+                        <div class="col-md-4 col-sm-10">
+                        {{ formulario.anoFinDos | bootstrap }}
+                        </div>
+                        {{ formulario.duracionDos | bootstrap }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <input type='submit' class="btn btn-primary" value='Atras' name="atras" />
+                <input type='submit' class="btn btn-primary" value='Siguiente' name="siguiente" />
+            </div>
         </form>
+    </div>
+    <div id='datos'>
+
     </div>
 {% endblock %}
