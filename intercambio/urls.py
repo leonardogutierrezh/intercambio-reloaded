@@ -53,5 +53,8 @@ urlpatterns = patterns('',
     url(r'^ajaxConvenio', 'estudiante.views.ajaxConvenio'),
     url(r'^ajaxConvenioPais', 'estudiante.views.ajaxConvenioPais'),
 
-
+    ############### Coordinacion ##########################
+    url(r'^listar_solicitudes_coord', 'postulante.views.listar_solicitudes_coord'),
+    url(r'^perfilCoordinacion', 'postulante.views.perfilCoordinacion'),
+    url(r'^verDetallePostulacion/(?P<id_user>\d+)/$', 'postulante.views.verDetallePostulacion'),
 )

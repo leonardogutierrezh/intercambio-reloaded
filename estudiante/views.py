@@ -19,6 +19,7 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Image
 from django.core import serializers
 from administrador.models import Universidad
+from postulante.models import Postulacion
 
 def registrarEstudianteUSB(request):
     if request.method == 'POST':
@@ -52,6 +53,9 @@ def registrarEstudianteUSB(request):
             estudiante = Estudiante.objects.create(user=user,nombre1=nombre1,nombre2=nombre2,apellido1=apellido1,apellido2=apellido2,email=email,carnet=carnet,estudUsb=True,carrera_usb=carrera,nacionalidad=nacionalidad)
             user.save()
             estudiante.save()
+
+            postulacion = Postulacion.objects.create(username=estudiante,estadoPostulacion='Sin postular')
+            postulacion.save()
 
             return HttpResponseRedirect('/')
     else:
@@ -87,6 +91,9 @@ def registrarEstudianteExt(request):
             user.save()
             estudiante = Estudiante.objects.create(user=user,nombre1=nombre1,nombre2=nombre2,apellido1=apellido1,apellido2=apellido2,email=email,estudUsb=False,pasaporte=pasaporte)
             estudiante.save()
+
+            postulacion = Postulacion.objects.create(username=estudiante,estadoPostulacion='Sin postular')
+            postulacion.save()
 
             return HttpResponseRedirect('/')
     else:
@@ -148,8 +155,10 @@ def iniciarSesion(request):
 def estadoPostulacion(request):
     user = request.user
     estudiante = Estudiante.objects.get(user=user)
-    print estudiante.estadoPostulacion
-    return render_to_response('estudiante/estadoPostulacion.html', {'estudiante':estudiante}, context_instance=RequestContext(request))
+    postulacion = Postulacion.objects.get(username=estudiante)
+
+    print postulacion.estadoPostulacion
+    return render_to_response('estudiante/estadoPostulacion.html', {'estudiante':estudiante,'postulacion':postulacion}, context_instance=RequestContext(request))
 
 def perfilEstudianteUSB(request):
     user = request.user
@@ -192,8 +201,7 @@ def perfilEstudianteUSB(request):
 
             user.save()
             estudiante.save()
-
-            return render_to_response('index.html', context_instance=RequestContext(request))
+            return render_to_response('index.html', {'perfilEstudianteCambiado':True}, context_instance=RequestContext(request))
     else:
         formulario = EstudianteUSB_Edit_Form(initial={'nombre1':estudiante.nombre1,'nombre2':estudiante.nombre2,'apellido1':estudiante.apellido1,'apellido2':estudiante.apellido2,
                                                 'email':user.email,'carnet':estudiante.carnet,'username':user.username,
@@ -248,7 +256,8 @@ def perfilEstudianteExt(request):
 
 def postularse(request):
     estudiante = Estudiante.objects.get(user=request.user)
-    if estudiante.estadoPostulacion != 'Sin postular':
+    postulacion = Postulacion.objects.get(username=estudiante)
+    if postulacion.estadoPostulacion != 'Sin postular':
         yaPostulado = True
     else:
         yaPostulado = False
@@ -559,7 +568,10 @@ def formularioSIETE(request):
             estudiante.primerPaso = True
 
             if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
-                estudiante.estadoPostulacion = 'Postulado'
+                postulacion = Postulacion.objects.get(username=estudiante)
+                if postulacion.estadoPostulacion == 'Sin postular':
+                    postulacion.estadoPostulacion = 'Postulado'
+                    postulacion.save()
 
             estudiante.save()
             if 'atras' in request.POST:
@@ -605,7 +617,10 @@ def documentosRequeridos(request):
 
                 estudiante.segundoPaso = True
                 if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
-                    estudiante.estadoPostulacion = 'Postulado'
+                    postulacion = Postulacion.objects.get(username=estudiante)
+                    if postulacion.estadoPostulacion == 'Sin postular':
+                        postulacion.estadoPostulacion = 'Postulado'
+                        postulacion.save()
                 estudiante.save()
 
                 if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
@@ -668,7 +683,10 @@ def planEstudio(request):
             estudiante.tercerPaso = True
 
         if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
-            estudiante.estadoPostulacion = 'Postulado'
+            postulacion = Postulacion.objects.get(username=estudiante)
+            if postulacion.estadoPostulacion == 'Sin postular':
+                postulacion.estadoPostulacion = 'Postulado'
+                postulacion.save()
 
         estudiante.save()
 
@@ -726,7 +744,10 @@ def dominioIdiomas(request):
             estudiante.cuartoPaso = True
 
         if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
-            estudiante.estadoPostulacion = 'Postulado'
+            postulacion = Postulacion.objects.get(username=estudiante)
+            if postulacion.estadoPostulacion == 'Sin postular':
+                postulacion.estadoPostulacion = 'Postulado'
+                postulacion.save()
 
         estudiante.save()
 
