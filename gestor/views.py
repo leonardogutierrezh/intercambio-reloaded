@@ -20,8 +20,8 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Image
 from django.core import serializers
 from administrador.models import Universidad, Log
-from postulante.forms import *
-from gestor.forms import *
+#from postulante.forms import *
+#from gestor.forms import *
 
 def perfilDecanato(request):
     user = request.user

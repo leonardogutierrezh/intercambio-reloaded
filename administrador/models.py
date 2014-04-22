@@ -39,8 +39,8 @@ class Log(models.Model):
 class Idioma(models.Model):
     nombre = models.CharField(max_length=100)
 
-class ProgramaIntercambio(models.Model):
-    nombre = models.CharField(max_length=100)
-    universidad = models.ManyToManyField(Universidad)
-    def __unicode__(self):
-        return self.nombre
+#class ProgramaIntercambio(models.Model):
+#    nombre = models.CharField(max_length=100)
+#    universidad = models.ManyToManyField(Universidad)
+#    def __unicode__(self):
+#        return self.nombre
