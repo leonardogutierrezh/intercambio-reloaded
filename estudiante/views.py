@@ -575,7 +575,7 @@ def formularioSIETE(request):
                 if postulacion.estadoPostulacion == 'Sin postular':
                     postulacion.estadoPostulacion = 'Postulado'
                     postulacion.save()
-                    log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = user)
+                    log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = request.user)
                     log.save()
 
             estudiante.save()
@@ -626,7 +626,7 @@ def documentosRequeridos(request):
                     if postulacion.estadoPostulacion == 'Sin postular':
                         postulacion.estadoPostulacion = 'Postulado'
                         postulacion.save()
-                        log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = user)
+                        log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = request.user)
                         log.save()
 
                 estudiante.save()
@@ -695,7 +695,7 @@ def planEstudio(request):
             if postulacion.estadoPostulacion == 'Sin postular':
                 postulacion.estadoPostulacion = 'Postulado'
                 postulacion.save()
-                log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = user)
+                log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = request.user)
                 log.save()
 
         estudiante.save()
@@ -758,7 +758,7 @@ def dominioIdiomas(request):
             if postulacion.estadoPostulacion == 'Sin postular':
                 postulacion.estadoPostulacion = 'Postulado'
                 postulacion.save()
-                log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = user)
+                log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = request.user)
                 log.save()
 
 
