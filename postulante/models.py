@@ -18,6 +18,7 @@ class CarreraUsb(models.Model):
     codigo = models.CharField(max_length=100)
     decanato = models.CharField(max_length=100, null=True)
     areaDeEstudio = models.CharField(max_length=100, null=True)
+    indiceCarrera = models.CharField(max_length=10,default=1)
     def __unicode__(self):
         return self.nombre
 

@@ -18,7 +18,7 @@ from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Image
 from django.core import serializers
-from administrador.models import Universidad
+from administrador.models import Universidad, Log
 from postulante.models import Postulacion
 
 def registrarEstudianteUSB(request):
@@ -57,6 +57,8 @@ def registrarEstudianteUSB(request):
             postulacion = Postulacion.objects.create(username=estudiante,estadoPostulacion='Sin postular')
             postulacion.save()
 
+            log = Log.objects.create(suceso = "Nuevo usuario creado",usuario = user)
+            log.save()
             return HttpResponseRedirect('/')
     else:
         formulario = EstudianteUSB_Form()
@@ -94,7 +96,8 @@ def registrarEstudianteExt(request):
 
             postulacion = Postulacion.objects.create(username=estudiante,estadoPostulacion='Sin postular')
             postulacion.save()
-
+            log = Log.objects.create(suceso = "Nuevo usuario creado",usuario = user)
+            log.save()
             return HttpResponseRedirect('/')
     else:
         formulario = EstudianteExt_Form()
@@ -572,6 +575,8 @@ def formularioSIETE(request):
                 if postulacion.estadoPostulacion == 'Sin postular':
                     postulacion.estadoPostulacion = 'Postulado'
                     postulacion.save()
+                    log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = user)
+                    log.save()
 
             estudiante.save()
             if 'atras' in request.POST:
@@ -621,6 +626,9 @@ def documentosRequeridos(request):
                     if postulacion.estadoPostulacion == 'Sin postular':
                         postulacion.estadoPostulacion = 'Postulado'
                         postulacion.save()
+                        log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = user)
+                        log.save()
+
                 estudiante.save()
 
                 if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
@@ -687,6 +695,8 @@ def planEstudio(request):
             if postulacion.estadoPostulacion == 'Sin postular':
                 postulacion.estadoPostulacion = 'Postulado'
                 postulacion.save()
+                log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = user)
+                log.save()
 
         estudiante.save()
 
@@ -748,6 +758,9 @@ def dominioIdiomas(request):
             if postulacion.estadoPostulacion == 'Sin postular':
                 postulacion.estadoPostulacion = 'Postulado'
                 postulacion.save()
+                log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = user)
+                log.save()
+
 
         estudiante.save()
 

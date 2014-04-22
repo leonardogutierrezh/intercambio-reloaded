@@ -71,3 +71,42 @@ def verDetallePostulacion(request,id_user):
     estudiante = Estudiante.objects.get(id=int(id_user))
     postulacion = Postulacion.objects.get(username=estudiante)
     return render_to_response('postulante/verDetallePostulacion.html', {'estudiante':estudiante,'postulacion':postulacion},context_instance=RequestContext(request))
+
+def eliminarPostulacion_coord(request,id_user):
+    estudiante = Estudiante.objects.get(id=int(id_user))
+    postulacion = Postulacion.objects.get(username=estudiante)
+
+    postulacion.estadoPostulacion = 'Sin postular'
+    postulacion.save()
+    estudiante.primerPaso = False
+    estudiante.segundoPaso = False
+    estudiante.tercerPaso = False
+    estudiante.cuartoPaso = False
+
+    estudiante.sexo = ''
+    estudiante.fechaNacimiento = ''
+    estudiante.urbanizacion = ''
+    estudiante.calle = ''
+    estudiante.edificio = ''
+    estudiante.apartamento = ''
+    estudiante.codigopostal = ''
+
+    for plan in estudiante.planDeEstudio.all():
+        plan.delete()
+    for idio in estudiante.idiomas.all():
+        idio.delete()
+    estudiante.save()
+
+    eliminadoPostulacion = True
+
+    user = request.user
+    postulante = Postulante.objects.get(usuario=user)
+    postulacion = Postulacion.objects.filter(estadoPostulacion='Postulado')
+
+    postulaciones = []
+    for post in postulacion:
+        if post.username.carrera_usb == postulante.carrera:
+            postulaciones.append(post)
+
+    ## Correo
+    return render_to_response('postulante/listar_solicitudes_coord.html', {'postulante':postulante,'estudiante':estudiante,'postulaciones':postulaciones,'postulacion':postulacion,'eliminadoPostulacion':eliminadoPostulacion},context_instance=RequestContext(request))
