@@ -11,6 +11,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives
 from administrador.models import *
 from estudiante.models import *
 from administrador.forms import *
+from countries.models import *
 from gestor.models import *
 from postulante.models import *
 import os, random, string
@@ -255,6 +256,7 @@ def ver_log(request):
     log = Log.objects.all().order_by('fecha')
     return render_to_response('administrador/log.html', {'log': log}, context_instance=RequestContext(request))
 
+@login_required(login_url='/')
 def editar_cuenta(request, id_user):
     logueado = request.user
     error=0
@@ -400,3 +402,37 @@ def editar_cuenta(request, id_user):
                                                                   'formulario': formulario,
                                                                   'seleccionado': seleccionado,
                                                                   'error': error}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def redactar_anuncio(request):
+    carreras = Carrera.objects.all()
+    universidades = Universidad.objects.all()
+    paises = Country.objects.all()
+    for pais in paises:
+        print pais.name
+    return render_to_response('administrador/redactar_anuncio.html', {'carreras': carreras,
+                                                                      'universidades': universidades,
+                                                                      'paises': paises}, context_instance=RequestContext(request))
+@login_required(login_url='/')
+def crear_universidad(request):
+    if request.method == 'POST':
+        formulario = CrearUniversidadForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            return HttpResponseRedirect('/administrador_listar_universidad/1')
+    else:
+        formulario = CrearUniversidadForm()
+    return render_to_response('administrador/crear_universidad.html', {'formulario': formulario}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def listar_universidades(request, creado):
+    universidades = Universidad.objects.all()
+    return render_to_response('administrador/listar_universidad.html', {'universidades': universidades, 'creado': creado}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def eliminar_universidad(request, id_universidad):
+    if request.user.first_name == 'admin':
+        universidad = Universidad.objects.get(id=id_universidad).delete()
+        return HttpResponseRedirect('/administrador_listar_universidad/3')
+    else:
+        return HttpResponseRedirect('/')

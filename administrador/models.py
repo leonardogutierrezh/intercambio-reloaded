@@ -17,7 +17,6 @@ class ProgramaIntercambio(models.Model):
 class Universidad(models.Model):
     nombre = models.CharField(max_length=100)
     pais = models.ForeignKey(Country)
-    nombre = models.CharField(max_length=100)
     programa = models.ForeignKey(ProgramaIntercambio)
     def __unicode__(self):
         return self.nombre
@@ -39,6 +38,9 @@ class Log(models.Model):
 
 class Idioma(models.Model):
     nombre = models.CharField(max_length=100)
-    def __unicode__(self):
-        return self.nombre
 
+#class ProgramaIntercambio(models.Model):
+#    nombre = models.CharField(max_length=100)
+#    universidad = models.ManyToManyField(Universidad)
+#    def __unicode__(self):
+#        return self.nombre

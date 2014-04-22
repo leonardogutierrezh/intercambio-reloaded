@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+{% block seccion-contenido %}
+    <form method="POST">{% csrf_token %}
+        <div class="col-sm-4">
+            {{ formulario.nombre | bootstrap }}
+        </div>
+        <div class="col-sm-4">
+            {{ formulario.pais | bootstrap }}
+        </div>
+        <div class="col-sm-4">
+            {{ formulario.programa | bootstrap }}
+        </div>
+
+    <input type="submit" value="Crear" class="btn-default btn btn-primary">
+    </form>
+{% endblock %}

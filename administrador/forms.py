@@ -39,3 +39,7 @@ class EditarPerfilForm(forms.Form):
     nombre = forms.CharField(label='Nombre Completo')
     email = forms.EmailField()
     usuario = forms.CharField()
+
+class CrearUniversidadForm(forms.ModelForm):
+    class Meta:
+        model = Universidad
