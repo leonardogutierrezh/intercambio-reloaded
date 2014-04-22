@@ -1,0 +1,54 @@
+{% extends 'tabla.html' %}
+{% load bootstrap %}
+{% block seccion-contenido %}
+{% if creado == '1' %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Universidad creada satisfactoriamente!
+    </div>
+
+{% elif creado == '2' %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Universidad editada satifactoriamente!
+    </div>
+
+{% elif creado == '3' %}
+   <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+         ¡Universidad eliminada satifactoriamente!
+    </div>
+{% endif %}
+  <table class="table table-striped table-bordered table-hover" id="content">
+            <thead>
+                <th>Universidad</th>
+                <th>Pais</th>
+                <th>Acciones</th>
+            </thead>
+        {% for universidad in universidades %}
+            <tr>
+                <td>{{ universidad.nombre }}</td>
+                <td>{{ universidad.pais }}</td>
+                <td><a href="/administrador_editar_usuario/{{ universidad.id }}" class="btn-xs btn-default">Editar</a> <button type="button" onclick="deleteAlert({{universidad.id}})" class="btn-xs btn-default btn-danger">Eliminar</button> </td>
+            </tr>
+        {% endfor %}
+        </table>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+        	function deleteAlert(id)
+        	{
+        		var r=confirm("¿Esta seguro que desea eliminar?");
+        		if (r==true)
+        	  {
+        			var string1 = "/administrador_eliminar_universidad/";
+        		  window.location.assign(string1 + id)
+          	}
+        		else
+          	{
+
+          	}
+        		document.getElementById("demo").innerHTML=x;
+        }
+    </script>
+{% endblock %}

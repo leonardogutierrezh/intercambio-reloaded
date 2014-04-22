@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block seccion-contenido %}
+    <form method="POST">{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-4">
+            <input id="estudiantecheck" class="selector" type="checkbox">Estudiantes:
+        </div>
+        <div class="col-sm-4">
+            <input id="postulantecheck" class="selector" type="checkbox">Postulantes:
+        </div>
+        <div class="col-sm-4">
+            <input id="gestorcheck" class="selector" type="checkbox">Gestores:
+        </div>
+    </div>
+    <div id="estudiante" class="row">
+         <div class="col-sm-6 form-group">
+            <label class="control-label">Nombre Estudiante</label>
+             <div class=" ">
+                 <input id="nueva" class="form-control" type="text" name="nombreEstudiante">
+             </div>
+         </div>
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Apellido Estudiante</label>
+             <div class=" ">
+                 <input id="nueva" class="form-control" type="text" name="apellidoEstudiante">
+             </div>
+         </div>
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Carnet</label>
+             <div class=" ">
+                 <input id="nueva" class="form-control" type="text" name="carnetEstudiante">
+             </div>
+         </div>
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Indice</label>
+             <div class=" ">
+                 <input id="nueva" class="form-control" type="text" name="indiceEstudiante">
+             </div>
+         </div>
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Carrera</label>
+             <div class=" ">
+                 <select class="form-control" name="carreraEstudiante">
+                     <option>N/A</option>
+                     {% for carrera in carreras %}
+                         <option>{{ carrera.nombre }}</option>
+                     {% endfor %}
+                 </select>
+             </div>
+         </div>
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Pais Destino</label>
+             <div class=" ">
+                <select class="form-control" name="paisdestinoEstudiante">
+                     <option>N/A</option>
+                    {% for pais in paises %}
+                        <option>{{ pais.name }}</option>
+                    {% endfor %}
+                 </select>
+             </div>
+         </div>
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Primera Opcion</label>
+             <div class=" ">
+                 <select class="form-control" name="primeraEstudiante">
+
+                     <option>N/A</option>
+                     {% for universidad in universidades %}
+                         <option>{{ universidad.nombre }}</option>
+                     {% endfor %}
+                 </select>
+             </div>
+         </div>
+    </div>
+    <div id="postulante" class="row">
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Nombre Postulante</label>
+             <div class=" ">
+                 <input id="nueva" class="form-control" type="text" name="nombrePostulante">
+             </div>
+         </div>
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Tipo de Postulante</label>
+             <div class=" ">
+                 <input id="nueva" class="form-control" type="text" name="tipoPostulante">
+             </div>
+         </div>
+    </div>
+    <div id="gestor" class="row">
+        <div class="col-sm-6 form-group">
+            <label class="control-label">Gestor</label>
+             <div class=" ">
+                 <select class="form-control" name="tipoGestor">
+                     <option value="none">Seleccione</option>
+                     <option value="profesionales">Decanato de Estudios Profesionales</option>
+                     <option value="tecnologicos">Decanato de Estudios Tecnologicos</option>
+                 </select>
+             </div>
+         </div>
+    </div>
+    <div clas="row">
+        <input type="submit" value="Realizar Busqueda" class="btn-default btn btn-primary">
+    </div>
+    </form>
+{% endblock %}
+{% block js %}
+<script>
+$(document).ready(function(){
+  $("#estudiante").hide();
+  $("#postulante").hide();
+  $("#gestor").hide();
+  $(".selector").click(function(){
+    if( $("#gestorcheck").is(':checked')) {
+        $("#gestor").show();
+    } else {
+        $("#gestor").hide();
+    }
+    if( $("#postulantecheck").is(':checked')) {
+        $("#postulante").show();
+    } else {
+        $("#postulante").hide();
+    }
+    if( $("#estudiantecheck").is(':checked')) {
+        $("#estudiante").show();
+    } else {
+        $("#estudiante").hide();
+    }
+  });
+  $("#ver").click(function(){
+    $("#escondido").show();
+    $("#cambiar").hide();
+
+  });
+});
+</script>
+{% endblock %}

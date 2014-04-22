@@ -12,7 +12,6 @@ class Pais(models.Model):
 class Universidad(models.Model):
     nombre = models.CharField(max_length=100)
     pais = models.ForeignKey(Country)
-    nombre = models.CharField(max_length=100)
     def __unicode__(self):
         return self.nombre
 
@@ -39,3 +38,8 @@ class ProgramaIntercambio(models.Model):
     universidad = models.ManyToManyField(Universidad)
     def __unicode__(self):
         return self.nombre
+
+class Anuncio(models.Model):
+    asunto = models.CharField(max_length=300)
+    mensaje = models.TextField(max_length=5000)
+    para = models.ManyToManyField(User)

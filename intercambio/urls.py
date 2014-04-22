@@ -24,6 +24,10 @@ urlpatterns = patterns('',
     url(r'^administrador_editar_perfil/$', 'administrador.views.editar_perfil'),
     url(r'^administrador_ver_log/$', 'administrador.views.ver_log'),
     url(r'^administrador_editar_usuario/(?P<id_user>\d+)/$', 'administrador.views.editar_cuenta'),
+    url(r'^redactar_anuncio/$', 'administrador.views.redactar_anuncio'),
+    url(r'^administrador_crear_universidad/$', 'administrador.views.crear_universidad'),
+    url(r'administrador_listar_universidad/(?P<creado>\d+)/$', 'administrador.views.listar_universidades'),
+    url(r'administrador_eliminar_universidad/(?P<id_universidad>\d+)/$', 'administrador.views.eliminar_universidad'),
 
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT,}),
@@ -50,6 +54,7 @@ urlpatterns = patterns('',
     url(r'^planEstudio', 'estudiante.views.planEstudio'),
     url(r'^dominioIdiomas', 'estudiante.views.dominioIdiomas'),
     url(r'^descargarPlanilla', 'estudiante.views.descargarPlanilla'),
+
 
 
 )
