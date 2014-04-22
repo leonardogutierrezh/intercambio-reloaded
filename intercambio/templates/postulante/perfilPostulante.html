@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block js %}
+
+<script type="text/javascript">
+    function cambiarContrasena(){
+        if (document.getElementById('id_cambiarContra').checked) {
+            document.getElementById('id_contrasena1').disabled = false;
+            document.getElementById('id_contrasena2').disabled = false;
+        } else {
+            document.getElementById('id_contrasena1').disabled = true;
+            document.getElementById('id_contrasena2').disabled = true;
+        }
+    }
+</script>
+
+{% endblock %}
+
+{% block seccion-contenido %}
+
+    <h2>Perfil</h2> <br>
+    <form id='formulario' method='post' action=''> {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-5 col-sm-10">
+                {{ UsuarioRepetido }}
+                {{ formulario.username | bootstrap }}
+                {{ formulario.cambiarContra|bootstrap}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-sm-10">
+                <p style="color: red"> {{ ContrasenaDist }} </p>
+                {{ formulario.contrasena1 | bootstrap }}
+                {{ formulario.email | bootstrap }}
+
+            </div>
+            <div class="col-md-5 col-sm-10">
+                <p></p>
+                {{ formulario.contrasena2 | bootstrap }}
+                {{ formulario.carrera | bootstrap }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="final col-md-4 col-md-push-4 col-sm-4 col-sm-push-4">
+                <input type='submit' class="btn btn-primary" value='Guardar' />
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

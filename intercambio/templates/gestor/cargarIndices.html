@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block js %}
+
+<script>
+        function numero(e) {
+          var codigo;
+          codigo = (document.all) ? e.keyCode : e.which;
+          if (codigo > 31 && (codigo < 48 || codigo > 57) && codigo != 46 ) {
+          return false;
+          }
+          return true;
+        }
+</script>
+
+{% endblock %}
+
+{% block seccion-contenido %}
+{% if indicesCargados %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Indices caargados exitosamente!
+    </div>
+{% endif %}
+    <h2>Cargar indices de carreras</h2> <br>
+    <form id='formulario' method='post' action=''> {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-2 col-md-push-3 col-sm-2">
+            {% for carrera in carreras %}
+                <label>{{carrera.nombre}}</label><input type="hidden" name="listaIndices" value="{{carrera.id}}" />
+                <input type="text" name="{{carrera.id}}" value="{{carrera.indiceCarrera}}" onkeypress='return numero(event)' onkeyup='return numero(event)' class=" form-control" />
+            {% endfor %}
+
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="final col-md-3 col-md-push-3 col-sm-3 col-sm-push-3">
+                <input type='submit' class="btn btn-primary" value='Guardar' />
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

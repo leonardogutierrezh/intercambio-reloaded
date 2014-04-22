@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import admin
 from postulante.models import *
 from countries.models import *
+from administrador.models import Idioma,Universidad
 
 class AntecedenteAcad(models.Model):
     indice = models.FloatField()
@@ -38,11 +39,32 @@ class Financiamiento(models.Model):
     ayuda = models.BooleanField()
     descripcionAyuda = models.CharField(max_length=100)
 
-class Idiomas(models.Model):
-    idioma = models.CharField(max_length=100)
-    verbal = models.CharField(max_length=100)
-    escrito = models.CharField(max_length=100)
-    auditivo = models.CharField(max_length=100)
+class ManejoIdiomas(models.Model):
+    idioma = models.ForeignKey(Idioma)
+    verbal = models.CharField(max_length=30)
+    escrito = models.CharField(max_length=30)
+    auditivo = models.CharField(max_length=30)
+    auxiliar = models.CharField(max_length=10)
+
+class OpcionUNO(models.Model):
+    programa = models.ForeignKey(ProgramaIntercambio)
+    univ = models.ForeignKey(Universidad)
+    tipoPrograma = models.CharField(max_length=50)
+    fechaInicio = models.CharField(max_length=50)
+    anoInicio = models.CharField(max_length=50)
+    fechaFin = models.CharField(max_length=50)
+    anoFin = models.CharField(max_length=50)
+    duracion = models.CharField(max_length=50)
+
+class OpcionDOS(models.Model):
+    programa = models.ForeignKey(ProgramaIntercambio)
+    univ = models.ForeignKey(Universidad)
+    tipoPrograma = models.CharField(max_length=50)
+    fechaInicio = models.CharField(max_length=50)
+    anoInicio = models.CharField(max_length=50)
+    fechaFin = models.CharField(max_length=50)
+    anoFin = models.CharField(max_length=50)
+    duracion = models.CharField(max_length=50)
 
 class Estudiante(models.Model):
     user = models.ForeignKey(User)
@@ -82,13 +104,16 @@ class Estudiante(models.Model):
     planDeEstudio = models.ManyToManyField(PlanDeEstudio, null=True, blank=True)
     estadoPostulacion = models.CharField(max_length=100, default ='Sin postular')
     representante = models.ForeignKey(Representante, null=True, blank=True)
-    idiomas = models.ManyToManyField(Idiomas, null=True, blank=True)
+    idiomas = models.ManyToManyField(ManejoIdiomas, null=True, blank=True)
     financiamiento = models.ForeignKey(Financiamiento, null=True, blank=True)
     documentos = models.ForeignKey(DocumentosRequeridos, null=True, blank=True)
     primerPaso = models.BooleanField(default=False)
     segundoPaso = models.BooleanField(default=False)
     tercerPaso = models.BooleanField(default=False)
     cuartoPaso = models.BooleanField(default=False)
+    primeraOpcion = models.ForeignKey(OpcionUNO,null=True,blank=True)
+    segundaOpcion = models.ForeignKey(OpcionDOS,null=True,blank=True)
+
     def __unicode__(self):
         return self.user.username
 

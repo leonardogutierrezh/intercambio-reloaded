@@ -139,7 +139,7 @@ def crear_cuenta(request):
             asunto = "Sistema de Gestion de Intercambio"
             mensaje = "Hola se ha creado a tu nombre una cuenta para utilizar el sistema de gestion de intercambios de la universidad simon bolivar. \n"
             mensaje = mensaje + "tu usuario es:" + user.username + "\n"
-            mensaje = mensaje + "tu clave es" + password + "\n"
+            mensaje = mensaje + "tu clave es " + password + "\n"
             #correo = EmailMessage(asunto, mensaje, to=['contacto@asuntopais.com'])
             correo = EmailMessage(asunto, mensaje, to=[user.email])
             try:

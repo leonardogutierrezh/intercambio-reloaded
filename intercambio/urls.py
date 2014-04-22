@@ -54,7 +54,19 @@ urlpatterns = patterns('',
     url(r'^planEstudio', 'estudiante.views.planEstudio'),
     url(r'^dominioIdiomas', 'estudiante.views.dominioIdiomas'),
     url(r'^descargarPlanilla', 'estudiante.views.descargarPlanilla'),
+    url(r'^ajaxConvenio', 'estudiante.views.ajaxConvenio'),
+    url(r'^ajaxConvenioPais', 'estudiante.views.ajaxConvenioPais'),
 
+    ############### Coordinacion ##########################
+    url(r'^listar_solicitudes_coord', 'postulante.views.listar_solicitudes_coord'),
+    url(r'^perfilCoordinacion', 'postulante.views.perfilCoordinacion'),
+    url(r'^verDetallePostulacion/(?P<id_user>\d+)/$', 'postulante.views.verDetallePostulacion'),
+    url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
 
+    ############### Gestor ################################
+    url(r'^perfilDecanato', 'gestor.views.perfilDecanato'),
+    url(r'^cargarIndices', 'gestor.views.cargarIndices'),
+    url(r'^decanato_ver_log', 'gestor.views.decanato_ver_log'),
 
+    #url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
 )

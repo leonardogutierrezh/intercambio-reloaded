@@ -24,20 +24,40 @@
 
     {% if user.first_name == "estudianteUSB" %}
         <form id='formulario' method='post' action=''> {% csrf_token %}
-           {{ UsuarioRepetido }}
-           {{formulario.username|bootstrap }}
-           {{ formulario.cambiarContra|bootstrap}}
-           <p style="color: red"> {{ ContrasenaDist }} </p>
-           {{formulario.contrasena1|bootstrap }}
-           {{formulario.contrasena2|bootstrap }}
-           {{formulario.nombre1|bootstrap }}
-           {{formulario.nombre2|bootstrap }}
-           {{formulario.apellido1|bootstrap }}
-           {{formulario.apellido2|bootstrap }}
-           {{formulario.email|bootstrap }}
-           {{formulario.carnet|bootstrap }}
 
-        <input type='submit' class="btn btn-primary" value='Guardar' />
+            <div class="row">
+                <div class="col-md-5 col-sm-10">
+                    {{ UsuarioRepetido }}
+                    {{ formulario.username | bootstrap }}
+                    {{ formulario.cambiarContra|bootstrap}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-sm-10">
+                    <p style="color: red"> {{ ContrasenaDist }} </p>
+                    {{ formulario.contrasena1 | bootstrap }}
+                    {{ formulario.nombre1 | bootstrap }}
+                    {{ formulario.apellido1 | bootstrap }}
+                    {{ formulario.email | bootstrap }}
+                    {{ formulario.carrera | bootstrap }}
+                </div>
+                <div class="col-md-5 col-sm-10">
+                    <p></p>
+                    {{ formulario.contrasena2 | bootstrap }}
+                    {{ formulario.nombre2 | bootstrap }}
+                    {{ formulario.apellido2 | bootstrap }}
+                    {{ formulario.carnet | bootstrap }}
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="final col-md-4 col-md-push-4 col-sm-4 col-sm-push-4">
+                    <input type='submit' class="btn btn-primary" value='Guardar' />
+                </div>
+            </div>
+
+
         </form>
     {% endif %}
 
@@ -61,3 +81,36 @@
     {% endif %}
 
 {% endblock %}
+
+        <form id='formulario' method='post' action=''> {% csrf_token %}
+       <div class="row">
+            <div class="col-md-5 col-sm-10">
+                {{ UsuarioRepetido }}
+                {{ formulario.username | bootstrap }}
+            </div>
+       </div>
+       <div class="row">
+            <div class="col-md-5 col-sm-10">
+                {{ ContrasenaDist }}
+                {{ formulario.contrasena1 | bootstrap }}
+                {{ formulario.nombre1 | bootstrap }}
+                {{ formulario.apellido1 | bootstrap }}
+                {{ formulario.email | bootstrap }}
+                {{formulario.carrera|bootstrap}}
+            </div>
+            <div class="col-md-5 col-sm-10">
+                {{ formulario.contrasena2 | bootstrap }}
+                {{ formulario.nombre2 | bootstrap }}
+                {{ formulario.apellido2 | bootstrap }}
+                {{ formulario.carnet | bootstrap }}
+
+            </div>
+       </div>
+
+        <div class="row">
+            <div class="final col-md-4 col-md-push-4 col-sm-4 col-sm-push-4">
+                <input type='submit' class="btn btn-primary" value='Guardar' />
+            </div>
+        </div>
+
+    </form>

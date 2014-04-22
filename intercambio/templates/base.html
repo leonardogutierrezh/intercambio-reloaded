@@ -146,8 +146,32 @@
 
                      {% elif user.first_name == 'decanato' %}
                         <h3 style="text-align: center">Decanato</h3>
+                        <li>
+                                <a href="/cargarIndices">Cargar indices carreras</a>
+                        </li>
+                        <li><a href="/decanato_ver_log/">Log de auditoria</a></li>
+                        <li>
+                            <a href="/perfilDecanato">Ver/Modificar perfil</a>
+                        </li>
+                        <li>
+                                <a href="/cerrar_sesion">Cerrar sesion</a>
+                        </li>
                      {% elif user.first_name == 'coordinacion' %}
                         <h3 style="text-align: center">Coordinacion</h3>
+                        <li>
+                            <a href="/perfilCoordinacion">Ver/Modificar perfil</a>
+                        </li>
+                        <li>
+                            <a href="#">Gestion de solicitudes</a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="/listar_solicitudes_coord">Listar Solicitudes </a>
+                                    </li>
+                                </ul>
+                        </li>
+                        <li>
+                                <a href="/cerrar_sesion">Cerrar sesion</a>
+                        </li>
                     {% endif %}
                 {% endif %}
                 <!-- /#side-menu -->

@@ -1,0 +1,40 @@
+{% extends "tabla.html" %}
+{% load bootstrap %}
+
+{% block seccion-contenido %}
+    <table class="table table-striped table-bordered table-hover" id="content">
+            <thead>
+                <th>Nombre</th>
+                <th class="actions">Accion</th>
+            </thead>
+            {% for postulacion in postulaciones %}
+                <tr>
+                    <td>{{ postulacion.username.nombre1 }} {{ postulacion.username.apellido1 }} </td>
+                    <td class="actions">
+                        <button class="btn-xs btn-default"><a href="/verDetallePostulacion/{{postulacion.username.id}}" class="btn-xs btn-default">Ver</a></button>
+                        <button type="button" class="btn-xs btn-default">Recomendar</button>
+                        <button type="button" onclick="deleteAlert({{postulacion.username.id}})" class="btn-xs btn-default btn-danger">Eliminar</button>
+                    </td>
+                </tr>
+            {% endfor %}
+    </table>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+        	function deleteAlert(id)
+        	{
+        		var r=confirm("¿Esta seguro que desea eliminar?");
+        		if (r==true)
+        	  {
+        			var string1 = "/eliminarPostulacion_coord/";
+        		  window.location.assign(string1 + id)
+          	}
+        		else
+          	{
+
+          	}
+        		document.getElementById("demo").innerHTML=x;
+        }
+    </script>
+{% endblock %}

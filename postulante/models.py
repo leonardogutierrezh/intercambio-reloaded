@@ -18,6 +18,7 @@ class CarreraUsb(models.Model):
     codigo = models.CharField(max_length=100)
     decanato = models.CharField(max_length=100, null=True)
     areaDeEstudio = models.CharField(max_length=100, null=True)
+    indiceCarrera = models.CharField(max_length=10,default=1)
     def __unicode__(self):
         return self.nombre
 
@@ -34,6 +35,7 @@ class PlanDeEstudio(models.Model):
     codigoUniv = models.CharField(max_length=100)
     nombreMateriaUniv = models.CharField(max_length=100)
     creditosUniv = models.IntegerField()
+    auxiliar = models.CharField(max_length=10)
 
 from estudiante.models import Estudiante
 
@@ -48,5 +50,6 @@ class Postulacion(models.Model):
     estadoPostulacion = models.CharField(max_length=100)
     comentRecomendacion = models.CharField(max_length=100, null=True)
     date = models.DateField(auto_now=True)
+
 
 
