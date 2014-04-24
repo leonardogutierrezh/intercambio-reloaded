@@ -17,8 +17,6 @@ class NuevaCoordinacionForm(forms.Form):
 class NuevaUniversidadExtrangeraForm(forms.Form):
     nombre_usuarioExtranjera = forms.CharField(label='Nombre de usuario')
     emailExtranjera = forms.EmailField(label='Email')
-    nombreExtranjera = forms.CharField(label='Nombre de la universidad')
-    pais = forms.ModelChoiceField(queryset= Pais.objects.all())
 
 class NuevoEstudianteForm(forms.Form):
     nombre_usuarioEstudiante = forms.CharField(label='Nombre de usuario')

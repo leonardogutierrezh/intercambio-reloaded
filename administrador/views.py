@@ -121,8 +121,6 @@ def crear_cuenta(request):
             elif seleccionado == "universidad":
                 nombreUsu= formulario.cleaned_data['nombre_usuarioExtranjera']
                 email = formulario.cleaned_data['emailExtranjera']
-                nombre = formulario.cleaned_data['nombreExtranjera']
-                pais = formulario.cleaned_data['pais']
                 length = 13
                 chars = string.ascii_letters + string.digits + '!@#$%^&*()'
                 random.seed = (os.urandom(1024))
@@ -130,9 +128,8 @@ def crear_cuenta(request):
                 try:
                     user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
                     user.save()
-                    universidad = Universidad.objects.create(nombre=nombre, pais=pais)
-                    universidad.save()
-                    postulante = Postulante.objects.create(usuario=user, tipo="uniextranjera", universidad=universidad)
+                    postulante = Postulante.objects.create(usuario=user, tipo="uniextranjera")
+                    postulante.save()
 
                 except:
                     error=1
@@ -260,147 +257,151 @@ def ver_log(request):
 def editar_cuenta(request, id_user):
     logueado = request.user
     error=0
-    seleccionado = User.objects.get(id=id_user).first_name
-    if seleccionado == "decanato" or seleccionado == "dric":
-        formulario = NuevoUsuarioForm(request.POST)
-        formularioUsuario = formulario
-    elif seleccionado == "coordinacion":
-        formulario = NuevaCoordinacionForm(request.POST)
-        formularioCoordinacion = formulario
-    elif seleccionado == "estudiante":
-        formulario = NuevoEstudianteForm(request.POST)
-        formularioEstudiante = formulario
-    elif seleccionado == "extranjero":
-        formulario = NuevoEstudianteExtranjeroForm(request.POST)
-        formularioEstudianteExtranjero = formulario
-    elif seleccionado == "universidad":
-        formulario = NuevaUniversidadExtrangeraForm(request.POST)
-        formularioUniversidad = formulario
+    seleccionado = User.objects.get(id=id_user)
     if request.method == 'POST':
         formulario = NuevoUsuarioForm()
-        if seleccionado == "decanato" or seleccionado == "dric":
+        if seleccionado.first_name == "decanato" or seleccionado.first_name == "dric":
             formulario = NuevoUsuarioForm(request.POST)
             formularioUsuario = formulario
-        elif seleccionado == "coordinacion":
+        elif seleccionado.first_name == "coordinacion":
             formulario = NuevaCoordinacionForm(request.POST)
             formularioCoordinacion = formulario
-        elif seleccionado == "estudiante":
+        elif seleccionado.first_name == "estudiante":
             formulario = NuevoEstudianteForm(request.POST)
             formularioEstudiante = formulario
-        elif seleccionado == "extranjero":
+        elif seleccionado.first_name == "extranjero":
             formulario = NuevoEstudianteExtranjeroForm(request.POST)
             formularioEstudianteExtranjero = formulario
-        elif seleccionado == "universidad":
+        elif seleccionado.first_name == "universidad":
             formulario = NuevaUniversidadExtrangeraForm(request.POST)
             formularioUniversidad = formulario
         if formulario.is_valid():
-            if seleccionado == "decanato" or seleccionado == "dric":
-                nombreUsu = formulario.cleaned_data['nombre_usuario']
-                email = formulario.cleaned_data['email']
-                nombre = formulario.cleaned_data['nombre']
-                length = 13
-                chars = string.ascii_letters + string.digits + '!@#$%^&*()'
-                random.seed = (os.urandom(1024))
-                password = ''.join(random.choice(chars) for i in range(length))
+            if seleccionado.first_name == "decanato" or seleccionado.first_name == "dric":
+                #length = 13
+                #chars = string.ascii_letters + string.digits + '!@#$%^&*()'
+                #random.seed = (os.urandom(1024))
+                #password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
-                    user.save()
-                    gestor = Gestor.objects.create(usuario=user, nombre=nombre)
+                    gestor = Gestor.objects.get(usuario__id=id_user)
+                    seleccionado.username = formulario.cleaned_data['nombre_usuario']
+                    seleccionado.email = formulario.cleaned_data['email']
+                    gestor.nombre = formulario.cleaned_data['nombre']
+                    seleccionado.save()
                     gestor.save()
-
                 except:
                     error=1
-            elif seleccionado == "coordinacion":
+            elif seleccionado.first_name == "coordinacion":
                 nombreUsu = formulario.cleaned_data['nombre_usuarioCoordinacion']
                 email = formulario.cleaned_data['emailCoordinacion']
                 carrera = formulario.cleaned_data['carreraCoordinacion']
-                length = 13
-                chars = string.ascii_letters + string.digits + '!@#$%^&*()'
-                random.seed = (os.urandom(1024))
-                password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
+                    user = User.objects.get(id=id_user)
+                    postulante = Postulante.objects.get(usuario=user)
+                    user.username=nombreUsu
+                    user.email=email
                     user.save()
-                    coordinacion = Postulante.objects.create(usuario=user, tipo="coordinacion", carrera=carrera)
-                    coordinacion.save()
+                    postulante.carrera=carrera
+                    postulante.save()
 
                 except:
                     error=1
-            elif seleccionado == "estudiante":
+            elif seleccionado.first_name == "estudiante":
                 nombreUsu = formulario.cleaned_data['nombre_usuarioEstudiante']
                 email = formulario.cleaned_data['emailEstudiante']
                 nombre = formulario.cleaned_data['nombreEstudiante']
                 apellido = formulario.cleaned_data['apellidoEstudiante']
                 carrera = formulario.cleaned_data['carreraEstudiante']
                 carnet = formulario.cleaned_data['carnet']
-                length = 13
-                chars = string.ascii_letters + string.digits + '!@#$%^&*()'
-                random.seed = (os.urandom(1024))
-                password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
+                    user = User.objects.get(id=id_user)
+                    estudiante = Estudiante.objects.get(user=user)
+                    user.username = nombreUsu
+                    user.email= email
                     user.save()
-                    estudiante = Estudiante.objects.create(user=user, nombre1=nombre,
-                                                           nombre2="", apellido1=apellido, apellido2="", carnet=carnet, carrera_usb=carrera, estudUsb=True, email=email)
+                    estudiante.nombre1 = nombre
+                    estudiante.apellido1 = apellido
+                    estudiante.carnet=carnet
+                    estudiante.carrera_usb=carrera
+                    estudiante.estudUsb=True
+                    estudiante.email=email
                     estudiante.save()
 
                 except:
                     error=1
-            elif seleccionado == "extranjero":
+            elif seleccionado.first_name == "extranjero":
                 nombreUsu = formulario.cleaned_data['nombre_usuarioExtranjero']
                 email = formulario.cleaned_data['emailExtranjero']
                 nombre = formulario.cleaned_data['nombreExtranjero']
                 apellido = formulario.cleaned_data['apellidoExtranjero']
                 pasaporte = formulario.cleaned_data['pasaporteExtranjero']
-                length = 13
-                chars = string.ascii_letters + string.digits + '!@#$%^&*()'
-                random.seed = (os.urandom(1024))
-                password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
+                    user = User.objects.get(id=id_user)
+                    estudiante = Estudiante.objects.get(user=user)
+                    user.username = nombreUsu
+                    user.email= email
                     user.save()
-                    extranjero = Estudiante.objects.create(user=user, nombre1=nombre, nombre2="", apellido1=apellido, apellido2="", email=email, pasaporte=pasaporte)
-                    extranjero.save()
+                    estudiante.nombre1 = nombre
+                    estudiante.apellido1 = apellido
+                    estudiante.carnet=carnet
+                    estudiante.carrera_usb=carrera
+                    estudiante.estudUsb=False
+                    estudiante.email=email
+                    estudiante.pasaporte = pasaporte
+                    estudiante.save()
 
                 except:
                     error=1
-            elif seleccionado == "universidad":
+            elif seleccionado.first_name == "universidad":
                 nombreUsu= formulario.cleaned_data['nombre_usuarioExtranjera']
                 email = formulario.cleaned_data['emailExtranjera']
-                nombre = formulario.cleaned_data['nombreExtranjera']
-                pais = formulario.cleaned_data['pais']
-                length = 13
-                chars = string.ascii_letters + string.digits + '!@#$%^&*()'
-                random.seed = (os.urandom(1024))
-                password = ''.join(random.choice(chars) for i in range(length))
                 try:
-                    user = User.objects.create_user(nombreUsu, email, password, first_name=seleccionado)
-                    user.save()
-                    universidad = Universidad.objects.create(nombre=nombre, pais=pais)
-                    universidad.save()
-                    postulante = Postulante.objects.create(usuario=user, tipo="uniextranjera", universidad=universidad)
+                    seleccionado.username = nombreUsu
+                    seleccionado.email = email
+                    seleccionado.save()
+
 
                 except:
                     error=1
-            asunto = "Sistema de Gestion de Intercambio"
-            mensaje = "Hola se ha creado a tu nombre una cuenta para utilizar el sistema de gestion de intercambios de la universidad simon bolivar. \n"
-            mensaje = mensaje + "tu usuario es:" + user.username + "\n"
-            mensaje = mensaje + "tu clave es" + password + "\n"
+            #asunto = "Sistema de Gestion de Intercambio"
+            #mensaje = "Hola se ha creado a tu nombre una cuenta para utilizar el sistema de gestion de intercambios de la universidad simon bolivar. \n"
+            #mensaje = mensaje + "tu usuario es:" + user.username + "\n"
+            #mensaje = mensaje + "tu clave es" + password + "\n"
             #correo = EmailMessage(asunto, mensaje, to=['contacto@asuntopais.com'])
-            correo = EmailMessage(asunto, mensaje, to=[user.email])
+            #correo = EmailMessage(asunto, mensaje, to=[user.email])
             try:
-                print "enviando"
-                correo.send()
-                Log.objects.create(usuario=logueado, suceso='Nuevo usuario creado')
-                return HttpResponseRedirect('/administrador_listar_usuarios/1')
+                Log.objects.create(usuario=logueado, suceso='Usuario ' + seleccionado.username + ' editado')
+                return HttpResponseRedirect('/administrador_listar_usuarios/2')
             except:
                 mensaje="error al enviar el mensaje"
 
     else:
-        seleccionado = "decanato"
-    return render_to_response('administrador/editar_cuenta.html', {'formularioUsuario': formularioUsuario,
-                                                                  'formulario': formulario,
-                                                                  'seleccionado': seleccionado,
+        if seleccionado.first_name == "decanato" or seleccionado.first_name == "dric":
+            gestor = Gestor.objects.get(usuario__id=id_user)
+            formulario = NuevoUsuarioForm(initial={'nombre_usuario': seleccionado.username, 'nombre': gestor.nombre, 'email': seleccionado.email})
+        elif seleccionado.first_name == "coordinacion":
+            coordinacion = Postulante.objects.get(usuario__id=id_user)
+            formulario = NuevaCoordinacionForm(initial={'nombre_usuarioCoordinacion': seleccionado.username, 'emailCoordinacion': seleccionado.email, 'carreraCoordinacion': coordinacion.carrera})
+
+        elif seleccionado.first_name == "estudiante":
+#            estudiante = Estudiante.objects.create(user=user, nombre1=nombre,
+ #                                                          nombre2="", apellido1=apellido, apellido2="", carnet=carnet, carrera_usb=carrera, estudUsb=True, email=email)
+            estudiante = Estudiante.objects.get(user__id=id_user)
+            formulario = NuevoEstudianteForm(initial={'nombre_usuarioEstudiante': seleccionado.username, 'emailEstudiante': seleccionado.email,
+                                                      'nombreEstudiante': estudiante.nombre1 + ' ' + estudiante.nombre2,
+                                                      'apellidoEstudiante': estudiante.apellido1 + ' ' + estudiante.apellido2,
+                                                      'carnet': estudiante.carnet, 'carreraEstudiante': estudiante.carrera_usb})
+        elif seleccionado.first_name == "extranjero":
+            estudiante = Estudiante.objects.get(user__id=id_user)
+            formulario = NuevoEstudianteExtranjeroForm(initial={'nombre_usuarioExtranjero': seleccionado.username, 'emailExtranjero': seleccionado.email,
+                                                      'nombreExtranjero': estudiante.nombre1 + ' ' + estudiante.nombre2,
+                                                      'apellidoExtranjero': estudiante.apellido1 + ' ' + estudiante.apellido2,
+                                                      'carnet': estudiante.carnet, 'pasaporteExtranjero': estudiante.pasaporte})
+        elif seleccionado.first_name == "universidad":
+            postulante = Postulante.objects.get(usuario__id=id_user)
+            formulario = NuevaUniversidadExtrangeraForm(initial={'nombre_usuarioExtranjera': seleccionado.username,
+                                                                 'emailExtranjera': seleccionado.email})
+    return render_to_response('administrador/editar_cuenta.html', {'formulario': formulario,
+                                                                  'seleccionado': seleccionado.first_name,
                                                                   'error': error}, context_instance=RequestContext(request))
 
 @login_required(login_url='/')
