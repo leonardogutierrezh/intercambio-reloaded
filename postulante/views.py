@@ -19,7 +19,7 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Image
 from django.core import serializers
 from administrador.models import Universidad
-#from postulante.forms import *
+from postulante.forms import *
 
 def listar_solicitudes_coord(request):
     user = request.user
