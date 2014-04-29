@@ -21,6 +21,9 @@ from django.core import serializers
 from administrador.models import Universidad, Log
 from postulante.models import Postulacion
 
+def index(request):
+    return render_to_response('index.html', context_instance=RequestContext(request))
+
 def registrarEstudianteUSB(request):
     if request.method == 'POST':
         formulario = EstudianteUSB_Form(request.POST)
@@ -113,9 +116,8 @@ def iniciarSesion(request):
                 acceso = authenticate(username=usuario, password=clave)
                 if acceso is not None:
                     login(request,acceso)
-                    #return HttpResponseRedirect('/index')
                     print 'hice login'
-                    return render_to_response('index.html', context_instance=RequestContext(request))
+                    return HttpResponseRedirect('/index')
                 else:
                     formulario = AuthenticationForm()
                     error_log = "Nombre de usuario o contrasena incorrectos **"
