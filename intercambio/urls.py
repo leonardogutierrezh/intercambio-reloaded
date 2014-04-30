@@ -71,7 +71,7 @@ urlpatterns = patterns('',
     url(r'^perfilDecanato', 'gestor.views.perfilDecanato'),
     url(r'^cargarIndices', 'gestor.views.cargarIndices'),
     url(r'^decanato_ver_log', 'gestor.views.decanato_ver_log'),
-    url(r'ver_tabla_postulados', 'gestor.views.ver_tabla_postulados')
+    url(r'ver_tabla_postulados/(?P<opcion>\d+)/$', 'gestor.views.ver_tabla_postulados')
 
     #url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
 )

@@ -1,0 +1,13 @@
+{% extends 'tabla.html' %}
+{% load bootstrap %}
+{% block seccion-contenido %}
+    <table class="table table-striped table-bordered table-hover table-responsive">
+    {% for universidad in universidades %}
+            <tr>
+                <td><strong>{{ universidad.nombre }}</strong></td>
+                <td>Pais: {{ universidad.pais }}</td>
+                <td>Cupos: {{ universidad.cupo }}</td>
+            </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

@@ -77,6 +77,12 @@ def decanato_ver_log(request):
     return render_to_response('gestor/log.html', {'log': log}, context_instance=RequestContext(request))
 
 @login_required(login_url='/')
-def ver_tabla_postulados(request):
-
-    return render_to_response('gestor/ver_tabla_postulados.html', {}, context_instance=RequestContext(request))
+def ver_tabla_postulados(request, opcion):
+    universidades = Universidad.objects.all().order_by('pais')
+    if opcion == '1':
+        print 1
+    elif opcion == '2':
+        print 2
+    else:
+        print 3
+    return render_to_response('gestor/ver_tabla_postulados.html', {'universidades': universidades}, context_instance=RequestContext(request))
