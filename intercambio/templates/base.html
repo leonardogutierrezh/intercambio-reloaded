@@ -90,7 +90,7 @@
                              <a href="/administrador_editar_perfil/">Ver/Modificar perfil</a>
                         </li>
                         <li>
-                                <a href="#">Gestion de anuncions</a>
+                                <a href="#">Gestion de anuncios</a>
                                     <ul class="nav nav-second-level">
                                         <li>
                                             <a href="/redactar_anuncio">Redactar Anuncio </a>
@@ -172,7 +172,22 @@
                         <li>
                                 <a href="/cerrar_sesion">Cerrar sesion</a>
                         </li>
+                    {% elif user.first_name == 'dric' %}
+                              <h3 style="text-align: center">DRIC</h3>
+                        <li>
+                            <a href="/perfilCoordinacion">Ver/Modificar perfil</a>
+                        </li>
+                        <li>
+                            <a href="/ver_tabla_postulados">Ver tabla de Postulados</a>
+                        </li>
+                        <li>
+                            <a href="#">Busqueda Avanzada</a>
+                        </li>
+                        <li>
+                                <a href="/cerrar_sesion">Cerrar sesion</a>
+                        </li>
                     {% endif %}
+
                 {% endif %}
                 <!-- /#side-menu -->
             </div>

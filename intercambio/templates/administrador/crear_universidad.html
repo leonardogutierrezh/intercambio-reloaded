@@ -2,16 +2,18 @@
 {% load bootstrap %}
 {% block seccion-contenido %}
     <form method="POST">{% csrf_token %}
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             {{ formulario.nombre | bootstrap }}
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             {{ formulario.pais | bootstrap }}
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             {{ formulario.programa | bootstrap }}
         </div>
-
+        <div class="col-sm-6">
+            {{ formulario.cupo | bootstrap }}
+        </div>
     <input type="submit" value="Crear" class="btn-default btn btn-primary">
     </form>
 {% endblock %}

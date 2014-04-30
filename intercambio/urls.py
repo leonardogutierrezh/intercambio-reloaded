@@ -21,12 +21,13 @@ urlpatterns = patterns('',
     url(r'^cerrar_sesion$', 'administrador.views.cerrar_sesion'),
     url(r'^administrador_listar_usuarios/(?P<creado>\d+)/$', 'administrador.views.listar_usuarios'),
     url(r'^administrador_eliminar_usuario/(?P<id_usuario>\d+)/$', 'administrador.views.eliminar_usuario'),
-    url(r'^administrador_editar_perfil/$', 'administrador.indexviews.editar_perfil'),
+    url(r'^administrador_editar_perfil/$', 'administrador.views.editar_perfil'),
     url(r'^administrador_ver_log/$', 'administrador.views.ver_log'),
     url(r'^administrador_editar_usuario/(?P<id_user>\d+)/$', 'administrador.views.editar_cuenta'),
     url(r'^redactar_anuncio/$', 'administrador.views.redactar_anuncio'),
     url(r'^administrador_crear_universidad/$', 'administrador.views.crear_universidad'),
     url(r'administrador_listar_universidad/(?P<creado>\d+)/$', 'administrador.views.listar_universidades'),
+    url(r'administrador_editar_universidad/(?P<id_universidad>\d+)/$', 'administrador.views.editar_universidad'),
     url(r'administrador_eliminar_universidad/(?P<id_universidad>\d+)/$', 'administrador.views.eliminar_universidad'),
 
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),
@@ -70,6 +71,7 @@ urlpatterns = patterns('',
     url(r'^perfilDecanato', 'gestor.views.perfilDecanato'),
     url(r'^cargarIndices', 'gestor.views.cargarIndices'),
     url(r'^decanato_ver_log', 'gestor.views.decanato_ver_log'),
+    url(r'ver_tabla_postulados', 'gestor.views.ver_tabla_postulados')
 
     #url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
 )

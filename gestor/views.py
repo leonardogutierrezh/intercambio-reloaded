@@ -75,3 +75,8 @@ def cargarIndices(request):
 def decanato_ver_log(request):
     log = Log.objects.all().order_by('fecha')
     return render_to_response('gestor/log.html', {'log': log}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def ver_tabla_postulados(request):
+
+    return render_to_response('gestor/ver_tabla_postulados.html', {}, context_instance=RequestContext(request))

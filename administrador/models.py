@@ -18,6 +18,7 @@ class Universidad(models.Model):
     nombre = models.CharField(max_length=100)
     pais = models.ForeignKey(Country)
     programa = models.ForeignKey(ProgramaIntercambio)
+    cupo = models.IntegerField()
     def __unicode__(self):
         return self.nombre
 

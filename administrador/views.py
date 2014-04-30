@@ -414,6 +414,7 @@ def redactar_anuncio(request):
     return render_to_response('administrador/redactar_anuncio.html', {'carreras': carreras,
                                                                       'universidades': universidades,
                                                                       'paises': paises}, context_instance=RequestContext(request))
+
 @login_required(login_url='/')
 def crear_universidad(request):
     if request.method == 'POST':
@@ -424,6 +425,25 @@ def crear_universidad(request):
     else:
         formulario = CrearUniversidadForm()
     return render_to_response('administrador/crear_universidad.html', {'formulario': formulario}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def editar_universidad(request, id_universidad):
+    universidad = Universidad.objects.get(id=id_universidad)
+    if request.method == 'POST':
+        formulario = CrearUniversidadForm(request.POST)
+        if formulario.is_valid():
+            form = formulario.save(commit=False)
+            universidad.nombre = form.nombre
+            universidad.programa = form.programa
+            universidad.pais = form.pais
+            universidad.cupo = form.cupo
+            universidad.save()
+            return HttpResponseRedirect('/administrador_listar_universidad/2')
+    else:
+        formulario = CrearUniversidadForm(initial={'nombre': universidad.nombre, 'pais': universidad.pais,
+                                                   'programa': universidad.programa, 'cupo': universidad.cupo})
+    return render_to_response('administrador/crear_universidad.html', {'formulario': formulario}, context_instance=RequestContext(request))
+
 
 @login_required(login_url='/')
 def listar_universidades(request, creado):
