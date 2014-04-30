@@ -603,7 +603,42 @@ def documentosRequeridos(request):
     if request.method == 'POST':
         if estudiante.estudUsb:
             formulario = documentosRequeridosUSB_form(request.POST,request.FILES)
-            if formulario.is_valid():
+            if estudiante.documentos == None:
+                if formulario.is_valid():
+                    foto = formulario.cleaned_data['foto']
+                    informe = formulario.cleaned_data['informe']
+                    carta = formulario.cleaned_data['carta']
+                    planilla = formulario.cleaned_data['planilla']
+                    certificado = formulario.cleaned_data['certificado']
+
+                    if estudiante.documentos == None:
+                        doc = DocumentosRequeridos.objects.create(foto=foto,informe=informe,carta=carta,planilla=planilla,certificado=certificado)
+                        doc.save()
+                        estudiante.documentos = doc
+                    else:
+                        estudiante.documentos.foto = foto
+                        estudiante.documentos.informe = informe
+                        estudiante.documentos.carta = carta
+                        estudiante.documentos.planilla = planilla
+                        estudiante.documentos.certificado = certificado
+                        estudiante.documentos.save()
+
+                    estudiante.segundoPaso = True
+                    if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+                        postulacion = Postulacion.objects.get(username=estudiante)
+                        if postulacion.estadoPostulacion == 'Sin postular':
+                            postulacion.estadoPostulacion = 'Postulado'
+                            postulacion.save()
+                            log = Log.objects.create(suceso = "Usuario se postula al intercambio",usuario = request.user)
+                            log.save()
+
+                    estudiante.save()
+
+                    if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
+                        return HttpResponseRedirect('/postularse')
+                    else:
+                        return HttpResponseRedirect('/planEstudio')
+            else:
                 foto = formulario.cleaned_data['foto']
                 informe = formulario.cleaned_data['informe']
                 carta = formulario.cleaned_data['carta']

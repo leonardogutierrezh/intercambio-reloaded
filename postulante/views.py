@@ -110,3 +110,9 @@ def eliminarPostulacion_coord(request,id_user):
 
     ## Correo
     return render_to_response('postulante/listar_solicitudes_coord.html', {'postulante':postulante,'estudiante':estudiante,'postulaciones':postulaciones,'postulacion':postulacion,'eliminadoPostulacion':eliminadoPostulacion},context_instance=RequestContext(request))
+
+def recomendarCoord(request,id_user):
+    return render_to_response('postulante/recomendarCoord.html', {},context_instance=RequestContext(request))
+
+def noRecomendarCoord(request,id_user):
+    return render_to_response('postulante/noRecomendarCoord.html', {},context_instance=RequestContext(request))

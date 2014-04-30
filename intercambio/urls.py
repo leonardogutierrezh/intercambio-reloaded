@@ -63,6 +63,8 @@ urlpatterns = patterns('',
     url(r'^perfilCoordinacion', 'postulante.views.perfilCoordinacion'),
     url(r'^verDetallePostulacion/(?P<id_user>\d+)/$', 'postulante.views.verDetallePostulacion'),
     url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
+    url(r'^recomendarCoord/(?P<id_user>\d+)/$', 'postulante.views.recomendarCoord'),
+    url(r'^noRecomendarCoord/(?P<id_user>\d+)/$', 'postulante.views.noRecomendarCoord'),
 
     ############### Gestor ################################
     url(r'^perfilDecanato', 'gestor.views.perfilDecanato'),

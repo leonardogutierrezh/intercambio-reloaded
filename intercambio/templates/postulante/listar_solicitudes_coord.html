@@ -12,8 +12,11 @@
                     <td>{{ postulacion.username.nombre1 }} {{ postulacion.username.apellido1 }} </td>
                     <td class="actions">
                         <button class="btn-xs btn-default"><a href="/verDetallePostulacion/{{postulacion.username.id}}" class="btn-xs btn-default">Ver</a></button>
-                        <button type="button" class="btn-xs btn-default">Recomendar</button>
-                        <button type="button" onclick="deleteAlert({{postulacion.username.id}})" class="btn-xs btn-default btn-danger">Eliminar</button>
+                        <button class="btn-xs btn-default"><a href="/recomendarCoord/{{postulacion.username.id}}" class="btn-xs btn-default"> Recomendar </a></button>
+                        {% comment %}
+                            <button type="button" onclick="deleteAlert({{postulacion.username.id}})" class="btn-xs btn-default btn-danger">Eliminar</button>
+                        {% endcomment %}
+                        <button class="btn-xs btn-default"><a href="/noRecomendarCoord/{{postulacion.username.id}}" class="btn-xs btn-default">No Recomendar</a></button>
                     </td>
                 </tr>
             {% endfor %}

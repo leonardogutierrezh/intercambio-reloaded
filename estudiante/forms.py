@@ -98,8 +98,8 @@ class formularioDOS_form(forms.Form):
     codigo_postal = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}))
 
 class formularioTRES_form(forms.Form):
-    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono celular")
-    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono casa")
+    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono celular. (Recuerda incluir codigo del pais)")
+    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono casa. (Recuerda incluir codigo del pais)")
     email = forms.EmailField()
 
 class formularioCUATRO_formUSB(forms.Form):
@@ -184,7 +184,7 @@ class formularioSIETE_form(forms.Form):
     apellidos = forms.CharField(max_length=50)
     nombres = forms.CharField(max_length=50)
     cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono celular")
-    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono casa")
+    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono casa. (Recuerda incluir codigo del pais)")
     email = forms.EmailField()
     rel_estudiante = forms.CharField(max_length=50, label="Relacion con el estudiante")
     direccion = forms.CharField(max_length=500)
@@ -195,7 +195,6 @@ class documentosRequeridosUSB_form(forms.Form):
     carta = forms.FileField(label='Carta de motivación')
     planilla = forms.FileField(required=False,label='*Planilla CINDA/SMILE')
     certificado = forms.FileField(required=False,label='**Certificado de idiomas')
-
 
 class documentosRequeridosExt_form(forms.Form):
     foto = forms.ImageField()
