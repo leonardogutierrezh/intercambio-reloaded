@@ -1,12 +1,22 @@
 {% extends 'tabla.html' %}
 {% load bootstrap %}
 {% block seccion-contenido %}
+    <div class="row">
+    <a href="/ver_tabla_postulados/1">Opcion 1</a> <a href="/ver_tabla_postulados/2">Opcion 2</a>
+    </div>
     <table class="table table-striped table-bordered table-hover table-responsive">
-    {% for universidad in universidades %}
+    {% for elemento in lista %}
             <tr>
-                <td><strong>{{ universidad.nombre }}</strong></td>
-                <td>Pais: {{ universidad.pais }}</td>
-                <td>Cupos: {{ universidad.cupo }}</td>
+                <td><strong>{{ elemento.1.nombre }}</strong></td>
+                <td>Pais: {{ elemento.1.pais }}</td>
+                <td>Cupos: {{ elemento.1.cupo }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{{ elemento.0.nombre1 }} {{ elemento.0.apellido1 }}</td>
+                <td>Carnet: {{ elemento.0.carnet }}</td>
+                <td>Carrera: {{ elemento.0.carrera_usb }}</td>
+                <td><button class="btn btn-default btn-sm">Aceptar</button></td>
             </tr>
     {% endfor %}
     </table>

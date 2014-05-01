@@ -38,10 +38,10 @@ def crear_cuenta(request):
         elif seleccionado == "coordinacion":
             formulario = NuevaCoordinacionForm(request.POST)
             formularioCoordinacion = formulario
-        elif seleccionado == "estudiante":
+        elif seleccionado == "estudianteUSB":
             formulario = NuevoEstudianteForm(request.POST)
             formularioEstudiante = formulario
-        elif seleccionado == "extranjero":
+        elif seleccionado == "estudianteExt":
             formulario = NuevoEstudianteExtranjeroForm(request.POST)
             formularioEstudianteExtranjero = formulario
         elif seleccionado == "universidad":
@@ -80,7 +80,7 @@ def crear_cuenta(request):
 
                 except:
                     error=1
-            elif seleccionado == "estudiante":
+            elif seleccionado == "estudianteUSB":
                 nombreUsu = formulario.cleaned_data['nombre_usuarioEstudiante']
                 email = formulario.cleaned_data['emailEstudiante']
                 nombre = formulario.cleaned_data['nombreEstudiante']
@@ -97,10 +97,10 @@ def crear_cuenta(request):
                     estudiante = Estudiante.objects.create(user=user, nombre1=nombre,
                                                            nombre2="", apellido1=apellido, apellido2="", carnet=carnet, carrera_usb=carrera, estudUsb=True, email=email)
                     estudiante.save()
-
+                    postulacion = Postulacion.objects.create(username=estudiante, estadoPostulacion="Sin postular")
                 except:
                     error=1
-            elif seleccionado == "extranjero":
+            elif seleccionado == "estudianteExt":
                 nombreUsu = formulario.cleaned_data['nombre_usuarioExtranjero']
                 email = formulario.cleaned_data['emailExtranjero']
                 nombre = formulario.cleaned_data['nombreExtranjero']

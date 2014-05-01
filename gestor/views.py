@@ -78,11 +78,15 @@ def decanato_ver_log(request):
 
 @login_required(login_url='/')
 def ver_tabla_postulados(request, opcion):
-    universidades = Universidad.objects.all().order_by('pais')
+    lista = []
+    postulados = Postulacion.objects.filter(estadoPostulacion='Postulado. Revisado por coordinacion')
     if opcion == '1':
-        print 1
+        for postulado in postulados:
+            lista.append((postulado.username, postulado.username.primeraOpcion.univ))
+
     elif opcion == '2':
-        print 2
+        for postulado in postulados:
+            lista.append((postulado.username, postulado.username.segundaOpcion.univ))
     else:
         print 3
-    return render_to_response('gestor/ver_tabla_postulados.html', {'universidades': universidades}, context_instance=RequestContext(request))
+    return render_to_response('gestor/ver_tabla_postulados.html', {'lista': lista}, context_instance=RequestContext(request))
