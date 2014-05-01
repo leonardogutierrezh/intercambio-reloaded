@@ -22,6 +22,6 @@ class Postulante_Edit_Form(forms.Form):
     carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())
 
 class Postulante_RecomendarEstudiante(forms.Form):
-    indiceVerificado = forms.BooleanField(label='Indice verificado:')
-    indice = forms.CharField(max_length=10)
-    comentarios = forms.CharField(max_length=600)
+    indiceVerificado = forms.BooleanField(label='Índice verificado:')
+    indice = forms.CharField(max_length=10, label= 'Índice')
+    comentarios = forms.CharField(widget=forms.Textarea)

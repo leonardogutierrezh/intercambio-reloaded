@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -900,7 +901,7 @@ def descargarPlanilla(request):
         if estudiante.estudUsb:
             ## Segunda pagina
             p.setFont("Helvetica",11)
-            p.drawString( 68, 770, "INFORMACION ACADEMICA:")
+            p.drawString( 68, 770, "INFORMACIÓN ACADEMICA:")
             p.setFont("Helvetica",8)
             p.drawString( 70, 740, "Nro de creditos aprobados a la fecha de postulacion: " + str(estudiante.antecedente.creditosAprobados))
             p.drawString( 320, 740, "Decanato: " + estudiante.carrera_usb.decanato)
@@ -940,7 +941,7 @@ def descargarPlanilla(request):
         else:
             ## Segunda pagina
             p.setFont("Helvetica",11)
-            p.drawString( 68, 750, "INFORMACION ACADEMICA:")
+            p.drawString( 68, 750, "INFORMACIÓN ACADEMICA:")
             p.setFont("Helvetica",8)
             p.drawString( 70, 720, "Nro de creditos aprobados a la fecha de postulacion: " )
             p.drawString( 320, 720, "Decanato: " )

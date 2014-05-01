@@ -139,4 +139,27 @@ def recomendarCoord(request,id_user):
     return render_to_response('postulante/recomendarCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
 
 def noRecomendarCoord(request,id_user):
-    return render_to_response('postulante/noRecomendarCoord.html', {},context_instance=RequestContext(request))
+    user = request.user
+    postulante = Postulante.objects.get(usuario=user)
+    estudiante = Estudiante.objects.get(id=int(id_user))
+    if request.method == 'POST':
+        formulario = Postulante_RecomendarEstudiante(request.POST)
+        if formulario.is_valid():
+            comentarios = formulario.cleaned_data['comentarios']
+
+            postulacion = Postulacion.objects.get(username=estudiante)
+            postulacion.comentRecomendacionCoord = comentarios
+            postulacion.recomendadoCoordinacion = False
+            postulacion.estadoPostulacion = 'Postulado. Revisado por coordinación'
+            postulacion.save()
+
+            postulacion = Postulacion.objects.filter(estadoPostulacion='Postulado')
+            postulaciones = []
+            for post in postulacion:
+                if post.username.carrera_usb == postulante.carrera:
+                    postulaciones.append(post)
+            return render_to_response('postulante/listar_solicitudes_coord.html',{'postulante':postulante,'postulaciones':postulaciones,'estudiante':estudiante,
+                                                                                  'recomendado':True},context_instance=RequestContext(request))
+    else:
+        formulario = Postulante_RecomendarEstudiante(initial={'indice':estudiante.antecedente.indice})
+    return render_to_response('postulante/noRecomendarCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
