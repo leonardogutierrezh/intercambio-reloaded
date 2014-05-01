@@ -48,7 +48,8 @@ class Postulante(models.Model):
 class Postulacion(models.Model):
     username = models.ForeignKey(Estudiante)
     estadoPostulacion = models.CharField(max_length=100)
-    comentRecomendacion = models.CharField(max_length=100, null=True)
+    recomendadoCoordinacion = models.BooleanField()
+    comentRecomendacionCoord = models.CharField(max_length=100, null=True)
     date = models.DateField(auto_now=True)
 
 

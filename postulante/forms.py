@@ -20,3 +20,8 @@ class Postulante_Edit_Form(forms.Form):
     contrasena1 = forms.CharField(widget=forms.PasswordInput(attrs={'disabled':'disabled'}),label="Contrasena", required=False)
     contrasena2 = forms.CharField(widget=forms.PasswordInput(attrs={'disabled':'disabled'}),label="Contrasena de nuevo", required=False)
     carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())
+
+class Postulante_RecomendarEstudiante(forms.Form):
+    indiceVerificado = forms.BooleanField(label='Indice verificado:')
+    indice = forms.CharField(max_length=10)
+    comentarios = forms.CharField(max_length=600)
