@@ -7,7 +7,7 @@
             var contador = document.getElementById('count_con').value;
             contador = parseInt(contador) + 1;
             document.getElementById('count_con').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\" onchange=\"ColocarNombreCON(this," + contador + ")\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"nom_" + contador + "\" class=\"form-control\"/></td><td><input type=\"text\" id=\"cred_" + contador + "\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" onkeypress='return numero(event)' onkeyup='return numero(event)' name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\" onchange=\"ColocarNombreCON(this," + contador + ")\" onclick=\"ColocarNombreCON(this," + contador + ")\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"nom_" + contador + "\" class=\"form-control\" disabled/></td><td><input type=\"text\" id=\"cred_" + contador + "\" class=\"form-control\" disabled/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" onkeypress='return numero(event)' onkeyup='return numero(event)' name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
     </script>
     <script>
@@ -15,9 +15,8 @@
             var contador = document.getElementById('count_sin').value;
             contador = parseInt(contador) + 1;
             document.getElementById('count_sin').value = contador;
-            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"cred{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" id=\"nombre{{materia.id}}\" class=\"form-control\"/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" onkeypress='return numero(event)' onkeyup='return numero(event)' name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\" onchange=\"ColocarNombreSIN(this," + contador + ")\" onclick=\"ColocarNombreSIN(this," + contador + ")\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"nombre_mat_" + contador + "\" class=\"form-control\" disabled/></td><td><input type=\"text\" id=\"cred_mat_" + contador + "\" class=\"form-control\" disabled/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" onkeypress='return numero(event)' onkeyup='return numero(event)' name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
         }
-
         function eliminarFila(btn){
             var row = btn.parentNode.parentNode;
             row.parentNode.removeChild(row);
@@ -36,6 +35,23 @@
             var id = $(btn).val();
             var nombre = "nom_" + numero;
             var creditos = "cred_" + numero
+            $.ajax({
+                data : {'id':id},
+                url: '/nombreMaterias/',
+                type: 'get',
+                success: function(data){
+                    console.log(data);
+                    document.getElementById(nombre).value = data[0].fields.nombre;
+                    document.getElementById(creditos).value = data[0].fields.creditos;
+                }
+            })
+        }
+    </script>
+    <script>
+        function ColocarNombreSIN(btn,numero) {
+            var id = $(btn).val();
+            var nombre = "nombre_mat_" + numero;
+            var creditos = "cred_mat_" + numero
             $.ajax({
                 data : {'id':id},
                 url: '/nombreMaterias/',
@@ -101,7 +117,7 @@
                 {% for planEst in estudiante.planDeEstudio.all %}
                     <tr>
                         <td>
-                            <select name="lista_materias" id="listCON" class="form-control" onchange="ColocarNombreCON(this,{{planEst.auxiliar}})" >
+                            <select name="lista_materias" id="listCON" class="form-control" onchange="ColocarNombreCON(this,{{planEst.auxiliar}})" onclick="ColocarNombreCON(this,{{planEst.auxiliar}})" >
                             {% for materia in materias %}
                                 <option value="{{materia.id}}" {% if planEst.materiaUsb.codigo == materia.codigo %}selected{%endif%}>{{materia.codigo}}</option>
                             {% endfor %}
@@ -118,14 +134,14 @@
             {% else %}
                 <tr>
                     <td>
-                        <select name="lista_materias" id="listSIN" class="form-control">
+                        <select name="lista_materias" id="listSIN" class="form-control" onchange="ColocarNombreSIN(this,0)" onclick="ColocarNombreSIN(this,0)" >
                             {% for materia in materias %}
                             <option value="{{materia.id}}" >{{materia.codigo}}</option>
                             {% endfor %}
                         </select>
                     </td>
-                    <td><input type="text" id="cred_mat" class="form-control"/></td>
-                    <td><input type="text" id="nombre_mat" class="form-control"/></td>
+                    <td><input type="text" id="nombre_mat_0" class="form-control" disabled/></td>
+                    <td><input type="text" id="cred_mat_0" class="form-control" disabled/></td>
                     <td><input type="text" name="cod_des_0" class="form-control"> </input> </td>
                     <td><input type="text" name="nom_des_0" class="form-control"> </input></td>
                     <td><input type="text" name="cred_des_0" class="form-control" onkeypress='return numero(event)' onkeyup='return numero(event)' > </input></td>
