@@ -159,7 +159,7 @@ class formularioCUATRO_formExt(forms.Form):
 class formularioCINCO_formUSB(forms.Form):
     carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())
     creditos = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Número de créditos aprobados hasta el momento")
-    indice = forms.FloatField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Índice académico")
+    indice = forms.FloatField(widget=forms.TextInput(attrs={'onkeypress':'return numero_float(event)','onkeyup':'return numero_float(event)'}), label="Índice académico")
 
 class formularioCINCO_formExt(forms.Form):
     anoIngreso = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Ano ingreso a la carrera")
@@ -183,11 +183,11 @@ class formularioSEIS_form(forms.Form):
 class formularioSIETE_form(forms.Form):
     apellidos = forms.CharField(max_length=50)
     nombres = forms.CharField(max_length=50)
-    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono celular")
-    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono casa. (Recuerda incluir codigo del pais)")
+    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono celular. (Recuerda incluir código del país)")
+    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono casa. (Recuerda incluir código del país)")
     email = forms.EmailField()
-    rel_estudiante = forms.CharField(max_length=50, label="Relacion con el estudiante")
-    direccion = forms.CharField(max_length=500)
+    rel_estudiante = forms.CharField(max_length=50, label="Relación con el estudiante")
+    direccion = forms.CharField(max_length=500, label='Dirección')
 
 class documentosRequeridosUSB_form(forms.Form):
     foto = forms.ImageField()

@@ -12,6 +12,16 @@
           return true;
     }
 </script>
+<script>
+    function numero_float(e) {
+          var codigo;
+          codigo = (document.all) ? e.keyCode : e.which;
+          if (codigo > 31 && (codigo < 48 || codigo > 57) && codigo != 46) {
+          return false;
+          }
+          return true;
+    }
+</script>
 {% endblock %}
 
 {% block seccion-contenido %}
