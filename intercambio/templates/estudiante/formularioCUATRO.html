@@ -27,7 +27,7 @@
                 console.log(data);
                 var paises = "";
                 var uni = "";
-                paises += '<label>Pais</label><select id="paises_prog" onchange="verUniv(this)" onclick="verUniv(this)" class=" form-control">';
+                paises += '<label>País</label><select id="paises_prog" onchange="verUniv(this)" onclick="verUniv(this)" class=" form-control">';
                 for(var i=0; i<data.length; i++){
                     paises += '<option value="' + data[i].pk + '">'+ data[i].fields.printable_name +'</option> ';
                 }
@@ -51,7 +51,7 @@
                 console.log(data);
                 var paises = "";
                 var uni = "";
-                paises += '<label>Pais</label><select id="paises_prog_dos" onchange="verUnivDos(this)" onclick="verUnivDos(this)" class=" form-control">';
+                paises += '<label>País</label><select id="paises_prog_dos" onchange="verUnivDos(this)" onclick="verUnivDos(this)" class=" form-control">';
                 for(var i=0; i<data.length; i++){
                     paises += '<option value="' + data[i].pk + '">'+ data[i].fields.printable_name +'</option> ';
                 }
@@ -117,11 +117,11 @@
         <form id='formulario' method='post' action=''> {% csrf_token %}
                 <div class="row">
                     <div class="col-md-5 col-sm-10">
-                        <h4 style="text-align: center;">Primera Opcion</h4>
+                        <h4 style="text-align: center;">Primera Opción</h4>
                         {{ formulario.programaUno | bootstrap }}
                         <div id="paises">
                             {% if hayOpcion %}
-                                    <label>Pais </label>
+                                    <label>País </label>
                                     <select id="paises_prog" onchange="verUnivDos(this)" onclick="verUnivDos(this)" class=" form-control">
                                         {% for pais_1 in paises1 %}
                                             <option value="{{pais_1.id}}" {%if pais_1.iso == estudiante.primeraOpcion.univ.pais.iso %} selected {% endif %}>{{pais_1.printable_name}}</option>
@@ -157,11 +157,11 @@
                         </div>
                     </div>
                     <div class="col-md-5 col-sm-10">
-                        <h4 style="text-align: center;">Segunda Opcion</h4>
+                        <h4 style="text-align: center;">Segunda Opción</h4>
                         {{ formulario.programaDos | bootstrap }}
                         <div id="paises_2">
                             {% if hayOpcion %}
-                                    <label>Pais</label>
+                                    <label>País</label>
                                     <select id="paises_prog_dos" onchange="verUniv(this)" onclick="verUniv(this)" class=" form-control">
                                         {% for pais_2 in paises2 %}
                                             <option value="{{pais_2.id}}" {%if pais_2.iso == estudiante.segundaOpcion.univ.pais.iso %} selected {% endif %}>{{pais_2.printable_name}}</option>

@@ -42,7 +42,7 @@
                         <a href="#">Entrar</a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="/iniciarSesion">Iniciar Sesion</a>
+                                <a href="/iniciarSesion">Iniciar Sesión</a>
                             </li>
                             <li>
                                 <a href="#">Registrarse</a>
@@ -75,7 +75,7 @@
                       {% if  user.first_name == 'admin' %}
                         <h3 style="text-align: center">Administrador</h3>
                         <li>
-                            <a href="#">Gestion de usuarios</a>
+                            <a href="#">Gestión de usuarios</a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="/administrador_crear_cuenta">Agregar usuario</a>
@@ -90,7 +90,7 @@
                              <a href="/administrador_editar_perfil/">Ver/Modificar perfil</a>
                         </li>
                         <li>
-                                <a href="#">Gestion de anuncios</a>
+                                <a href="#">Gestión de anuncios</a>
                                     <ul class="nav nav-second-level">
                                         <li>
                                             <a href="/redactar_anuncio">Redactar Anuncio </a>
@@ -100,9 +100,9 @@
                                         </li>
                                     </ul>
                             </li>
-                        <li><a href="/administrador_ver_log/">Log de auditoria</a></li>
+                        <li><a href="/administrador_ver_log/">Log de auditoría</a></li>
                         <li>
-                            <a href="#">Gestion de Universidades</a>
+                            <a href="#">Gestión de Universidades</a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="/administrador_crear_universidad">Agregar universidad</a>
@@ -113,12 +113,12 @@
                             </ul>
 
                         </li>
-                        <li><a href="/cerrar_sesion">Cerrar sesion</a></li>
+                        <li><a href="/cerrar_sesion">Cerrar sesión</a></li>
                      </ul>
                      {% elif user.first_name == 'estudianteUSB' or user.first_name == 'estudianteExt' %}
                          <h3 style="text-align: center">Estudiante</h3>
                          <li>
-                                <a href="#">Gestion de solicitudes</a>
+                                <a href="#">Gestión de solicitudes</a>
                                     <ul class="nav nav-second-level">
                                         <li>
                                             <a href="/postularse">Postularse/Modificar </a>
@@ -141,28 +141,28 @@
                                 </li>
                             {% endif %}
                         <li>
-                                <a href="/cerrar_sesion">Cerrar sesion</a>
+                                <a href="/cerrar_sesion">Cerrar sesión</a>
                         </li>
 
                      {% elif user.first_name == 'decanato' %}
                         <h3 style="text-align: center">Decanato</h3>
                         <li>
-                                <a href="/cargarIndices">Cargar indices carreras</a>
+                                <a href="/cargarIndices">Cargar índices carreras</a>
                         </li>
                         <li><a href="/decanato_ver_log/">Log de auditoria</a></li>
                         <li>
                             <a href="/perfilDecanato">Ver/Modificar perfil</a>
                         </li>
                         <li>
-                                <a href="/cerrar_sesion">Cerrar sesion</a>
+                                <a href="/cerrar_sesion">Cerrar sesión</a>
                         </li>
                      {% elif user.first_name == 'coordinacion' %}
-                        <h3 style="text-align: center">Coordinacion</h3>
+                        <h3 style="text-align: center">Coordinación</h3>
                         <li>
                             <a href="/perfilCoordinacion">Ver/Modificar perfil</a>
                         </li>
                         <li>
-                            <a href="#">Gestion de solicitudes</a>
+                            <a href="#">Gestión de solicitudes</a>
                                 <ul class="nav nav-second-level">
                                     <li>
                                         <a href="/listar_solicitudes_coord">Listar Solicitudes </a>
@@ -170,7 +170,7 @@
                                 </ul>
                         </li>
                         <li>
-                                <a href="/cerrar_sesion">Cerrar sesion</a>
+                                <a href="/cerrar_sesion">Cerrar sesión</a>
                         </li>
                     {% elif user.first_name == 'dric' %}
                               <h3 style="text-align: center">DRIC</h3>
@@ -184,7 +184,7 @@
                             <a href="#">Busqueda Avanzada</a>
                         </li>
                         <li>
-                                <a href="/cerrar_sesion">Cerrar sesion</a>
+                                <a href="/cerrar_sesion">Cerrar sesión</a>
                         </li>
                     {% endif %}
 

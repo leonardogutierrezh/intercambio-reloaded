@@ -70,10 +70,10 @@ class formularioUNO_formUSB(forms.Form):
     nombre2 = forms.CharField(max_length=50, label="Segundo nombre", required=False)
     apellido1 = forms.CharField(max_length=50, label="Primer apellido" , required=False)
     apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False)
-    genero = forms.ChoiceField(choices=genero_choices)
+    genero = forms.ChoiceField(choices=genero_choices, label='Género')
     fecha = forms.CharField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
     nacionalidad = forms.ModelChoiceField(queryset=Country.objects.all())
-    cedula = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}))
+    cedula = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label='Cédula')
     carnet = forms.CharField(max_length=8 , required=False)
 
 class formularioUNO_formExt(forms.Form):
@@ -85,7 +85,7 @@ class formularioUNO_formExt(forms.Form):
     nombre2 = forms.CharField(max_length=50, label="Segundo nombre", required=False )
     apellido1 = forms.CharField(max_length=50, label="Primer apellido" , required=False)
     apellido2 = forms.CharField(max_length=50, label="Segundo apellido", required=False)
-    genero = forms.ChoiceField(choices=genero_choices)
+    genero = forms.ChoiceField(choices=genero_choices, label='Género')
     fecha = forms.CharField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
     nacionalidad = forms.ModelChoiceField(queryset=Country.objects.all())
     pasaporte = forms.CharField(max_length=50, required=False)
@@ -94,12 +94,12 @@ class formularioDOS_form(forms.Form):
     urbanizacion = forms.CharField(max_length=100, label='Urb / Sector / Barrio')
     calle = forms.CharField(max_length=50)
     edificio  = forms.CharField(max_length=50, label='Edificio / Casa')
-    apartamento = forms.CharField(max_length=50, label="Apartamento/Nro Casa")
-    codigo_postal = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}))
+    apartamento = forms.CharField(max_length=50, label="Apartamento / Nro Casa")
+    codigo_postal = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label='Código postal')
 
 class formularioTRES_form(forms.Form):
-    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono celular. (Recuerda incluir codigo del pais)")
-    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Telefono casa. (Recuerda incluir codigo del pais)")
+    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono celular. (Recuerda incluir código del país)")
+    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono casa. (Recuerda incluir código del país)")
     email = forms.EmailField()
 
 class formularioCUATRO_formUSB(forms.Form):
@@ -143,7 +143,7 @@ class formularioCUATRO_formUSB(forms.Form):
     anoInicioUno = forms.ChoiceField(choices=ano_choice, label='Año')
     fechaFinUno = forms.ChoiceField(choices=inicio_choice, label='Mes tentativa fin ')
     anoFinUno = forms.ChoiceField(choices=ano_choice, label='Año')
-    duracionUno = forms.ChoiceField(choices=duracion_choice, label='Duracion')
+    duracionUno = forms.ChoiceField(choices=duracion_choice, label='Duración')
 
     programaDos= forms.ModelChoiceField(label='Nombre de programa',queryset=ProgramaIntercambio.objects.all(),widget=forms.Select(attrs={'onchange':'verPais_Dos(this)','onclick':'verPais_Dos(this)'}))
     tipoProgramaDos = forms.ChoiceField(choices=tipo_choice, label='Tipo de programa')
@@ -151,15 +151,15 @@ class formularioCUATRO_formUSB(forms.Form):
     anoInicioDos = forms.ChoiceField(choices=ano_choice, label='Año')
     fechaFinDos = forms.ChoiceField(choices=inicio_choice, label='Fecha tentativa fin ')
     anoFinDos = forms.ChoiceField(choices=ano_choice, label='Año')
-    duracionDos = forms.ChoiceField(choices=duracion_choice, label='Duracion')
+    duracionDos = forms.ChoiceField(choices=duracion_choice, label='Duración')
 
 class formularioCUATRO_formExt(forms.Form):
     programa= forms.ModelChoiceField(queryset=ProgramaIntercambio.objects.all())
 
 class formularioCINCO_formUSB(forms.Form):
     carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())
-    creditos = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Numero de créditos aprobados hasta el momento")
-    indice = forms.FloatField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Indice academico")
+    creditos = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Número de créditos aprobados hasta el momento")
+    indice = forms.FloatField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Índice académico")
 
 class formularioCINCO_formExt(forms.Form):
     anoIngreso = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Ano ingreso a la carrera")
