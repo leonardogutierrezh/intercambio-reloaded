@@ -1062,3 +1062,8 @@ def ajaxConvenioPais(request):
     data = serializers.serialize('json',universidades,fields=('nombre'))
     return HttpResponse(data,mimetype='application/json')
 
+def nombreMaterias(request):
+    id_materia = request.GET['id']
+    materia = MateriaUSB.objects.filter(id=int(id_materia))
+    data = serializers.serialize('json',materia,fields=('creditos','nombre'))
+    return HttpResponse(data,mimetype='application/json')
