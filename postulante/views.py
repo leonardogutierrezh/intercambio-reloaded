@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -119,12 +120,13 @@ def recomendarCoord(request,id_user):
         formulario = Postulante_RecomendarEstudiante(request.POST)
         if formulario.is_valid():
             comentarios = formulario.cleaned_data['comentarios']
-            '''
+
             postulacion = Postulacion.objects.get(username=estudiante)
             postulacion.comentRecomendacionCoord = comentarios
             postulacion.recomendadoCoordinacion = True
+            postulacion.estadoPostulacion = 'Postulado. Revisado por coordinación'
             postulacion.save()
-            '''
+
             postulacion = Postulacion.objects.filter(estadoPostulacion='Postulado')
             postulaciones = []
             for post in postulacion:

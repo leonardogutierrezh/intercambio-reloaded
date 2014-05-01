@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -79,7 +80,7 @@ def decanato_ver_log(request):
 @login_required(login_url='/')
 def ver_tabla_postulados(request, opcion):
     lista = []
-    postulados = Postulacion.objects.filter(estadoPostulacion='Postulado. Revisado por coordinacion')
+    postulados = Postulacion.objects.filter(estadoPostulacion='Postulado. Revisado por coordinación')
     if opcion == '1':
         for postulado in postulados:
             lista.append((postulado.username, postulado.username.primeraOpcion.univ))
