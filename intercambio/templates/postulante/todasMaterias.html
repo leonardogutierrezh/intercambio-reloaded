@@ -1,0 +1,64 @@
+{% extends "tabla.html" %}
+{% load bootstrap %}
+
+{% block seccion-contenido %}
+{% if agregadaMateria  %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Materia agregada satisfactoriamente!
+    </div>
+{% endif %}
+{% if modificadaMateria  %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Materia modificada satisfactoriamente!
+    </div>
+{% endif %}
+{% if eliminadaMateria  %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Materia eliminada satisfactoriamente!
+    </div>
+{% endif %}
+
+    <h3>Listado de materias</h3>
+    <table class="table table-striped table-bordered table-hover" id="content">
+            <thead>
+                <th>Nombre</th>
+                <th>Código</th>
+                <th>Créditos</th>
+                <th class="actions">Acción</th>
+            </thead>
+            {% for materia in materias %}
+                <tr>
+                    <td>{{ materia.nombre }} </td>
+                    <td>{{ materia.codigo }} </td>
+                    <td>{{ materia.creditos }} </td>
+                    <td class="actions">
+                        <button class="btn-xs btn-default"><a href="/modificarMateria/{{materia.id}}" class="btn-xs btn-default">Modificar</a></button>
+                        <button type="button" onclick="deleteAlert({{materia.id}})" class="btn-xs btn-default btn-danger">Eliminar</button>
+
+                    </td>
+                </tr>
+            {% endfor %}
+    </table>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+        	function deleteAlert(id)
+        	{
+        		var r=confirm("¿Esta seguro que desea eliminar?");
+        		if (r==true)
+        	  {
+        			var string1 = "/eliminarMateria/";
+        		  window.location.assign(string1 + id)
+          	}
+        		else
+          	{
+
+          	}
+        		document.getElementById("demo").innerHTML=x;
+        }
+    </script>
+{% endblock %}

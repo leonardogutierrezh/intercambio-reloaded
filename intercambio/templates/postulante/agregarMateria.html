@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block seccion-contenido %}
+    <div class="container">
+        <h3>Agregar nueva materia</h3>
+        <br>
+        <form id='formulario' method='post' action=''> {% csrf_token %}
+            <div class="row">
+
+                    <div class="col-md-5 col-md-push-3 col-sm-2">
+                    {% if repetidoCod %}
+                        <p style="color: red;"> Disculpe, el código ya existe</p>
+                    {% endif %}
+                        {{formulario.nombre|bootstrap}}
+                        {{formulario.codigo|bootstrap}}
+                        {{formulario.creditos|bootstrap}}
+                    </div>
+            </div>
+            <div class="row">
+                <div class="final col-md-4 col-md-push-5 col-sm-4 col-sm-push-4">
+                    <input type='submit' class="btn btn-primary" value='Agregar' />
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

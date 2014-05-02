@@ -67,6 +67,10 @@ urlpatterns = patterns('',
     url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
     url(r'^recomendarCoord/(?P<id_user>\d+)/$', 'postulante.views.recomendarCoord'),
     url(r'^noRecomendarCoord/(?P<id_user>\d+)/$', 'postulante.views.noRecomendarCoord'),
+    url(r'^agregarMateria/$', 'postulante.views.agregarMateria'),
+    url(r'^todasMaterias/$', 'postulante.views.todasMaterias'),
+    url(r'^modificarMateria/(?P<id_mat>\d+)/$', 'postulante.views.modificarMateria'),
+    url(r'^eliminarMateria/(?P<id_mat>\d+)/$', 'postulante.views.eliminarMateria'),
 
     ############### Gestor ################################
     url(r'^perfilDecanato', 'gestor.views.perfilDecanato'),

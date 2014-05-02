@@ -163,3 +163,64 @@ def noRecomendarCoord(request,id_user):
     else:
         formulario = Postulante_RecomendarEstudiante(initial={'indice':estudiante.antecedente.indice})
     return render_to_response('postulante/noRecomendarCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
+
+def agregarMateria(request):
+    user = request.user
+    postulante = Postulante.objects.get(usuario=user)
+
+    if request.method == 'POST':
+        formulario = nuevaMateriaForm(request.POST)
+        if formulario.is_valid():
+            nombre = formulario.cleaned_data['nombre']
+            creditos = formulario.cleaned_data['creditos']
+            codigo = formulario.cleaned_data['codigo']
+
+            materias = MateriaUSB.objects.filter(codigo = codigo)
+            if len(materias) != 0:
+                return render_to_response('postulante/agregarMateria.html',{'formulario':formulario,'repetidoCod':True},context_instance=RequestContext(request))
+            materia = MateriaUSB.objects.create(nombre=nombre,creditos=creditos,codigo=codigo)
+            materia.cod_carrera.add(postulante.carrera)
+            materia.save()
+
+            materias = MateriaUSB.objects.all()
+            return render_to_response('postulante/todasMaterias.html',{'materias':materias,'agregadaMateria':True},context_instance=RequestContext(request))
+    else:
+        formulario = nuevaMateriaForm()
+    return render_to_response('postulante/agregarMateria.html', {'formulario':formulario},context_instance=RequestContext(request))
+
+def todasMaterias(request):
+    user = request.user
+    postulante = Postulante.objects.get(usuario=user)
+    materias = MateriaUSB.objects.all()
+    return render_to_response('postulante/todasMaterias.html',{'materias':materias},context_instance=RequestContext(request))
+
+def modificarMateria(request,id_mat):
+    materia = MateriaUSB.objects.get(id=int(id_mat))
+    if request.method == 'POST':
+        formulario = nuevaMateriaForm(request.POST)
+        if formulario.is_valid():
+            nombre = formulario.cleaned_data['nombre']
+            creditos = formulario.cleaned_data['creditos']
+            codigo = formulario.cleaned_data['codigo']
+
+            if materia.codigo != codigo:
+                materias = MateriaUSB.objects.filter(codigo = codigo)
+                if len(materias) != 0:
+                    return render_to_response('postulante/agregarMateria.html',{'formulario':formulario,'repetidoCod':True},context_instance=RequestContext(request))
+
+            materia.nombre=nombre
+            materia.creditos=creditos
+            materia.codigo=codigo
+            materia.save()
+
+            materias = MateriaUSB.objects.all()
+            return render_to_response('postulante/todasMaterias.html',{'materias':materias,'modificadaMateria':True},context_instance=RequestContext(request))
+    else:
+        formulario = nuevaMateriaForm(initial={'nombre':materia.nombre,'creditos':materia.creditos,'codigo':materia.codigo})
+    return render_to_response('postulante/agregarMateria.html', {'formulario':formulario},context_instance=RequestContext(request))
+
+def eliminarMateria(request,id_mat):
+    materia = MateriaUSB.objects.get(id=int(id_mat))
+    materia.delete()
+    materias = MateriaUSB.objects.all()
+    return render_to_response('postulante/todasMaterias.html',{'materias':materias,'eliminadaMateria':True},context_instance=RequestContext(request))

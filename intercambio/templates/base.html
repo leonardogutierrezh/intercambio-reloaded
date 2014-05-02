@@ -159,9 +159,6 @@
                      {% elif user.first_name == 'coordinacion' %}
                         <h3 style="text-align: center">Coordinación</h3>
                         <li>
-                            <a href="/perfilCoordinacion">Ver/Modificar perfil</a>
-                        </li>
-                        <li>
                             <a href="#">Gestión de solicitudes</a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -169,6 +166,22 @@
                                     </li>
                                 </ul>
                         </li>
+                        <li>
+                            <a href="#">Gestión de materias</a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="/agregarMateria">Agregar materia </a>
+                                    </li>
+                                    <li>
+                                        <a href="/todasMaterias">Listar materias</a>
+                                    </li>
+
+                                </ul>
+                        </li>
+                        <li>
+                            <a href="/perfilCoordinacion">Ver/Modificar perfil</a>
+                        </li>
+
                         <li>
                                 <a href="/cerrar_sesion">Cerrar sesión</a>
                         </li>
@@ -181,7 +194,7 @@
                             <a href="/ver_tabla_postulados/1">Ver tabla de Postulados</a>
                         </li>
                         <li>
-                            <a href="#">Busqueda Avanzada</a>
+                            <a href="#">Búsqueda Avanzada</a>
                         </li>
                         <li>
                                 <a href="/cerrar_sesion">Cerrar sesión</a>
