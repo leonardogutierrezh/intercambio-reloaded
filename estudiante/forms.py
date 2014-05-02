@@ -12,6 +12,7 @@ from django.forms.extras.widgets import SelectDateWidget
 from django.forms.widgets import CheckboxSelectMultiple
 import magic
 from datetime import *
+import re
 
 class EstudianteUSB_Form(forms.Form):
     nombre1 = forms.CharField(max_length=50, label="Primer nombre")
@@ -24,6 +25,12 @@ class EstudianteUSB_Form(forms.Form):
     contrasena1 = forms.CharField(widget=forms.PasswordInput,label="Contrasena")
     contrasena2 = forms.CharField(widget=forms.PasswordInput,label="Contrasena de nuevo")
     carrera = forms.ModelChoiceField(queryset=CarreraUsb.objects.all())
+
+    def clean_carnet(self):
+        carnet = self.cleaned_data.get('carnet', '')
+        num_words = len(carnet.split())
+        if not(re.match("[0-9]{2}\\-[0-9]{5}",carnet)):
+            raise forms.ValidationError("Carnet no válido")
 
 class EstudianteExt_Form(forms.Form):
     nombre1 = forms.CharField(max_length=50, label="Primer nombre")
@@ -152,6 +159,18 @@ class formularioCUATRO_formUSB(forms.Form):
     fechaFinDos = forms.ChoiceField(choices=inicio_choice, label='Fecha tentativa fin ')
     anoFinDos = forms.ChoiceField(choices=ano_choice, label='Año')
     duracionDos = forms.ChoiceField(choices=duracion_choice, label='Duración')
+
+    def clean_anoFinUno(self):
+        anoFinUno = self.cleaned_data.get('anoFinUno', '')
+        anoInicioUno = self.cleaned_data.get('anoInicioUno', '')
+        if anoFinUno < anoInicioUno:
+            raise forms.ValidationError("Fecha no válida")
+
+    def clean_anoFinDos(self):
+        anoFinDos = self.cleaned_data.get('anoFinDos', '')
+        anoInicioDos = self.cleaned_data.get('anoInicioDos', '')
+        if anoFinDos < anoInicioDos:
+            raise forms.ValidationError("Fecha no válida")
 
 class formularioCUATRO_formExt(forms.Form):
     programa= forms.ModelChoiceField(queryset=ProgramaIntercambio.objects.all())

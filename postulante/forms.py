@@ -30,3 +30,4 @@ class nuevaMateriaForm(forms.Form):
     nombre = forms.CharField(max_length=100)
     codigo = forms.CharField(max_length=100, label='Código')
     creditos = forms.IntegerField(label='Créditos')
+
