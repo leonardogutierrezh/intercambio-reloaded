@@ -187,7 +187,7 @@ class formularioSIETE_form(forms.Form):
     tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono casa. (Recuerda incluir código del país)")
     email = forms.EmailField()
     rel_estudiante = forms.CharField(max_length=50, label="Relación con el estudiante")
-    direccion = forms.CharField(max_length=500, label='Dirección')
+    direccion = forms.CharField(max_length=500, label=9)
 
 class documentosRequeridosUSB_form(forms.Form):
     foto = forms.ImageField()

@@ -2,6 +2,81 @@
 {% load bootstrap %}
 
 {% block seccion-contenido %}
+{% if  user.first_name == 'admin' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <font size=5>
+        <center> ¡Bienvenido al Sistema de Gestión de Intercambios! <center> <br>
+    </font>
+    <font size=4>
+        <center> A través de este sistema usted podrá gestionar el proceso de intercambio de un estudiante. <br>
+
+        <center>
+     </font>
+{% endif %}
+
+
+{% if  user.first_name == 'estudianteUSB' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <font size=5>
+        <center> ¡Bienvenido al Sistema de Gestión de Intercambios! <center> <br>
+    </font>
+    <font size=4>
+        <center> A través de este sistema usted se podrá postular para realizar un intercambio en una universidad extrajera. <br>
+
+        <center>
+     </font>
+{% endif %}
+
+{% if  user.first_name == 'coordinacion' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <font size=5>
+        <center> ¡Bienvenido al Sistema de Gestión de Intercambios! <center> <br>
+    </font>
+    <font size=4>
+        <center> A través de este sistema usted podrá evaluar el proceso de intercambio de un estudiante. <br>
+
+        <center>
+     </font>
+{% endif %}
+
+{% if  user.first_name == 'estudianteExt' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <font size=5>
+        <center> ¡Bienvenido al Sistema de Gestión de Intercambios! <center> <br>
+    </font>
+    <font size=4>
+        <center> A través de este sistema usted se podrá postular para realizar un intercambio en la USB. <br>
+
+        <center>
+     </font>
+{% endif %}
+
+{% if  user.first_name == 'decanato' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <font size=5>
+        <center> ¡Bienvenido al Sistema de Gestión de Intercambios! <center> <br>
+    </font>
+    <font size=4>
+        <center> A través de este sistema usted se podrá gestionar las postulaciones de los estudiantes. <br>
+
+        <center>
+     </font>
+{% endif %}
 
 {% if perfilPostulanteCambiado %}
     <div class="alert alert-success">

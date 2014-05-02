@@ -816,7 +816,7 @@ def descargar(request):
     # if not(estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso):
     #    return render_to_response('estudiante/noPostuladoAun.html',context_instance=RequestContext(request))
 
-def descargarPlanilla(request):
+def descargarPlanilla1(request):
     estudiante = Estudiante.objects.get(user=request.user)
     if estudiante.primerPaso and estudiante.segundoPaso and  estudiante.tercerPaso and estudiante.cuartoPaso:
         # Create the HttpResponse object with the appropriate PDF headers.
@@ -1067,3 +1067,263 @@ def nombreMaterias(request):
     materia = MateriaUSB.objects.filter(id=int(id_materia))
     data = serializers.serialize('json',materia,fields=('creditos','nombre'))
     return HttpResponse(data,mimetype='application/json')
+
+def descargarPlanilla(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if estudiante.primerPaso and estudiante.segundoPaso and  estudiante.tercerPaso and estudiante.cuartoPaso:
+        # Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="Planilla Postulacion.pdf"'
+
+        # Create the PDF object, using the response object as its "file."
+        p = canvas.Canvas(response)
+
+        p.drawInlineImage("./intercambio/static/img/cebollaUSB.jpg", 110, 780, 0.8*inch, 0.5*inch)
+        p.setFont("Helvetica",11)
+        p.drawString( 60, 765, "UNIVERSIDAD SIMON BOLIVAR")
+
+        p.setFont("Helvetica",7)
+        p.drawString( 283, 785, "Dirección de Relaciones Internacionales y de Cooperación")
+        p.drawString( 291, 775, "Coordinación de Apoyo a los Programas de Intercambio ")
+        p.drawString( 338, 765, "Programa de Intercambio de Estudiantes")
+
+        p.setFont("Helvetica",11)
+        p.drawString( 70, 745, "SOLICITUD DE INCORPORACIÓN AL PROGRAMA DE INTERCAMBIO DE ESTUDIANTES")
+
+        p.setFont("Helvetica",9)
+        p.drawString( 65, 720, "DATOS PERSONALES:")
+        p.setFont("Helvetica",7)
+        p.drawString(60,710,"1.")
+        p.drawString(80,710,"Apellidos:")
+        p.drawString(80,690,"__________________________________________")
+        if estudiante.apellido2 != None:
+            p.drawString(80,695,estudiante.apellido1 + " " + estudiante.apellido2)
+        else:
+            p.drawString(80,795,estudiante.apellido1 )
+        p.drawString(310,710,"Nombres:")
+        p.drawString(310,690,"____________________________________________")
+        if estudiante.nombre2 != None:
+            p.drawString(310,695,estudiante.nombre1 + " " + estudiante.nombre2)
+        else:
+            p.drawString(310,695,estudiante.nombre1 )
+        p.rect(50,685,6.8*inch,50)                                  #Cuadro
+        p.drawString(60,670,"2.")
+        p.drawString(80,670,"Género:")
+        p.drawString(110,660,"F _____ ")
+        p.drawString(140,660,"M _____ ")
+        if estudiante.sexo == 'femenino':
+            p.drawString(120,660," X ")
+        else:
+            p.drawString(150,660," X ")
+        p.drawString(300,670,"7.")
+        p.drawString(320,670,"Domicilio Actual:")
+        p.drawString(320,660,"____________________________________________")
+        p.drawString(320,650,"____________________________________________")
+        p.drawString(320,640,"____________________________________________")
+        p.drawString(320,630,"____________________________________________")
+
+        p.drawString(320,660,"Urb: " + estudiante.urbanizacion)
+        p.drawString(320,650,"Calle: " + estudiante.calle)
+        p.drawString(320,640,"Nombre (Edificio/Casa): " + estudiante.edificio)
+        p.drawString(320,630,"Apartamento/Nro.Casa: " + estudiante.apartamento + " Cod.Postal: " + estudiante.codigopostal)
+        p.drawString(60,640,"3.")
+        p.drawString(80,640,"Nacionalidad:")
+        p.drawString(80,630,"_______________________________________")
+        p.drawString(80,630,estudiante.nacionalidad.printable_name)
+        p.drawString(60,610,"4.")
+        p.drawString(80,610,"Número de Cédula de Identidad:")
+        p.drawString(80,600,"_______________________________________")
+        p.drawString(300,610,"8.")
+        p.drawString(320,610,"Datos de Contacto:")
+        p.drawString(320,590,"Telf. Hab: ______________________________________")
+        p.drawString(360,590,str(estudiante.telfCasa))
+        p.drawString(320,570,"Telf. Cel: ______________________________________")
+        p.drawString(360,570,str(estudiante.telfCel))
+        p.drawString(320,550,"E-mail: ________________________________________")
+        p.drawString(360,550,request.user.email)
+        p.drawString(80,600,str(estudiante.cedula))
+        p.drawString(60,580,"5.")
+        p.drawString(80,580,"N° Carnet Estudiantil USB:")
+        p.drawString(80,570,"_______________________________________")
+        p.drawString(60,550,"6.")
+        p.drawString(80,550,"N° Pasaporte vigente:")
+        p.drawString(80,540,"_______________________________________")
+
+        p.rect(50,520,240,165)                                  #Cuadro segundo izquierdo
+        p.rect(290,520,250,165)                                  #Cuadro segundo derecho
+
+        p.drawString(60,500,"9.")
+        p.drawString(80,500,"Datos de una persona a contactar en caso de emergencias:")
+        p.drawString(80,490,"Apellidos y Nombres: ___________________________________________________________________________________________")
+        p.drawString(160,490,estudiante.representante.nombre + " " + estudiante.representante.apellido)
+        p.drawString(80,470,"Relación con el estudiante: ______________________________________________________________________________________")
+        p.drawString(180,470,estudiante.representante.tipoRelacion)
+        p.drawString(80,450,"Direccion: ____________________________________________________________________________________________________")
+        p.drawString(120,450, estudiante.representante.direccion)
+        p.drawString(80,430,"Teléfonos: ________________________________________")
+        p.drawString(120,430, str(estudiante.representante.telefCasa) + " / " + str(estudiante.representante.telefCel))
+        p.drawString(290,430,"E-mail: ________________________________________________")
+        p.drawString(320,430, estudiante.representante.email)
+
+        p.rect(50,425,6.8*inch,95)                                  #Cuadro
+
+        p.drawString(60,410,"10.")
+        p.drawString(80,410," Idioma a emplear en la universidad destino: ")
+        p.drawString(60,390,"11.")
+        p.drawString(80,390," Nivel de suficiencia del idioma a emplear verbal y escrito: ")
+
+        p.drawString(80,370," Oral: ")
+        p.drawString(150,370," Básico: _______ ")
+        p.drawString(250,370," Intermedio: _______ ")
+        p.drawString(370,370," Avanzado: _______ ")
+
+        p.drawString(80,360," Escrito: ")
+        p.drawString(150,360," Básico: _______ ")
+        p.drawString(250,360," Intermedio: _______ ")
+        p.drawString(370,360," Avanzado: _______ ")
+
+        p.drawString(80,350," Lectura: ")
+        p.drawString(150,350," Básico: _______ ")
+        p.drawString(250,350," Intermedio: _______ ")
+        p.drawString(370,350," Avanzado: _______ ")
+
+        p.showPage()
+
+        if estudiante.estudUsb:
+            ## Segunda pagina
+            p.setFont("Helvetica",11)
+            p.drawString( 68, 770, "INFORMACIÓN ACADEMICA:")
+            p.setFont("Helvetica",8)
+            p.drawString( 70, 740, "Nro de creditos aprobados a la fecha de postulacion: " + str(estudiante.antecedente.creditosAprobados))
+            p.drawString( 320, 740, "Decanato: " + estudiante.carrera_usb.decanato)
+            p.drawString( 70, 720, "Carrera que estudia en la universidad: " + estudiante.carrera_usb.nombre)
+            p.drawString( 70, 700, "Area de estudio: " + estudiante.carrera_usb.areaDeEstudio)
+            p.drawString( 320, 700, "Indice academico a la fecha de postulacion: " + str(estudiante.antecedente.indice))
+            p.setFont("Helvetica",10)
+            p.drawString( 70, 670, "Asignaturas del Plan de Estudio USB que aspira " )
+            p.drawString( 70, 660, "sean convalidadas u otorgadas en equivalencia " )
+            p.drawString( 320, 670, "Asignaturas a cursar en la Universidad de  " )
+            p.drawString( 320, 660, "Destino " )
+            p.rect(50,470,6.8*inch,3*inch)
+            p.drawString( 60, 640, "Codigo  " )
+            p.drawString( 135, 640, "Denominacion  " )
+            p.drawString( 250, 640, "Creditos  " )
+            p.drawString( 305, 640, "Codigo  " )
+            p.drawString( 380, 640, "Denominacion  " )
+            p.drawString( 495, 640, "Creditos  " )
+            p.rect(50,470,3.4*inch,3*inch)
+            p.rect(50,630,6.8*inch,20)
+            p.rect(50,470,55,180)
+            p.rect(240,470,55,180)      #Cuadro de denominacion a credito USB
+            p.rect(295,470,55,180)       #Cuadro de codigo a denominacion Ext
+            p.rect(485,470,55,180)      #Cuadro de denominacion a credito Ext
+            p.setFont("Helvetica",8)
+            y=620
+            for plan in estudiante.planDeEstudio.all():
+                p.drawString( 55, y, plan.materiaUsb.codigo )
+                p.drawString( 110, y, plan.materiaUsb.nombre )
+                p.drawString( 250, y, str(plan.materiaUsb.creditos) )
+                p.drawString( 300, y, plan.codigoUniv )
+                p.drawString( 355, y, plan.nombreMateriaUniv )
+                p.drawString( 495, y, str(plan.creditosUniv) )
+                y = y - 10
+            p.drawString( 100, 435, "Aprobacion coordinacion carrera:               ________________________________  " )
+            p.rect(50,420,6.8*inch,375)      #Cuadro completo informacion academica
+        else:
+            ## Segunda pagina
+            p.setFont("Helvetica",11)
+            p.drawString( 68, 750, "INFORMACIÓN ACADEMICA:")
+            p.setFont("Helvetica",8)
+            p.drawString( 70, 720, "Nro de creditos aprobados a la fecha de postulacion: " )
+            p.drawString( 320, 720, "Decanato: " )
+            p.drawString( 70, 700, "Carrera que estudia en la universidad: " )
+            p.drawString( 70, 680, "Area de estudio: " )
+            p.drawString( 320, 680, "Indice academico a la fecha de postulacion: " )
+            p.setFont("Helvetica",10)
+            p.drawString( 70, 650, "Asignaturas del Plan de Estudio USB que aspira " )
+            p.drawString( 70, 640, "sean convalidadas u otorgadas en equivalencia: " )
+            p.drawString( 320, 650, "Asignaturas a cursar en la Universidad de  " )
+            p.drawString( 320, 640, "Destino " )
+            p.rect(50,450,6.8*inch,3*inch)
+            p.drawString( 60, 620, "Codigo  " )
+            p.drawString( 135, 620, "Denominacion  " )
+            p.drawString( 250, 620, "Creditos  " )
+            p.drawString( 305, 620, "Codigo  " )
+            p.drawString( 380, 620, "Denominacion  " )
+            p.drawString( 495, 620, "Creditos  " )
+            p.rect(50,450,3.4*inch,3*inch)
+            p.rect(50,610,6.8*inch,20)
+            p.rect(50,450,55,180)
+            p.rect(240,450,55,180)      #Cuadro de denominacion a credito USB
+            p.rect(295,450,55,180)       #Cuadro de codigo a denominacion Ext
+            p.rect(485,450,55,180)      #Cuadro de denominacion a credito Ext
+            p.drawString( 100, 435, "Aprobacion coordinacion carrera:               ________________________________  " )
+            p.rect(50,420,6.8*inch,375)      #Cuadro completo informacion academica
+
+        p.setFont("Helvetica",11)
+        p.drawString( 68, 390, "FUENTE DE FINANCIAMIENTO DEL ESTUDIANTE" )
+        p.setFont("Helvetica",8)
+        p.drawString( 70, 370, "- Principal fuente de ingresos: " + estudiante.financiamiento.fuente )
+        p.drawString( 320, 370, "- Otros: " + estudiante.financiamiento.descripcionFuente)
+        p.drawString( 70, 350, "- Recibe ayuda economica por: " )
+        if estudiante.financiamiento.ayuda:
+            p.drawString( 70, 340, "parte de la universidad u otro organismo?: Si")
+        else:
+            p.drawString( 70, 340, "parte de la universidad u otro organismo?: No")
+        p.drawString( 320, 350, "- Especifique: " + estudiante.financiamiento.descripcionAyuda)
+        p.rect(50,320,6.8*inch,95)      #Cuadro completo de fuente financiamiento
+
+        p.setFont("Helvetica",11)
+        p.drawString( 68, 300, "CONOCIMIENTO DE IDIOMAS" )
+        p.setFont("Helvetica",10)
+        p.drawString( 60, 280, "Idioma a emplear  " )
+        p.drawString( 270, 280, "Verbal  " )
+        p.drawString( 360, 280, "Escrito  " )
+        p.drawString( 460, 280, "Auditivo  " )
+        p.rect(50,170,6.8*inch,145)      #Cuadro completo de conocimiento idiomas
+        p.rect(50,270,6.8*inch,23)
+        p.rect(50,170,190,123)
+        p.rect(240,170,90,123)
+        p.rect(240,170,195,123)
+        y = 260
+        p.setFont("Helvetica",8)
+        for idioma in estudiante.idiomas.all():
+            p.drawString( 60, y, idioma.idioma.nombre )
+            p.drawString( 250, y, idioma.verbal)
+            p.drawString( 340, y, idioma.escrito)
+            p.drawString( 445, y, idioma.auditivo)
+            y = y-10
+
+        p.setFont("Helvetica",11)
+        p.drawString( 68, 150, "DATOS DE CONTACTO EN CASO DE EMERGENCIA" )
+        p.setFont("Helvetica",8)
+        p.drawString( 70, 130, "- Nombre contacto: " + estudiante.representante.nombre + " " + estudiante.representante.apellido)
+        p.drawString( 70, 110, "- Tlf. Habitacion contacto: " + str(estudiante.representante.telefCasa))
+        p.drawString( 70, 90, "- Relacion con el estudiante: " + estudiante.representante.tipoRelacion)
+        p.drawString( 70, 70, "- Domicilio contacto: " + estudiante.representante.direccion)
+        p.rect(50,50,6.8*inch,115)      #Cuadro completo de contacto emergencia
+        p.showPage()
+
+        ## Proxima pagina
+        p.setFont("Helvetica",8)
+        p.drawString( 100, 690, "Firma del solicitante: ____________________ ")
+        p.drawString( 320, 690, "Fecha del solicitud: ")
+        p.setFont("Helvetica",7)
+        p.drawString( 140, 660, "El estudiante firmante declara que los datos y documentos suministrados son veridicos y asume cumplir ")
+        p.drawString( 190, 650, "cabalmente con las normas del programa de intercambio estudiantil.")
+        p.rect(50,610,6.8*inch,2*inch)
+
+        p.setFont("Helvetica",11)
+        p.drawString( 100, 560, "**Esta seccion debe ser llenada exclusivamente por la coordinacion docente**")
+        p.drawString( 110, 510, "Opinion de la coordinacion Docente sobre esta solicitud (explicacion breve):")
+        p.setFont("Helvetica",8)
+        p.drawString( 70, 475, "Muy favorable: " )
+        p.drawString( 70, 455, "Favorable: " )
+        p.drawString( 70, 435, "Con reservas: " )
+        p.rect(50,415,6.8*inch,1.7*inch)
+        p.showPage()
+        p.save()
+
+        return response
+    else:
+        return render_to_response('estudiante/noPostuladoAun.html',{},context_instance=RequestContext(request))
