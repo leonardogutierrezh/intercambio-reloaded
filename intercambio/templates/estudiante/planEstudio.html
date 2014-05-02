@@ -94,6 +94,7 @@
 {% block seccion-contenido %}
 <div class="container">
     <h3>Paso 3: Plan de estudio</h3>
+    <h4 style="text-align: center;">Cargue las asignaturas del plan de estudio</h4> <br>
 
     <form class="" id='formulario_invoice' method='post' action=''>{% csrf_token %}
         {% if hayPlan %}
@@ -151,8 +152,15 @@
 
         </table>
 
-        <input type='submit' class="btn btn-primary" value='Guardar' />
+        <div class="row">
+                <div class="final col-md-4 col-md-push-4 col-sm-4 col-sm-push-4">
+                    <input type='submit' class="btn btn-primary" value='Guardar' />
+                </div>
+        </div>
+
+
     </form>
+    <br>
     {% if hayPlan %}
         <button id="boton_agregarCON" onclick="agregar_materiaCON()" class="btn btn-primary">Agregar Materia</button>
     {% else %}

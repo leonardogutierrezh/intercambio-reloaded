@@ -23,7 +23,7 @@
 
 
 {% block seccion-contenido %}
-    {% if mensajeRecuperar == "Nombre de usuario no existe. Trate de nuevo" or mensajeErrorCorreo == "Ha ocurrido un error. Favor intente de nuevo" %}
+    {% if mensajeRecuperar == "Nombre de usuario no existe. Intente de nuevo" or mensajeErrorCorreo == "Ha ocurrido un error. Favor intente de nuevo" %}
         <div class="container" id="iniciar_sesion" style="display: none">
             <h2 class="form-signin">Iniciar sesión</h2>
 
@@ -71,5 +71,4 @@
 
 
 {% endblock %}
-
 
