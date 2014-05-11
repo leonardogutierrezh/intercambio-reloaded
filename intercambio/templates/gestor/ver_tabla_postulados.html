@@ -1,25 +1,62 @@
 {% extends 'tabla.html' %}
 {% load bootstrap %}
+{% block titulo %}
+    {% if opcion == "1" %}
+        <h2>Lista para opcion 1</h2>
+    {% elif opcion == "2" %}
+        <h2>Lista para opcion 2</h2>
+    {% endif %}
+{% endblock %}
 {% block seccion-contenido %}
     <div class="row">
     <a href="/ver_tabla_postulados/1">Opción 1</a> <a href="/ver_tabla_postulados/2">Opción 2</a>
     </div>
     <table class="table table-striped table-bordered table-hover table-responsive">
     {% for elemento in lista %}
-            <tr>
+            <tr id="univ{{ elemento.1.id }}">
                 <td><strong>{{ elemento.1.nombre }}</strong></td>
                 <td>Pais: {{ elemento.1.pais }}</td>
-                <td>Cupos: {{ elemento.1.cupo }}</td>
+                <td id="cupo{{ elemento.1.id }}">Cupos: {{ elemento.1.cupo }}</td>
                 <td></td>
             </tr>
-            <tr>
+            <tr id="estudiante{{ elemento.0.id }}">
                 <td>{{ elemento.0.nombre1 }} {{ elemento.0.apellido1 }}</td>
                 <td>Carnet: {{ elemento.0.carnet }}</td>
                 <td>Carrera: {{ elemento.0.carrera_usb }}</td>
-                <td><button class="btn btn-default btn-sm">Aceptar</button>
+                <td id="accion{{ elemento.0.id }}"><button class="btn btn-default btn-sm" onclick="ajax_aceptar('{{ elemento.1.id }}','{{ elemento.0.id }}')">Aceptar</button>
                 	<button class="btn btn-default btn-sm"><a href="/verDetallePostulacionDRIC/{{elemento.0.id}}" class="btn-xs btn-default">Ver</a></button>
                 </td>
             </tr>
     {% endfor %}
     </table>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+        function ajax_aceptar(id, id_estudiante){
+                $.ajax({
+                    data:{'id_universidad':id, 'id_estudiante': id_estudiante, 'opcion': {{opcion}} },
+                    url:'/ajax_aceptar_postulado/',
+                    type:'get',
+                    error:function(){
+                        alert('No se pudo asignar la universidad');
+                    }
+
+                }).done(function(data){
+                    for(var i=0;i<data.length;i++){
+                        var estudiante = "estudiante"+data[i].fields.nombreEstud;
+                        var cupo = "cupo"+data[i].fields.nombreUniv;
+                        var accion = "accion"+data[i].fields.nombreEstud;
+                        //alert(estudiante);
+                        //alert(document.getElementById(estudiante).innerHTML);
+                        //alert("estudiante"+data[i].fields.nombre.toString());
+                        document.getElementById(estudiante).setAttribute("class", "success");
+                        document.getElementById(accion).innerHTML= "<button class=\"btn btn-default btn-sm\" onclick=\"ajax_aceptar('"+ id +"','"+ id_estudiante +"')\">Deshacer</button><button class=\"btn btn-default btn-sm\"><a href=\"/verDetallePostulacionDRIC/" + id_estudiante + "\" class=\"btn-xs btn-default\">Ver</a></button>";
+
+                        document.getElementById(cupo).innerHTML = "Cupos: " + (parseInt(document.getElementById(cupo).innerHTML.split(" ")[1]) - 1).toString();
+                        //document.getelementbyid('id_encargado').innerhtml = document.getelementbyid('id_encargado').innerhtml+'<option value='+data[i].pk+'>'+data[i].fields.nombre+'</option>';
+                    }
+
+                });
+        }
+</script>
 {% endblock %}

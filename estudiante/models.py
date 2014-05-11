@@ -126,6 +126,6 @@ class UniversidadExtranjera(models.Model):
 
 class UniversidadAsignada(models.Model):
     nombreEstud = models.ForeignKey(Estudiante)
-    nombreUniv = models.CharField(max_length=100)           ## VER
+    nombreUniv = models.ForeignKey(Universidad)          ## VER
 
 

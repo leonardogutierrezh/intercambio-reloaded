@@ -90,9 +90,40 @@ def ver_tabla_postulados(request, opcion):
             lista.append((postulado.username, postulado.username.segundaOpcion.univ))
     else:
         print 3
-    return render_to_response('gestor/ver_tabla_postulados.html', {'lista': lista}, context_instance=RequestContext(request))
+    return render_to_response('gestor/ver_tabla_postulados.html', {'lista': lista, 'opcion': opcion}, context_instance=RequestContext(request))
 
 def verDetallePostulacionDRIC(request,id_user):
     estudiante = Estudiante.objects.get(id=int(id_user))
     postulacion = Postulacion.objects.get(username=estudiante)
     return render_to_response('postulante/verDetallePostulacion.html', {'estudiante':estudiante,'postulacion':postulacion},context_instance=RequestContext(request))
+
+def ajax_aceptar_postulado(request):
+    print "entre al ajax" + request.GET['id_universidad']
+    print "opcion" + request.GET['opcion']
+    print "estudiante" +  request.GET['id_estudiante']
+    estudiante = Estudiante.objects.get(id=request.GET['id_estudiante'])
+    universidad = Universidad.objects.get(id=request.GET['id_universidad'])
+    if universidad.cupo > 0:
+        if UniversidadAsignada.objects.filter(nombreEstud=estudiante):
+            old = UniversidadAsignada.objects.get(nombreEstud=estudiante)
+            if  old.nombreUniv == universidad:
+                return False
+            else:
+                print "entre bien"
+                old_uni = old.nombreUniv
+                old.delete()
+                old_uni.cupo = old_uni.cupo + 1
+                old_uni.save()
+                universidad.cupo = universidad.cupo - 1
+                universidad.save()
+                asignada_aux = UniversidadAsignada.objects.create(nombreEstud=estudiante, nombreUniv=universidad)
+        else:
+            universidad.cupo = universidad.cupo - 1
+            universidad.save()
+            asignada_aux = UniversidadAsignada.objects.create(nombreEstud=estudiante, nombreUniv=universidad)
+        asignada = []
+        asignada.append(asignada_aux)
+        data = serializers.serialize('json', asignada, fields =('nombreEstud', 'nombreUniv'))
+        return HttpResponse(data, mimetype='application/json')
+    else:
+        return False
