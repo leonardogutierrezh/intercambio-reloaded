@@ -7,26 +7,37 @@
         <h2>Lista para opcion 2</h2>
     {% endif %}
 {% endblock %}
-{% block seccion-contenido %}
+{% block tabla %}
     <div class="row">
     <a href="/ver_tabla_postulados/1">Opción 1</a> <a href="/ver_tabla_postulados/2">Opción 2</a>
     </div>
-    <table class="table table-striped table-bordered table-hover table-responsive">
+    <table class="table table-bordered table-hover table-responsive">
     {% for elemento in lista %}
-            <tr id="univ{{ elemento.1.id }}">
+        {% if elemento.2 == "universidad" %}
+            <tr id="univ{{ elemento.1.id }}" style="background-color: #f9f9f9;">
                 <td><strong>{{ elemento.1.nombre }}</strong></td>
                 <td>Pais: {{ elemento.1.pais }}</td>
                 <td id="cupo{{ elemento.1.id }}">Cupos: {{ elemento.1.cupo }}</td>
                 <td></td>
             </tr>
-            <tr id="estudiante{{ elemento.0.id }}">
+        {% else %}
+            <tr id="estudiante{{ elemento.0.id }}" {% if elemento.3 == 1 %} class="success" {% endif %}{% if elemento.1.cupo == 0 and elemento.3 == 0 %}class="warning"{% endif %}>
                 <td>{{ elemento.0.nombre1 }} {{ elemento.0.apellido1 }}</td>
                 <td>Carnet: {{ elemento.0.carnet }}</td>
                 <td>Carrera: {{ elemento.0.carrera_usb }}</td>
-                <td id="accion{{ elemento.0.id }}"><button class="btn btn-default btn-sm" onclick="ajax_aceptar('{{ elemento.1.id }}','{{ elemento.0.id }}')">Aceptar</button>
+                <td id="accion{{ elemento.0.id }}">
+                    {% if elemento.3 == 1 %}
+                        <button class="btn btn-default btn-sm" onclick="ajax_aceptar('{{ elemento.1.id }}','{{ elemento.0.id }}')">Deshacer</button>
+                    {% else %}
+                        {% if elemento.1.cupo != 0 and elemento.3 == 0 %}
+                            <button class="btn btn-default btn-sm" onclick="ajax_aceptar('{{ elemento.1.id }}','{{ elemento.0.id }}')">Aceptar</button>
+                        {% endif %}
+                        
+                    {% endif %}
                 	<button class="btn btn-default btn-sm"><a href="/verDetallePostulacionDRIC/{{elemento.0.id}}" class="btn-xs btn-default">Ver</a></button>
                 </td>
             </tr>
+        {% endif %}
     {% endfor %}
     </table>
 {% endblock %}

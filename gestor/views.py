@@ -81,13 +81,31 @@ def decanato_ver_log(request):
 def ver_tabla_postulados(request, opcion):
     lista = []
     postulados = Postulacion.objects.filter(estadoPostulacion='Postulado. Revisado por coordinación')
+    uni_aux = "&&&&&&"
     if opcion == '1':
         for postulado in postulados:
-            lista.append((postulado.username, postulado.username.primeraOpcion.univ))
-
+            if UniversidadAsignada.objects.filter(nombreEstud=postulado.username, nombreUniv=postulado.username.primeraOpcion.univ):
+                existe=1
+            else:
+                existe=0
+            if postulado.username.primeraOpcion.univ.nombre == uni_aux:
+                lista.append((postulado.username, postulado.username.primeraOpcion.univ, "estudiante",existe))
+            else:
+                lista.append((postulado.username, postulado.username.primeraOpcion.univ, "universidad",existe))
+                lista.append((postulado.username, postulado.username.primeraOpcion.univ, "estudiante",existe))
+                uni_aux = postulado.username.primeraOpcion.univ.nombre
     elif opcion == '2':
         for postulado in postulados:
-            lista.append((postulado.username, postulado.username.segundaOpcion.univ))
+            if UniversidadAsignada.objects.filter(nombreEstud=postulado.username, nombreUniv=postulado.username.segundaOpcion.univ):
+                existe=1
+            else:
+                existe=0
+            if postulado.username.segundaOpcion.univ.nombre == uni_aux:
+                lista.append((postulado.username, postulado.username.segundaOpcion.univ, "estudiante",existe))
+            else:
+                lista.append((postulado.username, postulado.username.segundaOpcion.univ, "universidad",existe))
+                lista.append((postulado.username, postulado.username.segundaOpcion.univ, "estudiante",existe))
+                uni_aux = postulado.username.segundaOpcion.univ.nombre
     else:
         print 3
     return render_to_response('gestor/ver_tabla_postulados.html', {'lista': lista, 'opcion': opcion}, context_instance=RequestContext(request))
