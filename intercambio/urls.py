@@ -79,6 +79,7 @@ urlpatterns = patterns('',
     url(r'ver_tabla_postulados/(?P<opcion>\d+)/$', 'gestor.views.ver_tabla_postulados'),
     url(r'^verDetallePostulacionDRIC/(?P<id_user>\d+)/$', 'gestor.views.verDetallePostulacionDRIC'),
     url(r'^ajax_aceptar_postulado/$', 'gestor.views.ajax_aceptar_postulado'),
-
+    url(r'^ajax_deshacer_postulado/$', 'gestor.views.ajax_deshacer_postulado'),
+    url(r'^sin_asignar/$', 'gestor.views.sin_asignar'),
     #url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
 )

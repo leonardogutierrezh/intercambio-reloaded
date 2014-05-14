@@ -23,6 +23,7 @@ from django.core import serializers
 from administrador.models import Universidad, Log
 #from postulante.forms import *
 from gestor.forms import *
+from django.db.models import Q
 
 def perfilDecanato(request):
     user = request.user
@@ -80,7 +81,7 @@ def decanato_ver_log(request):
 @login_required(login_url='/')
 def ver_tabla_postulados(request, opcion):
     lista = []
-    postulados = Postulacion.objects.filter(estadoPostulacion='Postulado. Revisado por coordinación')
+    postulados = Postulacion.objects.filter(Q(estadoPostulacion='Postulado. Revisado por coordinación') | Q(estadoPostulacion__contains='Aceptado'))
     uni_aux = "&&&&&&"
     if opcion == '1':
         for postulado in postulados:
@@ -116,9 +117,6 @@ def verDetallePostulacionDRIC(request,id_user):
     return render_to_response('postulante/verDetallePostulacion.html', {'estudiante':estudiante,'postulacion':postulacion},context_instance=RequestContext(request))
 
 def ajax_aceptar_postulado(request):
-    print "entre al ajax" + request.GET['id_universidad']
-    print "opcion" + request.GET['opcion']
-    print "estudiante" +  request.GET['id_estudiante']
     estudiante = Estudiante.objects.get(id=request.GET['id_estudiante'])
     universidad = Universidad.objects.get(id=request.GET['id_universidad'])
     if universidad.cupo > 0:
@@ -141,7 +139,32 @@ def ajax_aceptar_postulado(request):
             asignada_aux = UniversidadAsignada.objects.create(nombreEstud=estudiante, nombreUniv=universidad)
         asignada = []
         asignada.append(asignada_aux)
+        postulacion = Postulacion.objects.get(username=estudiante)
+        postulacion.estadoPostulacion = "Aceptado en " + universidad.nombre
+        postulacion.save()
         data = serializers.serialize('json', asignada, fields =('nombreEstud', 'nombreUniv'))
         return HttpResponse(data, mimetype='application/json')
     else:
         return False
+
+def ajax_deshacer_postulado(request):
+    estudiante = Estudiante.objects.get(id=request.GET['id_estudiante'])
+    universidad = Universidad.objects.get(id=request.GET['id_universidad'])
+    if UniversidadAsignada.objects.filter(nombreEstud=estudiante):
+        old = UniversidadAsignada.objects.get(nombreEstud=estudiante).delete()
+        universidad.cupo =universidad.cupo + 1
+        universidad.save()
+    asignada = []
+    asignada.append(universidad)
+    postulacion = Postulacion.objects.get(username=estudiante)
+    postulacion.estadoPostulacion = "Postulado. Revisado por coordinación"
+    postulacion.save()
+    data = serializers.serialize('json', asignada, fields =('nombre'))
+    return HttpResponse(data, mimetype='application/json')
+
+def sin_asignar(request):
+    universidades = Universidad.objects.filter(cupo__gt=0)
+    asignados = UniversidadAsignada.objects.all().values('nombreEstud')
+    sin_asignar = Postulacion.objects.filter(Q(estadoPostulacion='Postulado. Revisado por coordinación')).exclude(username__in=asignados)
+    print sin_asignar
+    return render_to_response('postulante/sin_asignar.html', {'lista':sin_asignar, 'universidades': universidades},context_instance=RequestContext(request))
