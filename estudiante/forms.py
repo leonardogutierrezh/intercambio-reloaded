@@ -87,6 +87,31 @@ class formularioUNO_formUSB(forms.Form):
     cedula = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label='Cédula')
     carnet = forms.CharField(max_length=8 , required=False)
 
+    def clean_fecha(self):
+        fecha = self.cleaned_data.get('fecha', '')
+        fecha_split = fecha.split('-')
+
+        fecha_actual = str(datetime.today())
+        split_actual = fecha_actual.split('-')
+
+        ano = split_actual[0]
+        mes = split_actual[1]
+        dia = split_actual[2].split(' ')[0]
+
+        ano_atras = int(ano) - 18
+
+        if int(fecha_split[0]) > int(ano_atras):
+            raise forms.ValidationError("Usted debe ser mayor de edad")
+
+        if int(fecha_split[0]) == int(ano_atras):
+       	    if int(fecha_split[1]) > int(mes):
+       	        raise forms.ValidationError("Usted debe ser mayor de edad")
+            else:
+                if int(fecha_split[1]) == int(mes):
+                    if int(fecha_split[2]) > int(dia):
+                        raise forms.ValidationError("Usted debe ser mayor de edad")
+       	return fecha
+
 class formularioUNO_formExt(forms.Form):
     genero_choices = (
         ('femenino', 'Femenino'),
@@ -100,6 +125,7 @@ class formularioUNO_formExt(forms.Form):
     fecha = forms.CharField(widget=forms.TextInput(attrs={'type': 'date'}),label='Fecha de nacimiento')
     nacionalidad = forms.ModelChoiceField(queryset=Country.objects.all())
     pasaporte = forms.CharField(max_length=50, required=False)
+
 
 class formularioDOS_form(forms.Form):
     urbanizacion = forms.CharField(max_length=100, label='Urb / Sector / Barrio')

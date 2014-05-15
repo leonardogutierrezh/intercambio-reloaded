@@ -286,6 +286,7 @@ def formularioUNO(request):
                 estudiante.sexo = genero
                 estudiante.fechaNacimiento = fecha
                 estudiante.save()
+                print 'fecha', fecha
 
                 return HttpResponseRedirect('/formularioDOS')
         ## Si se trata de un estudiante Extranjero
