@@ -1199,3 +1199,34 @@ def extenderTrim(request):
     else:
         formulario = extenderTrimForm()
     return render_to_response('estudiante/extenderTrim.html',{'formulario':formulario},context_instance=RequestContext(request))
+
+def proyectoGrado(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        formulario = proyectoGradoForm(request.POST,request.FILES)
+        if formulario.is_valid():
+            proyecto = formulario.cleaned_data['proyecto']
+            razones = formulario.cleaned_data['razones']
+
+            if estudiante.casosExc == None:
+                casos = CasosExcepcionales.objects.create(pasantia=True,fileProyecto=proyecto,razonesProyecto=razones)
+                casos.save()
+
+                estudiante.casosExc = casos
+                estudiante.save()
+                proyectoEnviado = True
+                return render_to_response('index.html',{'proyectoEnviado':proyectoEnviado},context_instance=RequestContext(request))
+            else:
+                estudiante.casosExc.fileProyecto = proyecto
+                estudiante.casosExc.razonesProyecto = razones
+                estudiante.casosExc.save()
+                estudiante.save()
+                proyectoEnviado = True
+                return render_to_response('index.html',{'proyectoEnviado':proyectoEnviado},context_instance=RequestContext(request))
+    else:
+        if estudiante.casosExc == None:
+            formulario = proyectoGradoForm()
+        else:
+            formulario = proyectoGradoForm(initial={'pasantia':estudiante.casosExc.fileProyecto,'razones':estudiante.casosExc.razonesProyecto})
+    return render_to_response('estudiante/proyectoGrado.html',{'formulario':formulario},context_instance=RequestContext(request))

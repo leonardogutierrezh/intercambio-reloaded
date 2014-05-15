@@ -272,5 +272,17 @@ class solicitarPasantiaForm(forms.Form):
             raise forms.ValidationError(_('El archivo debe tener formato pdf'))
         return informe
 
+class proyectoGradoForm(forms.Form):
+    proyecto = forms.FileField(label='Proyecto de grado')
+    razones = forms.CharField(widget=forms.Textarea)
+
+    def clean_proyecto(self):
+        informe = self.cleaned_data.get('proyecto', '')
+        content_type = informe.content_type.split('/')[1]
+        CONTENT_TYPES = ['pdf']
+        if not(content_type in CONTENT_TYPES):
+            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
+        return informe
+
 class extenderTrimForm(forms.Form):
     razones = forms.CharField(widget=forms.Textarea)
