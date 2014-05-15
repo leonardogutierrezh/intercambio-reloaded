@@ -7,6 +7,17 @@ from postulante.models import *
 from countries.models import *
 from administrador.models import Idioma,Universidad
 
+class CasosExcepcionales(models.Model):
+    pasantia = models.BooleanField(default=False)
+    proyecto = models.BooleanField(default=False)
+    trimestre = models.BooleanField(default=False)
+    planEstudio = models.BooleanField(default=False)
+    filePasantia = models.FileField(upload_to='cargas', null=True)
+    razonesPasantia = models.CharField(max_length=800, null=True)
+    fileProyecto = models.FileField(upload_to='cargas', null=True)
+    razonesProyecto = models.CharField(max_length=800, null=True)
+    razonesTrimestre = models.CharField(max_length=800)
+
 class AntecedenteAcad(models.Model):
     indice = models.FloatField()
     creditosAprobados = models.IntegerField()
@@ -113,6 +124,7 @@ class Estudiante(models.Model):
     cuartoPaso = models.BooleanField(default=False)
     primeraOpcion = models.ForeignKey(OpcionUNO,null=True,blank=True)
     segundaOpcion = models.ForeignKey(OpcionDOS,null=True,blank=True)
+    casosExc = models.ForeignKey(CasosExcepcionales, null=True, blank=True)
 
     def __unicode__(self):
         return self.user.username

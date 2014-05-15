@@ -13,6 +13,9 @@ from django.forms.widgets import CheckboxSelectMultiple
 import magic
 from datetime import *
 import re
+from django.template.defaultfilters import filesizeformat
+from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 class EstudianteUSB_Form(forms.Form):
     nombre1 = forms.CharField(max_length=50, label="Primer nombre")
@@ -218,9 +221,56 @@ class documentosRequeridosUSB_form(forms.Form):
     planilla = forms.FileField(required=False,label='*Planilla CINDA/SMILE')
     certificado = forms.FileField(required=False,label='**Certificado de idiomas')
 
+    def clean_informe(self):
+        informe = self.cleaned_data.get('informe', '')
+        content_type = informe.content_type.split('/')[1]
+        CONTENT_TYPES = ['pdf']
+        if not(content_type in CONTENT_TYPES):
+            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
+        return informe
+
+    def clean_carta(self):
+        carta = self.cleaned_data.get('carta', '')
+        content_type = carta.content_type.split('/')[1]
+        CONTENT_TYPES = ['pdf']
+        if not(content_type in CONTENT_TYPES):
+            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
+        return carta
+
+    def clean_planilla(self):
+        planilla = self.cleaned_data.get('planilla', '')
+        content_type = planilla.content_type.split('/')[1]
+        CONTENT_TYPES = ['pdf']
+        if not(content_type in CONTENT_TYPES):
+            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
+        return planilla
+
+    def clean_certificado(self):
+        certificado = self.cleaned_data.get('certificado', '')
+        content_type = certificado.content_type.split('/')[1]
+        CONTENT_TYPES = ['pdf']
+        if not(content_type in CONTENT_TYPES):
+            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
+        return certificado
+
 class documentosRequeridosExt_form(forms.Form):
     foto = forms.ImageField()
     informe = forms.FileField(label='Informe académico')
     carta = forms.FileField(label='Carta de motivación')
     planilla = forms.FileField(required=False,label='*Planilla CINDA/SMILE')
     certificado = forms.FileField(required=False,label='**Certificado de idiomas')
+
+class solicitarPasantiaForm(forms.Form):
+    pasantia = forms.FileField(label='Plan de pasantía')
+    razones = forms.CharField(widget=forms.Textarea)
+
+    def clean_pasantia(self):
+        informe = self.cleaned_data.get('pasantia', '')
+        content_type = informe.content_type.split('/')[1]
+        CONTENT_TYPES = ['pdf']
+        if not(content_type in CONTENT_TYPES):
+            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
+        return informe
+
+class extenderTrimForm(forms.Form):
+    razones = forms.CharField(widget=forms.Textarea)

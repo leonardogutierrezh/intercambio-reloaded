@@ -1140,3 +1140,62 @@ def descargarPlanilla(request):
         return response
     else:
         return render_to_response('estudiante/noPostuladoAun.html',{},context_instance=RequestContext(request))
+
+def modificarCasosExcepcionales(request):
+    return render_to_response('estudiante/modificarCasosExcepcionales.html',{},context_instance=RequestContext(request))
+
+def solicitarPasantia(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        formulario = solicitarPasantiaForm(request.POST,request.FILES)
+        if formulario.is_valid():
+            pasantia = formulario.cleaned_data['pasantia']
+            razones = formulario.cleaned_data['razones']
+
+            if estudiante.casosExc == None:
+                casos = CasosExcepcionales.objects.create(pasantia=True,filePasantia=pasantia,razonesPasantia=razones)
+                casos.save()
+
+                estudiante.casosExc = casos
+                estudiante.save()
+                pasantiaEnviada = True
+                return render_to_response('index.html',{'pasantiaEnviada':pasantiaEnviada},context_instance=RequestContext(request))
+            else:
+                estudiante.casosExc.filePasantia = pasantia
+                estudiante.casosExc.razonesPasantia = razones
+                estudiante.casosExc.save()
+                estudiante.save()
+                pasantiaEnviada = True
+                return render_to_response('index.html',{'pasantiaEnviada':pasantiaEnviada},context_instance=RequestContext(request))
+    else:
+        if estudiante.casosExc == None:
+            formulario = solicitarPasantiaForm()
+        else:
+            formulario = solicitarPasantiaForm(initial={'pasantia':estudiante.casosExc.filePasantia,'razones':estudiante.casosExc.razonesPasantia})
+    return render_to_response('estudiante/solicitarPasantia.html',{'formulario':formulario},context_instance=RequestContext(request))
+
+def extenderTrim(request):
+    estudiante = Estudiante.objects.get(user=request.user)
+    if request.method == 'POST':
+        formulario = extenderTrimForm(request.POST)
+        if formulario.is_valid():
+            razones = formulario.cleaned_data['razones']
+
+            if estudiante.casosExc == None:
+                casos = CasosExcepcionales.objects.create(trimestre=True,razonesTrimestre=razones)
+                casos.save()
+
+                estudiante.casosExc = casos
+                estudiante.save()
+                trimEnviado = True
+                return render_to_response('index.html',{'trimEnviado':trimEnviado},context_instance=RequestContext(request))
+            else:
+                estudiante.casosExc.razonesTrimestre=razones
+                estudiante.casosExc.save()
+                estudiante.save()
+                trimEnviado = True
+                return render_to_response('index.html',{'trimEnviado':trimEnviado},context_instance=RequestContext(request))
+    else:
+        formulario = extenderTrimForm()
+    return render_to_response('estudiante/extenderTrim.html',{'formulario':formulario},context_instance=RequestContext(request))
