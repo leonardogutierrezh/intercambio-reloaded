@@ -36,6 +36,7 @@ def registrarEstudianteUSB(request):
             apellido2 = formulario.cleaned_data['apellido2']
             email = formulario.cleaned_data['email']
             carnet = formulario.cleaned_data['carnet']
+            print "carnet es: ", carnet
             username = formulario.cleaned_data['username']
             contrasena1 = formulario.cleaned_data['contrasena1']
             contrasena2 = formulario.cleaned_data['contrasena2']
@@ -689,7 +690,7 @@ def documentosRequeridos(request):
 
 def planEstudio(request):
     estudiante = Estudiante.objects.get(user=request.user)
-    materias = MateriaUSB.objects.all()
+    materias = MateriaUSB.objects.all().order_by('codigo')
     if request.method == 'POST':
         if len(estudiante.planDeEstudio.all()) != 0:
             for planEst in estudiante.planDeEstudio.all():
@@ -1036,7 +1037,7 @@ def descargarPlanilla(request):
         p.drawString(60,760,"19.")
         p.drawString(80,760," N° de créditos aprobados a la fecha: :")
         p.drawString(80,745,"_______________________________________")
-        p.drawString(90,745,str(estudiante.antecedente.creditosAprobados))
+        p.drawString(90,745,str(int(estudiante.antecedente.creditosAprobados)))
         p.drawString(300,760,"20.")
         p.drawString(320,760," Índice académico a la fecha: ")
         p.drawString(320,745,"_______________________________________")

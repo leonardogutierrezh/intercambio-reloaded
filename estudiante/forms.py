@@ -31,6 +31,7 @@ class EstudianteUSB_Form(forms.Form):
         num_words = len(carnet.split())
         if not(re.match("[0-9]{2}\\-[0-9]{5}",carnet)):
             raise forms.ValidationError("Carnet no válido")
+       	return carnet
 
 class EstudianteExt_Form(forms.Form):
     nombre1 = forms.CharField(max_length=50, label="Primer nombre")
@@ -165,13 +166,15 @@ class formularioCUATRO_formUSB(forms.Form):
         anoInicioUno = self.cleaned_data.get('anoInicioUno', '')
         if anoFinUno < anoInicioUno:
             raise forms.ValidationError("Fecha no válida")
-
+        return anoFinUno
+        
     def clean_anoFinDos(self):
         anoFinDos = self.cleaned_data.get('anoFinDos', '')
         anoInicioDos = self.cleaned_data.get('anoInicioDos', '')
         if anoFinDos < anoInicioDos:
             raise forms.ValidationError("Fecha no válida")
-
+        return anoFinDos
+		
 class formularioCUATRO_formExt(forms.Form):
     programa= forms.ModelChoiceField(queryset=ProgramaIntercambio.objects.all())
 
@@ -206,7 +209,7 @@ class formularioSIETE_form(forms.Form):
     tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono casa. (Recuerda incluir código del país)")
     email = forms.EmailField()
     rel_estudiante = forms.CharField(max_length=50, label="Relación con el estudiante")
-    direccion = forms.CharField(max_length=500, label=9)
+    direccion = forms.CharField(max_length=500, label='Dirección')
 
 class documentosRequeridosUSB_form(forms.Form):
     foto = forms.ImageField()
