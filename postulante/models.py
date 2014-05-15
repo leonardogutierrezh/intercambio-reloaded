@@ -51,6 +51,7 @@ class Postulacion(models.Model):
     recomendadoCoordinacion = models.BooleanField()
     comentRecomendacionCoord = models.CharField(max_length=100, null=True)
     date = models.DateField(auto_now=True)
+    indice_normalizado = models.FloatField(null=True,blank=True)
 
 
 

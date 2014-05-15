@@ -125,8 +125,8 @@ def recomendarCoord(request,id_user):
             postulacion.comentRecomendacionCoord = comentarios
             postulacion.recomendadoCoordinacion = True
             postulacion.estadoPostulacion = 'Postulado. Revisado por coordinación'
+            postulacion.indice_normalizado = float('%.2f'%(estudiante.antecedente.indice/float(postulacion.username.carrera_usb.indiceCarrera)))
             postulacion.save()
-
             postulacion = Postulacion.objects.filter(estadoPostulacion='Postulado')
             postulaciones = []
             for post in postulacion:

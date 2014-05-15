@@ -80,6 +80,8 @@ urlpatterns = patterns('',
     url(r'^verDetallePostulacionDRIC/(?P<id_user>\d+)/$', 'gestor.views.verDetallePostulacionDRIC'),
     url(r'^ajax_aceptar_postulado/$', 'gestor.views.ajax_aceptar_postulado'),
     url(r'^ajax_deshacer_postulado/$', 'gestor.views.ajax_deshacer_postulado'),
-    url(r'^sin_asignar/$', 'gestor.views.sin_asignar'),
+    url(r'^sin_asignar/(?P<creado>\d+)/$', 'gestor.views.sin_asignar'),
+    url(r'seleccionar_universidad/(?P<id_estudiante>\d+)/$', 'gestor.views.seleccionar_universidad'),
+    url(r'asignar_universidad/(?P<id_universidad>\d+)/(?P<id_estudiante>\d+)/$', 'gestor.views.asignar_universidad')
     #url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
 )

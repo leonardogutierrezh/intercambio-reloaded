@@ -1,46 +1,33 @@
 {% extends 'tabla.html' %}
 {% load bootstrap %}
 {% block titulo %}
-    {% if opcion == "1" %}
-        <h2>Lista para opcion 1</h2>
-    {% elif opcion == "2" %}
-        <h2>Lista para opcion 2</h2>
-    {% endif %}
+    <h2>Seleccionar universidad para: {{ estudiante.nombre1 }} {{ estudiante.apellido1 }}</h2>
 {% endblock %}
-{% block tabla %}
+{% block seccion-contenido %}
+
     <div class="row">
     <a href="/ver_tabla_postulados/1">Opción 1</a> <a href="/ver_tabla_postulados/2">Opción 2</a> <a href="/sin_asignar/0">Opcion Alternativa</a>
     </div>
-    <table class="table table-bordered table-hover table-responsive">
-    {% for elemento in lista %}
-        {% if elemento.2 == "universidad" %}
-            <tr id="univ{{ elemento.1.id }}" style="background-color: #f9f9f9;">
-                <td><strong>{{ elemento.1.nombre }}</strong></td>
-                <td>Pais: {{ elemento.1.pais }}</td>
-                <td id="cupo{{ elemento.1.id }}">Cupos: {{ elemento.1.cupo }}</td>
-                <td></td>
-                <td></td>
-            </tr>
-        {% else %}
-            <tr id="estudiante{{ elemento.0.username.id }}" {% if elemento.3 == 1 %} class="success" {% endif %}{% if elemento.1.cupo == 0 and elemento.3 == 0 %}class="warning"{% endif %}>
-                <td>{{ elemento.0.username.nombre1 }} {{ elemento.0.username.apellido1 }}</td>
-                <td>Carnet: {{ elemento.0.username.carnet }}</td>
-                <td>Carrera: {{ elemento.0.username.carrera_usb }}</td>
-                <td>Indice Normalizado: {{ elemento.0.indice_normalizado }}</td>
-                <td id="accion{{ elemento.0.username.id }}">
-                    {% if elemento.3 == 1 %}
-                        <button class="btn btn-default btn-sm" onclick="ajax_deshacer('{{ elemento.1.id }}','{{ elemento.0.username.id }}')">Deshacer</button>
-                    {% else %}
-                        {% if elemento.1.cupo != 0 and elemento.3 == 0 %}
-                            <button class="btn btn-default btn-sm" onclick="ajax_aceptar('{{ elemento.1.id }}','{{ elemento.0.username.id }}')">Aceptar</button>
-                        {% endif %}
-
-                    {% endif %}
-                	<button class="btn btn-default btn-sm"><a href="/verDetallePostulacionDRIC/{{elemento.0.id}}" class="btn-xs btn-default">Ver</a></button>
-                </td>
-            </tr>
-        {% endif %}
-    {% endfor %}
+      <table class="table table-striped table-bordered table-hover" id="content">
+<thead>
+                        <th>Nombre</th>
+                        <th>Pais</th>
+                        <th>Programa</th>
+                        <th>Cupo</th>
+                        <th>Acciones</th>
+                    </thead>
+                    {% for universidad in universidades %}
+                    <tr>
+                        <td>{{ universidad.nombre }}</td>
+                        <td>{{ universidad.pais }}</td>
+                        <td>{{ universidad.programa.nombre }}</td>
+                        <td>{{ universidad.cupo }}</td>
+                        <td><a class="btn btn-default btn-sm" href="/asignar_universidad/{{ universidad.id }}/{{ estudiante.id }}">
+                            seleccionar
+                        </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
     </table>
 {% endblock %}
 {% block js %}

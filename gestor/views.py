@@ -90,10 +90,10 @@ def ver_tabla_postulados(request, opcion):
             else:
                 existe=0
             if postulado.username.primeraOpcion.univ.nombre == uni_aux:
-                lista.append((postulado.username, postulado.username.primeraOpcion.univ, "estudiante",existe))
+                lista.append((postulado, postulado.username.primeraOpcion.univ, "estudiante",existe))
             else:
-                lista.append((postulado.username, postulado.username.primeraOpcion.univ, "universidad",existe))
-                lista.append((postulado.username, postulado.username.primeraOpcion.univ, "estudiante",existe))
+                lista.append((postulado, postulado.username.primeraOpcion.univ, "universidad",existe))
+                lista.append((postulado, postulado.username.primeraOpcion.univ, "estudiante",existe))
                 uni_aux = postulado.username.primeraOpcion.univ.nombre
     elif opcion == '2':
         for postulado in postulados:
@@ -102,10 +102,10 @@ def ver_tabla_postulados(request, opcion):
             else:
                 existe=0
             if postulado.username.segundaOpcion.univ.nombre == uni_aux:
-                lista.append((postulado.username, postulado.username.segundaOpcion.univ, "estudiante",existe))
+                lista.append((postulado, postulado.username.segundaOpcion.univ, "estudiante",existe))
             else:
-                lista.append((postulado.username, postulado.username.segundaOpcion.univ, "universidad",existe))
-                lista.append((postulado.username, postulado.username.segundaOpcion.univ, "estudiante",existe))
+                lista.append((postulado, postulado.username.segundaOpcion.univ, "universidad",existe))
+                lista.append((postulado, postulado.username.segundaOpcion.univ, "estudiante",existe))
                 uni_aux = postulado.username.segundaOpcion.univ.nombre
     else:
         print 3
@@ -162,9 +162,44 @@ def ajax_deshacer_postulado(request):
     data = serializers.serialize('json', asignada, fields =('nombre'))
     return HttpResponse(data, mimetype='application/json')
 
-def sin_asignar(request):
+def sin_asignar(request, creado):
     universidades = Universidad.objects.filter(cupo__gt=0)
     asignados = UniversidadAsignada.objects.all().values('nombreEstud')
+    auxiliar = UniversidadAsignada.objects.all()
+    lista = []
+    for asignado in auxiliar:
+        if asignado.nombreEstud.primeraOpcion.univ == asignado.nombreUniv:
+            pass
+        else:
+            if asignado.nombreEstud.segundaOpcion.univ == asignado.nombreUniv:
+                pass
+            else:
+                postu = Postulacion.objects.get(username=asignado.nombreEstud)
+                lista.append((postu, True))
     sin_asignar = Postulacion.objects.filter(Q(estadoPostulacion='Postulado. Revisado por coordinación')).exclude(username__in=asignados)
+    for sin in sin_asignar:
+        lista.append((sin,False))
     print sin_asignar
-    return render_to_response('postulante/sin_asignar.html', {'lista':sin_asignar, 'universidades': universidades},context_instance=RequestContext(request))
+    return render_to_response('postulante/sin_asignar.html', {'lista':lista, 'universidades': universidades, 'creado': creado},context_instance=RequestContext(request))
+
+def seleccionar_universidad(request,id_estudiante):
+    universidades = Universidad.objects.filter(cupo__gt=0)
+    estudiante = Estudiante.objects.get(id=id_estudiante)
+    return render_to_response('postulante/seleccionar_universidad.html', {'universidades': universidades, 'estudiante': estudiante}, context_instance=RequestContext(request))
+
+def asignar_universidad(request, id_universidad, id_estudiante):
+    universidad = Universidad.objects.get(id=id_universidad)
+    estudiante = Estudiante.objects.get(id=id_estudiante)
+    if UniversidadAsignada.objects.filter(nombreEstud=estudiante):
+            old = UniversidadAsignada.objects.get(nombreEstud=estudiante)
+            old_uni = old.nombreUniv
+            old.delete()
+            old_uni.cupo = old_uni.cupo + 1
+            old_uni.save()
+    universidad.cupo = universidad.cupo - 1
+    universidad.save()
+    postulacion = Postulacion.objects.get(username=estudiante)
+    postulacion.estadoPostulacion = "Aceptado en " + universidad.nombre
+    postulacion.save()
+    asignada_aux = UniversidadAsignada.objects.create(nombreEstud=estudiante, nombreUniv=universidad)
+    return HttpResponseRedirect("/sin_asignar/1")
