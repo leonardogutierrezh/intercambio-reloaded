@@ -24,32 +24,57 @@
         {% endif %}
     </h3>
 
-
-        <table class="table table-striped table-bordered table-hover" >
-            <thead>
-                <th>Razones del estudiante</th>
-            </thead>
-            <tr>
-                <td>
-                    {% if estudiante.casosExc.pasantia %}
-                        {{estudiante.casosExc.razonesPasantia}}
+    <br>
+    <table class="table table-striped table-bordered table-hover" >
+        <thead>
+            <th>Razones del estudiante</th>
+        </thead>
+        <tr>
+            <td>
+                {% if estudiante.casosExc.pasantia %}
+                    {{estudiante.casosExc.razonesPasantia}}
+                {% else %}
+                    {% if estudiante.casosExc.proyecto %}
+                        {{estudiante.casosExc.razonesProyecto}}
                     {% else %}
-                        {% if estudiante.casosExc.proyecto %}
-                            {{estudiante.casosExc.razonesProyecto}}
+                        {% if estudiante.casosExc.trimestre %}
+                            {{estudiante.casosExc.razonesTrimestre}}
                         {% else %}
-                            {% if estudiante.casosExc.trimestre %}
-                                {{estudiante.casosExc.razonesTrimestre}}
-                            {% else %}
-                                {% if estudiante.casosExc.planEstudio %}
-                                    {{estudiante.casosExc.razonesPlan}}
-                                {% endif %}
+                            {% if estudiante.casosExc.planEstudio %}
+                                {{estudiante.casosExc.razonesPlan}}
                             {% endif %}
                         {% endif %}
                     {% endif %}
+                {% endif %}
 
-                </td>
-            </tr>
-        </table>
+            </td>
+        </tr>
+    </table>
+
+    <h3>Recomendación de la coordinación</h3>
+    <table class="table table-striped table-bordered table-hover" >
+        <thead>
+            <th>Recomendado por la coordinación</th>
+            <th>
+                {% if estudiante.casosExc.recomendadoCoordinacion %}
+                    Si
+                {% else %}
+                    No
+                {% endif %}
+            </th>
+        </thead>
+    </table>
+    <table class="table table-striped table-bordered table-hover" >
+        <thead>
+            <th>Comentarios</th>
+        </thead>
+        <tr>
+            <td>
+                {{estudiante.casosExc.comentRecomendacionCoord}}
+            </td>
+
+        </tr>
+    </table>
 
     <h3>Datos personales</h3>
         <table class="table table-striped table-bordered table-hover" >

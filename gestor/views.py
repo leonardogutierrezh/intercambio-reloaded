@@ -222,3 +222,13 @@ def asignar_universidad(request, id_universidad, id_estudiante):
         mensaje="error al enviar el mensaje"
     asignada_aux = UniversidadAsignada.objects.create(nombreEstud=estudiante, nombreUniv=universidad)
     return HttpResponseRedirect("/sin_asignar/1")
+
+def verCasosExcepcionales(request):
+    estudiantes = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=True)
+
+    return render_to_response('gestor/verCasosExcepcionales.html', {'estudiantes':estudiantes}, context_instance=RequestContext(request))
+
+def verDetalleCasosExcGestor(request,id_user):
+    estudiante = Estudiante.objects.get(id=int(id_user))
+    postulacion = Postulacion.objects.get(username=estudiante)
+    return render_to_response('gestor/verDetalleCasosExcGestor.html', {'estudiante':estudiante,'postulacion':postulacion},context_instance=RequestContext(request))
