@@ -174,6 +174,37 @@ def recomendarCasoCoord(request,id_user):
         formulario = Postulante_RecomendarCasoEstudiante()
     return render_to_response('postulante/recomendarCasoCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
 
+def noRecomendarCasoCoord(request,id_user):
+    user = request.user
+    postulante = Postulante.objects.get(usuario=user)
+    estudiante = Estudiante.objects.get(id=int(id_user))
+
+    if request.method == 'POST':
+        formulario = Postulante_RecomendarCasoEstudiante(request.POST)
+        if formulario.is_valid():
+            comentarios = formulario.cleaned_data['comentarios']
+
+            estudiante.casosExc.comentRecomendacionCoord = comentarios
+            estudiante.casosExc.recomendadoCoordinacion = False
+
+            estudiante.vistoCasoCoord = True
+
+            estudiante.casosExc.save()
+            estudiante.save()
+
+            estudiantes_casos = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=False)
+            estudiantes = []
+            for est in estudiantes_casos:
+                if est.carrera_usb == postulante.carrera:
+                    estudiantes.append(est)
+
+            recomendacionCasos = True
+            return render_to_response('postulante/listar_casosExc_coord.html',{'estudiantes':estudiantes,'recomendacionCasos':recomendacionCasos},context_instance=RequestContext(request))
+
+    else:
+        formulario = Postulante_RecomendarCasoEstudiante()
+    return render_to_response('postulante/recomendarCasoCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
+
 
 def noRecomendarCoord(request,id_user):
     user = request.user
