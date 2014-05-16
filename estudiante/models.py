@@ -129,6 +129,8 @@ class Estudiante(models.Model):
     segundaOpcion = models.ForeignKey(OpcionDOS,null=True,blank=True)
     casosExc = models.ForeignKey(CasosExcepcionales, null=True, blank=True)
     tieneCasosExc = models.BooleanField(default=False)
+    vistoCasoCoord = models.BooleanField(default=False)
+    aprobadoCasoDeca = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.user.username
