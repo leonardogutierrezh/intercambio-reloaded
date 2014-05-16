@@ -7,19 +7,26 @@
 {% block seccion-contenido %}
     <div class="container">
         <h3>Solicitar extensión de trimestre</h3>
-        <form id='formulario' enctype='multipart/form-data' method='post' action=''> {% csrf_token %}
-            <div class="row">
+    <br>
+    <div class="row">
+        <div class="col-md-6 col-md-push-2 col-sm-4">
+            <p>Coloque las razones por la que usted desea quedarse un trimestre mas de intercambio</p>
+        </div>
+    </div>
+    <br>
+    <form id='formulario' enctype='multipart/form-data' method='post' action=''> {% csrf_token %}
+        <div class="row">
 
-                    <div class="col-md-5 col-md-push-3 col-sm-2">
-                        {{ formulario | bootstrap }}
-                    </div>
-            </div>
-
-            <div class="row">
-                <div class="final col-md-3 col-md-push-3 col-sm-3 col-sm-push-3">
-                    <input type='submit' class="btn btn-primary" value='Enviar' />
+                <div class="col-md-6 col-md-push-2 col-sm-2">
+                    {{ formulario | bootstrap }}
                 </div>
+        </div>
+
+        <div class="row">
+            <div class="final col-md-3 col-md-push-5 col-sm-3 col-sm-push-3">
+                <input type='submit' class="btn btn-primary" value='Enviar' />
             </div>
-        </form>
+        </div>
+    </form>
     </div>
 {% endblock %}

@@ -75,6 +75,7 @@ urlpatterns = patterns('',
     url(r'^todasMaterias/$', 'postulante.views.todasMaterias'),
     url(r'^modificarMateria/(?P<id_mat>\d+)/$', 'postulante.views.modificarMateria'),
     url(r'^eliminarMateria/(?P<id_mat>\d+)/$', 'postulante.views.eliminarMateria'),
+    url(r'^listar_casosExc_coord/$', 'postulante.views.listar_casosExc_coord'),
 
     ############### Gestor ################################
     url(r'^perfilDecanato', 'gestor.views.perfilDecanato'),
