@@ -31,3 +31,6 @@ class nuevaMateriaForm(forms.Form):
     codigo = forms.CharField(max_length=100, label='Código')
     creditos = forms.IntegerField(label='Créditos')
 
+class Postulante_RecomendarCasoEstudiante(forms.Form):
+    comentarios = forms.CharField(widget=forms.Textarea)
+

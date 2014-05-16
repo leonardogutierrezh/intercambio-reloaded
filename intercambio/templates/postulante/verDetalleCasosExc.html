@@ -1,0 +1,137 @@
+{% extends "tabla.html" %}
+{% load bootstrap %}
+
+{% block js %}
+{% endblock %}
+
+{% block seccion-contenido %}
+
+    <h3>
+        {% if estudiante.casosExc.pasantia %}
+            Detalles: petición de pasantía
+        {% else %}
+            {% if estudiante.casosExc.proyecto %}
+                Detalles: petición proyecto de grado
+            {% else %}
+                {% if estudiante.casosExc.trimestre %}
+                    Detalles: petición añadir un trimestre
+                {% else %}
+                    {% if estudiante.casosExc.planEstudio %}
+                        Detalles: modificar plan de estudio
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </h3>
+
+    <h3>Datos personales</h3>
+        <table class="table table-striped table-bordered table-hover" >
+            <thead>
+                <th>Razones del estudiante</th>
+            </thead>
+            <tr>
+                <td>
+                    {% if estudiante.casosExc.pasantia %}
+                        {{estudiante.casosExc.razonesPasantia}}
+                    {% else %}
+                        {% if estudiante.casosExc.proyecto %}
+                            {{estudiante.casosExc.razonesProyecto}}
+                        {% else %}
+                            {% if estudiante.casosExc.trimestre %}
+                                {{estudiante.casosExc.razonesTrimestre}}
+                            {% else %}
+                                {% if estudiante.casosExc.planEstudio %}
+                                    {{estudiante.casosExc.razonesPlan}}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                </td>
+            </tr>
+        </table>
+
+    <h3>Datos personales</h3>
+        <table class="table table-striped table-bordered table-hover" >
+            <thead>
+                <th>Datos personales</th>
+                <th></th>
+            </thead>
+            <tr>
+                <td>Primer nombre: {{estudiante.nombre1}}</td>
+                <td>Segundo nombre: {{estudiante.nombre2}}</td>
+            </tr>
+            <tr>
+                <td>Primer apellido: {{estudiante.apellido1}}</td>
+                <td>Segundo apellido: {{estudiante.apellido2}}</td>
+            </tr>
+            <tr>
+                <td>Sexo: {{estudiante.sexo}}</td>
+                <td>Nacionalidad: {{estudiante.nacionalidad}}</td>
+            </tr>
+            <tr>
+                <td>Cédula: {{estudiante.cedula}}</td>
+                <td>Carnet: {{estudiante.carnet}}</td>
+            </tr>
+            <tr>
+                <td>Teléfono casa: {{estudiante.telfCasa}}</td>
+                <td>Teléfono celular: {{estudiante.telfCel}}</td>
+            </tr>
+            <tr>
+                <td>Email: {{estudiante.user.email}}</td>
+                <td>Urbanización: {{estudiante.urbanizacion}}</td>
+            </tr>
+            <tr>
+                <td>Calle: {{estudiante.calle}}</td>
+                <td>Edificio/Casa: {{estudiante.edificio}}</td>
+            </tr>
+            <tr>
+                <td>Apartamento/Numero casa: {{estudiante.apartamento}}</td>
+                <td>Código postal: {{estudiante.codigopostal}}</td>
+            </tr>
+
+        </table>
+
+    <h3>Información académica</h3>
+        <table class="table table-striped table-bordered table-hover" >
+            <thead>
+                <th>Información académica</th>
+                <th></th>
+                <th></th>
+            </thead>
+
+            <tr>
+                <td>Carrera: </td>
+                <td>Número de créditos aprobados:</td>
+                <td>Indice: </td>
+            </tr>
+            <tr>
+
+                <td>Asignaturas del plan de estudio USB</td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% for plan in estudiante.planDeEstudio.all %}
+                <tr>
+                    <td>{{plan.materiaUsb.nombre}} </td>
+                    <td>{{plan.materiaUsb.codigo}}</td>
+                    <td>{{plan.materiaUsb.creditos}}</td>
+                </tr>
+            {% endfor %}
+
+            <tr>
+
+                <td>Asignaturas a cursar en la universidad de destino</td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% for plan in estudiante.planDeEstudio.all %}
+                <tr>
+                    <td>{{plan.nombreMateriaUniv}} </td>
+                    <td>{{plan.codigoUniv}}</td>
+                    <td>{{plan.creditosUniv}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+{% endblock %}

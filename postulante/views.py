@@ -73,6 +73,11 @@ def verDetallePostulacion(request,id_user):
     postulacion = Postulacion.objects.get(username=estudiante)
     return render_to_response('postulante/verDetallePostulacion.html', {'estudiante':estudiante,'postulacion':postulacion},context_instance=RequestContext(request))
 
+def verDetalleCasosExc(request,id_user):
+    estudiante = Estudiante.objects.get(id=int(id_user))
+    postulacion = Postulacion.objects.get(username=estudiante)
+    return render_to_response('postulante/verDetalleCasosExc.html', {'estudiante':estudiante,'postulacion':postulacion},context_instance=RequestContext(request))
+
 def eliminarPostulacion_coord(request,id_user):
     estudiante = Estudiante.objects.get(id=int(id_user))
     postulacion = Postulacion.objects.get(username=estudiante)
@@ -137,6 +142,34 @@ def recomendarCoord(request,id_user):
     else:
         formulario = Postulante_RecomendarEstudiante(initial={'indice':estudiante.antecedente.indice})
     return render_to_response('postulante/recomendarCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
+
+def recomendarCasoCoord(request,id_user):
+    user = request.user
+    postulante = Postulante.objects.get(usuario=user)
+    estudiante = Estudiante.objects.get(id=int(id_user))
+
+    if request.method == 'POST':
+        formulario = Postulante_RecomendarCasoEstudiante(request.POST)
+        if formulario.is_valid():
+            comentarios = formulario.cleaned_data['comentarios']
+
+            postulacion = Postulacion.objects.get(username=estudiante)
+            postulacion.comentRecomendacionCoord = comentarios
+            postulacion.recomendadoCoordinacion = True
+            postulacion.estadoPostulacion = 'Postulado. Revisado por coordinación'
+            postulacion.indice_normalizado = float('%.2f'%(estudiante.antecedente.indice/float(postulacion.username.carrera_usb.indiceCarrera)))
+            postulacion.save()
+            postulacion = Postulacion.objects.filter(estadoPostulacion='Postulado')
+            postulaciones = []
+            for post in postulacion:
+                if post.username.carrera_usb == postulante.carrera:
+                    postulaciones.append(post)
+            return render_to_response('postulante/listar_solicitudes_coord.html',{'postulante':postulante,'postulaciones':postulaciones,'estudiante':estudiante,
+                                                                                  'recomendado':True},context_instance=RequestContext(request))
+    else:
+        formulario = Postulante_RecomendarCasoEstudiante()
+    return render_to_response('postulante/recomendarCasoCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
+
 
 def noRecomendarCoord(request,id_user):
     user = request.user
@@ -224,3 +257,19 @@ def eliminarMateria(request,id_mat):
     materia.delete()
     materias = MateriaUSB.objects.all()
     return render_to_response('postulante/todasMaterias.html',{'materias':materias,'eliminadaMateria':True},context_instance=RequestContext(request))
+
+def listar_casosExc_coord(request):
+    user = request.user
+    postulante = Postulante.objects.get(usuario=user)
+
+    postulacion = Postulacion.objects.filter(estadoPostulacion='Postulado')
+
+    postulaciones = []
+    for post in postulacion:
+        if post.username.carrera_usb == postulante.carrera:
+            postulaciones.append(post)
+
+    estudiantes = Estudiante.objects.filter(tieneCasosExc = True)
+    print estudiantes
+
+    return render_to_response('postulante/listar_casosExc_coord.html',{'estudiantes':estudiantes},context_instance=RequestContext(request))

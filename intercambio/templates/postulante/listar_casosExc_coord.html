@@ -1,0 +1,68 @@
+{% extends "tabla.html" %}
+{% load bootstrap %}
+
+{% block seccion-contenido %}
+{% if recomendado == '1' %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Usuario {{estudiante.nombre1}} fue recomendado satisfactoriamente!
+    </div>
+{% endif %}
+    <h3>Casos excepcionales</h3>
+    <br>
+    <table class="table table-striped table-bordered table-hover" id="content">
+            <thead>
+                <th>Nombre y Apellido</th>
+                <th>Tipo Solicitud</th>
+                <th class="actions">Acción</th>
+            </thead>
+            {% for estudiante in estudiantes %}
+                <tr>
+                    <td>{{ estudiante.nombre1 }} {{ estudiante.apellido1 }} </td>
+                    <td>    {% if estudiante.casosExc.pasantia %}
+                                Petición de pasantía
+                            {% else %}
+                                {% if estudiante.casosExc.proyecto %}
+                                    Petición proyecto de grado
+                                {% else %}
+                                    {% if estudiante.casosExc.trimestre %}
+                                        Petición añadir un trimestre
+                                    {% else %}
+                                        {% if estudiante.casosExc.planEstudio %}
+                                            Modificar plan de estudio
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                    </td>
+                    <td class="actions">
+                        <button class="btn-xs btn-default"><a href="/verDetalleCasosExc/{{estudiante.id}}" class="btn-xs btn-default">Ver</a></button>
+                        <button class="btn-xs btn-default"><a href="/recomendarCasoCoord/{{estudiante.id}}" class="btn-xs btn-default"> Recomendar </a></button>
+                        {% comment %}
+                            <button type="button" onclick="deleteAlert({{postulacion.username.id}})" class="btn-xs btn-default btn-danger">Eliminar</button>
+                        {% endcomment %}
+                        <button class="btn-xs btn-default"><a href="/noRecomendarCasoCoord/{{estudiante.id}}" class="btn-xs btn-default">No Recomendar</a></button>
+                    </td>
+                </tr>
+            {% endfor %}
+    </table>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+        	function deleteAlert(id)
+        	{
+        		var r=confirm("¿Esta seguro que desea eliminar?");
+        		if (r==true)
+        	  {
+        			var string1 = "/eliminarPostulacion_coord/";
+        		  window.location.assign(string1 + id)
+          	}
+        		else
+          	{
+
+          	}
+        		document.getElementById("demo").innerHTML=x;
+        }
+    </script>
+{% endblock %}

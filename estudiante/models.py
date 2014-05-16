@@ -12,11 +12,14 @@ class CasosExcepcionales(models.Model):
     proyecto = models.BooleanField(default=False)
     trimestre = models.BooleanField(default=False)
     planEstudio = models.BooleanField(default=False)
-    filePasantia = models.FileField(upload_to='cargas', null=True)
-    razonesPasantia = models.CharField(max_length=800, null=True)
-    fileProyecto = models.FileField(upload_to='cargas', null=True)
-    razonesProyecto = models.CharField(max_length=800, null=True)
-    razonesTrimestre = models.CharField(max_length=800)
+    filePasantia = models.FileField(upload_to='cargas', null=True, blank=True)
+    razonesPasantia = models.CharField(max_length=800, null=True, blank=True)
+    fileProyecto = models.FileField(upload_to='cargas', null=True, blank=True)
+    razonesProyecto = models.CharField(max_length=800, null=True, blank=True)
+    razonesTrimestre = models.CharField(max_length=800, null=True, blank=True)
+
+    comentRecomendacionCoord = models.CharField(max_length=800, null=True, blank=True)
+    recomendadoCoordinacion = models.BooleanField(default=False)
 
 class AntecedenteAcad(models.Model):
     indice = models.FloatField()
@@ -125,6 +128,7 @@ class Estudiante(models.Model):
     primeraOpcion = models.ForeignKey(OpcionUNO,null=True,blank=True)
     segundaOpcion = models.ForeignKey(OpcionDOS,null=True,blank=True)
     casosExc = models.ForeignKey(CasosExcepcionales, null=True, blank=True)
+    tieneCasosExc = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.user.username

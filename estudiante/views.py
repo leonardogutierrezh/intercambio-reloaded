@@ -1159,13 +1159,16 @@ def solicitarPasantia(request):
                 casos.save()
 
                 estudiante.casosExc = casos
+                estudiante.tieneCasosExc = True
                 estudiante.save()
                 pasantiaEnviada = True
                 return render_to_response('index.html',{'pasantiaEnviada':pasantiaEnviada},context_instance=RequestContext(request))
             else:
                 estudiante.casosExc.filePasantia = pasantia
+                estudiante.casosExc.pasantia=True
                 estudiante.casosExc.razonesPasantia = razones
                 estudiante.casosExc.save()
+                estudiante.tieneCasosExc = True
                 estudiante.save()
                 pasantiaEnviada = True
                 return render_to_response('index.html',{'pasantiaEnviada':pasantiaEnviada},context_instance=RequestContext(request))
@@ -1188,11 +1191,14 @@ def extenderTrim(request):
                 casos.save()
 
                 estudiante.casosExc = casos
+                estudiante.tieneCasosExc = True
                 estudiante.save()
                 trimEnviado = True
                 return render_to_response('index.html',{'trimEnviado':trimEnviado},context_instance=RequestContext(request))
             else:
                 estudiante.casosExc.razonesTrimestre=razones
+                estudiante.casosExc.trimestre=True
+                estudiante.tieneCasosExc = True
                 estudiante.casosExc.save()
                 estudiante.save()
                 trimEnviado = True
@@ -1211,17 +1217,20 @@ def proyectoGrado(request):
             razones = formulario.cleaned_data['razones']
 
             if estudiante.casosExc == None:
-                casos = CasosExcepcionales.objects.create(pasantia=True,fileProyecto=proyecto,razonesProyecto=razones)
+                casos = CasosExcepcionales.objects.create(proyecto=True,fileProyecto=proyecto,razonesProyecto=razones)
                 casos.save()
 
                 estudiante.casosExc = casos
+                estudiante.tieneCasosExc = True
                 estudiante.save()
                 proyectoEnviado = True
                 return render_to_response('index.html',{'proyectoEnviado':proyectoEnviado},context_instance=RequestContext(request))
             else:
                 estudiante.casosExc.fileProyecto = proyecto
+                estudiante.casosExc.proyecto=True
                 estudiante.casosExc.razonesProyecto = razones
                 estudiante.casosExc.save()
+                estudiante.tieneCasosExc = True
                 estudiante.save()
                 proyectoEnviado = True
                 return render_to_response('index.html',{'proyectoEnviado':proyectoEnviado},context_instance=RequestContext(request))
