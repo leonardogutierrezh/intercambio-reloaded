@@ -4,6 +4,19 @@
 {% endblock %}
 {% block tabla %}
 
+{% if aceptadoCaso %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Se le ha notificado al estudiante mediante un correo que su petición fue aceptada!
+    </div>
+{% endif %}
+{% if rechazadoCaso %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Se le ha notificado al estudiante mediante un correo que su petición fue rechazada!
+    </div>
+{% endif %}
+
     <h3>Casos excepcionales</h3>
     <br>
     <table class="table table-striped table-bordered table-hover" id="content">
@@ -35,11 +48,11 @@
                     <td> {% if estudiante.casosExc.recomendadoCoordinacion %} Si {% else %} No {% endif %}</td>
                     <td class="actions">
                         <button class="btn-xs btn-default"><a href="/verDetalleCasosExcGestor/{{estudiante.id}}" class="btn-xs btn-default">Ver</a></button>
-                        <button class="btn-xs btn-default"><a href="/recomendarCasoCoord/{{estudiante.id}}" class="btn-xs btn-default"> Aceptar </a></button>
+                        <button class="btn-xs btn-default"><a href="/aceptarCasoExc/{{estudiante.id}}" class="btn-xs btn-default"> Aceptar </a></button>
                         {% comment %}
                             <button type="button" onclick="deleteAlert({{postulacion.username.id}})" class="btn-xs btn-default btn-danger">Eliminar</button>
                         {% endcomment %}
-                        <button class="btn-xs btn-default"><a href="/noRecomendarCasoCoord/{{estudiante.id}}" class="btn-xs btn-default">No Aceptar</a></button>
+                        <button class="btn-xs btn-default"><a href="/noAceptarCasoExc/{{estudiante.id}}" class="btn-xs btn-default">No Aceptar</a></button>
                     </td>
                 </tr>
             {% endfor %}

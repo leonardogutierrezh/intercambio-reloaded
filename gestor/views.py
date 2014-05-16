@@ -224,7 +224,7 @@ def asignar_universidad(request, id_universidad, id_estudiante):
     return HttpResponseRedirect("/sin_asignar/1")
 
 def verCasosExcepcionales(request):
-    estudiantes = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=True)
+    estudiantes = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=True,vistoCasoDeca=False)
 
     return render_to_response('gestor/verCasosExcepcionales.html', {'estudiantes':estudiantes}, context_instance=RequestContext(request))
 
@@ -232,3 +232,75 @@ def verDetalleCasosExcGestor(request,id_user):
     estudiante = Estudiante.objects.get(id=int(id_user))
     postulacion = Postulacion.objects.get(username=estudiante)
     return render_to_response('gestor/verDetalleCasosExcGestor.html', {'estudiante':estudiante,'postulacion':postulacion},context_instance=RequestContext(request))
+
+def aceptarCasoExc(request,id_user):
+    estudiante = Estudiante.objects.get(id=int(id_user))
+
+    email_est = estudiante.user.email
+
+    razon = ''
+    if estudiante.casosExc.pasantia:
+        razon = 'cursar la pasantia'
+    else:
+        if estudiante.casosExc.proyecto:
+            razon = 'cursar el proyecto de grado'
+        else:
+            if estudiante.casosExc.trimestre:
+                razon = 'quedarse de intercambio un trimestre mas'
+            else:
+                if estudiante.casosExc.planEstudio:
+                    razon = 'modificar el plan de estudio'
+
+    titulo = 'Respuesta de solicitud para ' + razon
+
+    contenido = 'Buenos dias ' + estudiante.nombre1 + ' ' + estudiante.apellido1 + '\n'
+    contenido += 'Le informamos que su solicitud para ' + razon + ' '
+    contenido += 'ha sido aprobada'
+
+    correo = EmailMessage(titulo, contenido, to=[email_est])
+    try:
+        correo.send()
+        estudiante.aprobadoCasoDeca = True
+        estudiante.vistoCasoDeca = True
+        estudiante.save()
+    except:
+        'no se envio el correo'
+
+    estudiantes = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=True,vistoCasoDeca=False)
+    aceptadoCaso = True
+    return render_to_response('gestor/verCasosExcepcionales.html', {'estudiantes':estudiantes,'aceptadoCaso':aceptadoCaso}, context_instance=RequestContext(request))
+
+def noAceptarCasoExc(request,id_user):
+    estudiante = Estudiante.objects.get(id=int(id_user))
+    email_est = estudiante.user.email
+    razon = ''
+    if estudiante.casosExc.pasantia:
+        razon = 'cursar la pasantia'
+    else:
+        if estudiante.casosExc.proyecto:
+            razon = 'cursar el proyecto de grado'
+        else:
+            if estudiante.casosExc.trimestre:
+                razon = 'quedarse de intercambio un trimestre mas'
+            else:
+                if estudiante.casosExc.planEstudio:
+                    razon = 'modificar el plan de estudio'
+
+    titulo = 'Respuesta de solicitud para ' + razon
+
+    contenido = 'Buenos dias ' + estudiante.nombre1 + ' ' + estudiante.apellido1 + '\n'
+    contenido += 'Le informamos que su solicitud para ' + razon + ' '
+    contenido += 'ha sido negada. Lo sentimos'
+
+    correo = EmailMessage(titulo, contenido, to=[email_est])
+    try:
+        correo.send()
+        estudiante.aprobadoCasoDeca = False
+        estudiante.vistoCasoDeca = True
+        estudiante.save()
+    except:
+        'no se envio el correo'
+
+    estudiantes = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=True,vistoCasoDeca=False)
+    rechazadoCaso = True
+    return render_to_response('gestor/verCasosExcepcionales.html', {'estudiantes':estudiantes,'rechazadoCaso':rechazadoCaso}, context_instance=RequestContext(request))

@@ -92,7 +92,9 @@ urlpatterns = patterns('',
     url(r'seleccionar_universidad/(?P<id_estudiante>\d+)/$', 'gestor.views.seleccionar_universidad'),
     url(r'asignar_universidad/(?P<id_universidad>\d+)/(?P<id_estudiante>\d+)/$', 'gestor.views.asignar_universidad'),
     url(r'^verDetalleCasosExcGestor/(?P<id_user>\d+)/$', 'gestor.views.verDetalleCasosExcGestor'),
-    url(r'^verCasosExcepcionales/$', 'gestor.views.verCasosExcepcionales')
+    url(r'^verCasosExcepcionales/$', 'gestor.views.verCasosExcepcionales'),
+    url(r'^aceptarCasoExc/(?P<id_user>\d+)/$', 'gestor.views.aceptarCasoExc'),
+    url(r'^noAceptarCasoExc/(?P<id_user>\d+)/$', 'gestor.views.noAceptarCasoExc')
 
     #url(r'^eliminarPostulacion_coord/(?P<id_user>\d+)/$', 'postulante.views.eliminarPostulacion_coord'),
 )
