@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block seccion-contenido %}
+
+{% if sepaso %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Disculpe, el tamaño permitido para la carga de documentos (5Mb) se ha excedido!
+    </div>
+{% endif %}
+
 <div class="container">
     <h3>2. Documentos Requeridos</h3>
     <br>
@@ -12,7 +20,7 @@
         <div class="col-md-6 col-md-push-2 col-sm-2">
             <p>Los archivos permitidos a cargar son aquellos con formato JPG o PNG (para la foto)</p>
             <p style="text-align: center;">y PDF para el resto de los documentos.</p>
-
+            <p style="text-align: center;">El tamaño maximo de la carga de archivos es de 5Mb.</p>
             <p style="text-align: center;color: red"> *Sólo para quienes apliquen a uno de estos programas </p>
             <p style="text-align: center;color: red"> **Sólo para quienes apliquen a países que NO sean de habla hispana </p>
             <br>

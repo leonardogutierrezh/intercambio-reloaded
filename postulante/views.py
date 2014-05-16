@@ -203,8 +203,7 @@ def noRecomendarCasoCoord(request,id_user):
 
     else:
         formulario = Postulante_RecomendarCasoEstudiante()
-    return render_to_response('postulante/recomendarCasoCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
-
+    return render_to_response('postulante/noRecomendarCasoCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
 
 def noRecomendarCoord(request,id_user):
     user = request.user
@@ -230,7 +229,7 @@ def noRecomendarCoord(request,id_user):
                                                                                   'recomendado':True},context_instance=RequestContext(request))
     else:
         formulario = Postulante_RecomendarEstudiante(initial={'indice':estudiante.antecedente.indice})
-    return render_to_response('postulante/noRecomendarCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
+    return render_to_response('postulante/noRecomendarCasoCoord.html', {'formulario':formulario},context_instance=RequestContext(request))
 
 def agregarMateria(request):
     user = request.user

@@ -247,37 +247,7 @@ class documentosRequeridosUSB_form(forms.Form):
     planilla = forms.FileField(required=False,label='*Planilla CINDA/SMILE')
     certificado = forms.FileField(required=False,label='**Certificado de idiomas')
 
-    def clean_informe(self):
-        informe = self.cleaned_data.get('informe', '')
-        content_type = informe.content_type.split('/')[1]
-        CONTENT_TYPES = ['pdf']
-        if not(content_type in CONTENT_TYPES):
-            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
-        return informe
 
-    def clean_carta(self):
-        carta = self.cleaned_data.get('carta', '')
-        content_type = carta.content_type.split('/')[1]
-        CONTENT_TYPES = ['pdf']
-        if not(content_type in CONTENT_TYPES):
-            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
-        return carta
-
-    def clean_planilla(self):
-        planilla = self.cleaned_data.get('planilla', '')
-        content_type = planilla.content_type.split('/')[1]
-        CONTENT_TYPES = ['pdf']
-        if not(content_type in CONTENT_TYPES):
-            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
-        return planilla
-
-    def clean_certificado(self):
-        certificado = self.cleaned_data.get('certificado', '')
-        content_type = certificado.content_type.split('/')[1]
-        CONTENT_TYPES = ['pdf']
-        if not(content_type in CONTENT_TYPES):
-            raise forms.ValidationError(_('El archivo debe tener formato pdf'))
-        return certificado
 
 class documentosRequeridosExt_form(forms.Form):
     foto = forms.ImageField()

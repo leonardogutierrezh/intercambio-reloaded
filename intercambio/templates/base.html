@@ -114,12 +114,14 @@
                      </ul>
                      {% elif user.first_name == 'estudianteUSB' or user.first_name == 'estudianteExt' %}
                          <h3 style="text-align: center">Estudiante</h3>
-                         <li>
+                            <li>
                                 <a href="#">Gestión de solicitudes</a>
                                     <ul class="nav nav-second-level">
-                                        <li>
-                                            <a href="/postularse">Postularse/Modificar </a>
-                                        </li>
+                                        {% if user.last_name != 'aceptado' %}
+                                            <li>
+                                                <a href="/postularse">Postularse/Modificar </a>
+                                            </li>
+                                        {% endif %}
                                         <li>
                                             <a href="/descargarPlanilla">Descargar Planilla</a>
                                         </li>
@@ -128,9 +130,11 @@
                                         </li>
                                     </ul>
                             </li>
-                            <li>
-                                <a href="/modificarCasosExcepcionales">Casos excepcionales</a>
-                            </li>
+                            {% if user.last_name == 'aceptado' %}
+                                <li>
+                                    <a href="/modificarCasosExcepcionales">Casos excepcionales</a>
+                                </li>
+                            {% endif %}
                             {% if user.first_name == 'estudianteUSB' %}
                                 <li>
                                     <a href="/perfilEstudianteUSB">Ver/Modificar perfil</a>

@@ -21,6 +21,8 @@ from reportlab.platypus import SimpleDocTemplate, Image
 from django.core import serializers
 from administrador.models import Universidad, Log
 from postulante.models import Postulacion
+from django.template.defaultfilters import filesizeformat
+from django.utils.translation import ugettext_lazy as _
 
 def index(request):
     return render_to_response('index.html', context_instance=RequestContext(request))
@@ -613,6 +615,13 @@ def documentosRequeridos(request):
                     carta = formulario.cleaned_data['carta']
                     planilla = formulario.cleaned_data['planilla']
                     certificado = formulario.cleaned_data['certificado']
+
+                    maximo = 5242880
+                    total = informe._size + carta._size + foto._size
+                    if int(total) > maximo:
+                        print 'se paso'
+                        sepaso = True
+                        return render_to_response('estudiante/documentosRequeridos.html',{'formulario':formulario,'estudiante':estudiante,'sepaso':sepaso},context_instance=RequestContext(request))
 
                     if estudiante.documentos == None:
                         doc = DocumentosRequeridos.objects.create(foto=foto,informe=informe,carta=carta,planilla=planilla,certificado=certificado)
@@ -1222,6 +1231,7 @@ def proyectoGrado(request):
 
                 estudiante.casosExc = casos
                 estudiante.tieneCasosExc = True
+                estudiante.casosExc.save()
                 estudiante.save()
                 proyectoEnviado = True
                 return render_to_response('index.html',{'proyectoEnviado':proyectoEnviado},context_instance=RequestContext(request))
