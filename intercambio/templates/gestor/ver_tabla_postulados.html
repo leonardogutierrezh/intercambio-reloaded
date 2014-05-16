@@ -8,8 +8,8 @@
     {% endif %}
 {% endblock %}
 {% block tabla %}
-    <div class="row">
-    <a href="/ver_tabla_postulados/1">Opción 1</a> <a href="/ver_tabla_postulados/2">Opción 2</a> <a href="/sin_asignar/0">Opcion Alternativa</a>
+    <div class="btn-group">
+    <a class ="btn btn-default" href="/ver_tabla_postulados/1">Opción 1</a> <a class ="btn btn-default" href="/ver_tabla_postulados/2">Opción 2</a> <a class ="btn btn-default" href="/sin_asignar/0">Opcion Alternativa</a>
     </div>
     <table class="table table-bordered table-hover table-responsive">
     {% for elemento in lista %}

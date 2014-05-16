@@ -406,14 +406,41 @@ def editar_cuenta(request, id_user):
 
 @login_required(login_url='/')
 def redactar_anuncio(request):
+    logueado = request.user
+    usuarios = User.objects.filter(is_staff=False)
     carreras = Carrera.objects.all()
     universidades = Universidad.objects.all()
     paises = Country.objects.all()
     for pais in paises:
         print pais.name
+    if request.method == "POST":
+        formulario = RedactarAnuncio(request.POST)
+        if formulario.is_valid():
+            lista = request.POST.getlist('lista')
+            for elemento in lista:
+                    asunto = formulario.cleaned_data['asunto']
+                    mensaje = formulario.cleaned_data['mensaje']
+                    #correo = EmailMessage(asunto, mensaje, to=['contacto@asuntopais.com'])
+                    para = User.objects.get(id=elemento)
+                    correo = EmailMessage(asunto, mensaje, to=[para.email])
+                    try:
+                        print "enviando"
+                        correo.send()
+
+                    except:
+                        mensaje="error al enviar el mensaje"
+
+            Log.objects.create(usuario=logueado, suceso='Asignada universidad a resagado')
+            formulario = RedactarAnuncio()
+            return render_to_response('administrador/redactar_anuncio.html', {'carreras': carreras,
+                                                                      'universidades': universidades,
+                                                                      'paises': paises, 'usuarios': usuarios, 'formulario': formulario, 'creado':'1'}, context_instance=RequestContext(request))
+    else:
+        formulario = RedactarAnuncio()
+
     return render_to_response('administrador/redactar_anuncio.html', {'carreras': carreras,
                                                                       'universidades': universidades,
-                                                                      'paises': paises}, context_instance=RequestContext(request))
+                                                                      'paises': paises, 'usuarios': usuarios, 'formulario': formulario}, context_instance=RequestContext(request))
 
 @login_required(login_url='/')
 def crear_universidad(request):

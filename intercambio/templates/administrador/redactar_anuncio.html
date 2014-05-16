@@ -1,106 +1,129 @@
-{% extends 'base.html' %}
+{% extends 'tabla.html' %}
+{% load bootstrap %}
 {% block seccion-contenido %}
+    {% if creado == '1' %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="True">&times;</button>
+        ¡Anuncio Enviado Exitosamente!
+    </div>
+    {% endif %}
     <form method="POST">{% csrf_token %}
-    <div class="row">
-        <div class="col-sm-4">
-            <input id="estudiantecheck" class="selector" type="checkbox">Estudiantes:
-        </div>
-        <div class="col-sm-4">
-            <input id="postulantecheck" class="selector" type="checkbox">Postulantes:
-        </div>
-        <div class="col-sm-4">
-            <input id="gestorcheck" class="selector" type="checkbox">Gestores:
-        </div>
-    </div>
-    <div id="estudiante" class="row">
-         <div class="col-sm-6 form-group">
-            <label class="control-label">Nombre Estudiante</label>
-             <div class=" ">
-                 <input id="nueva" class="form-control" type="text" name="nombreEstudiante">
-             </div>
-         </div>
-        <div class="col-sm-6 form-group">
-            <label class="control-label">Apellido Estudiante</label>
-             <div class=" ">
-                 <input id="nueva" class="form-control" type="text" name="apellidoEstudiante">
-             </div>
-         </div>
-        <div class="col-sm-6 form-group">
-            <label class="control-label">Carnet</label>
-             <div class=" ">
-                 <input id="nueva" class="form-control" type="text" name="carnetEstudiante">
-             </div>
-         </div>
-        <div class="col-sm-6 form-group">
-            <label class="control-label">Índice</label>
-             <div class=" ">
-                 <input id="nueva" class="form-control" type="text" name="indiceEstudiante">
-             </div>
-         </div>
-        <div class="col-sm-6 form-group">
-            <label class="control-label">Carrera</label>
-             <div class=" ">
-                 <select class="form-control" name="carreraEstudiante">
-                     <option>N/A</option>
-                     {% for carrera in carreras %}
-                         <option>{{ carrera.nombre }}</option>
-                     {% endfor %}
-                 </select>
-             </div>
-         </div>
-        <div class="col-sm-6 form-group">
-            <label class="control-label">País Destino</label>
-             <div class=" ">
-                <select class="form-control" name="paisdestinoEstudiante">
-                     <option>N/A</option>
-                    {% for pais in paises %}
-                        <option>{{ pais.name }}</option>
-                    {% endfor %}
-                 </select>
-             </div>
-         </div>
-        <div class="col-sm-6 form-group">
-            <label class="control-label">Primera Opción</label>
-             <div class=" ">
-                 <select class="form-control" name="primeraEstudiante">
-
-                     <option>N/A</option>
-                     {% for universidad in universidades %}
-                         <option>{{ universidad.nombre }}</option>
-                     {% endfor %}
-                 </select>
-             </div>
-         </div>
-    </div>
-    <div id="postulante" class="row">
-        <div class="col-sm-6 form-group">
-            <label class="control-label">Nombre Postulante</label>
-             <div class=" ">
-                 <input id="nueva" class="form-control" type="text" name="nombrePostulante">
-             </div>
-         </div>
-        <div class="col-sm-6 form-group">
-            <label class="control-label">Tipo de Postulante</label>
-             <div class=" ">
-                 <input id="nueva" class="form-control" type="text" name="tipoPostulante">
-             </div>
-         </div>
-    </div>
-    <div id="gestor" class="row">
-        <div class="col-sm-6 form-group">
-            <label class="control-label">Gestor</label>
-             <div class=" ">
-                 <select class="form-control" name="tipoGestor">
-                     <option value="none">Seleccione</option>
-                     <option value="profesionales">Decanato de Estudios Profesionales</option>
-                     <option value="tecnologicos">Decanato de Estudios Tecnológicos</option>
-                 </select>
-             </div>
-         </div>
-    </div>
-    <div clas="row">
-        <input type="submit" value="Realizar Busqueda" class="btn-default btn btn-primary">
-    </div>
+{#    {% comment %}<div class="row">#}
+{#        <div class="col-sm-4">#}
+{#            <input id="estudiantecheck" class="selector" type="checkbox">Estudiantes:#}
+{#        </div>#}
+{#        <div class="col-sm-4">#}
+{#            <input id="postulantecheck" class="selector" type="checkbox">Postulantes:#}
+{#        </div>#}
+{#        <div class="col-sm-4">#}
+{#            <input id="gestorcheck" class="selector" type="checkbox">Gestores:#}
+{#        </div>#}
+{#    </div>#}
+{#    <div id="estudiante" class="row">#}
+{#         <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Nombre Estudiante</label>#}
+{#             <div class=" ">#}
+{#                 <input id="nueva" class="form-control" type="text" name="nombreEstudiante">#}
+{#             </div>#}
+{#         </div>#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Apellido Estudiante</label>#}
+{#             <div class=" ">#}
+{#                 <input id="nueva" class="form-control" type="text" name="apellidoEstudiante">#}
+{#             </div>#}
+{#         </div>#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Carnet</label>#}
+{#             <div class=" ">#}
+{#                 <input id="nueva" class="form-control" type="text" name="carnetEstudiante">#}
+{#             </div>#}
+{#         </div>#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Índice</label>#}
+{#             <div class=" ">#}
+{#                 <input id="nueva" class="form-control" type="text" name="indiceEstudiante">#}
+{#             </div>#}
+{#         </div>#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Carrera</label>#}
+{#             <div class=" ">#}
+{#                 <select class="form-control" name="carreraEstudiante">#}
+{#                     <option>N/A</option>#}
+{#                     {% for carrera in carreras %}#}
+{#                         <option>{{ carrera.nombre }}</option>#}
+{#                     {% endfor %}#}
+{#                 </select>#}
+{#             </div>#}
+{#         </div>#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">País Destino</label>#}
+{#             <div class=" ">#}
+{#                <select class="form-control" name="paisdestinoEstudiante">#}
+{#                     <option>N/A</option>#}
+{#                    {% for pais in paises %}#}
+{#                        <option>{{ pais.name }}</option>#}
+{#                    {% endfor %}#}
+{#                 </select>#}
+{#             </div>#}
+{#         </div>#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Primera Opción</label>#}
+{#             <div class=" ">#}
+{#                 <select class="form-control" name="primeraEstudiante">#}
+{##}
+{#                     <option>N/A</option>#}
+{#                     {% for universidad in universidades %}#}
+{#                         <option>{{ universidad.nombre }}</option>#}
+{#                     {% endfor %}#}
+{#                 </select>#}
+{#             </div>#}
+{#         </div>#}
+{#    </div>#}
+{#    <div id="postulante" class="row">#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Nombre Postulante</label>#}
+{#             <div class=" ">#}
+{#                 <input id="nueva" class="form-control" type="text" name="nombrePostulante">#}
+{#             </div>#}
+{#         </div>#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Tipo de Postulante</label>#}
+{#             <div class=" ">#}
+{#                 <input id="nueva" class="form-control" type="text" name="tipoPostulante">#}
+{#             </div>#}
+{#         </div>#}
+{#    </div>#}
+{#    <div id="gestor" class="row">#}
+{#        <div class="col-sm-6 form-group">#}
+{#            <label class="control-label">Gestor</label>#}
+{#             <div class=" ">#}
+{#                 <select class="form-control" name="tipoGestor">#}
+{#                     <option value="none">Seleccione</option>#}
+{#                     <option value="profesionales">Decanato de Estudios Profesionales</option>#}
+{#                     <option value="tecnologicos">Decanato de Estudios Tecnológicos</option>#}
+{#                 </select>#}
+{#             </div>#}
+{#         </div>#}
+{#    </div>#}
+{#    <div clas="row">#}
+{#        <input type="submit" value="Realizar Busqueda" class="btn-default btn btn-primary">#}
+{#    </div>{% endcomment %}#}
+    <table class="table table-striped table-bordered table-hover" id="content">
+            <thead>
+                <th>Usuario</th>
+                <th>Tipo</th>
+                <th>Seleccionar</th>
+            </thead>
+        {% for usuario in usuarios %}
+            <tr>
+                <td><a href="/ver_usuario/{{ usuario.id }}">{{ usuario.username }}</a></td>
+                <td>{{ usuario.first_name }}</td>
+                <td><input type="checkbox" name="lista" value="{{ usuario.id }}"></td>
+            </tr>
+        {% endfor %}
+        </table>
+        {{ formulario | bootstrap }}
+        <button type="submit" value="enviar" class="btn btn-default">Enviar</button>
     </form>
 {% endblock %}
 {% block js %}

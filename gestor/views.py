@@ -143,6 +143,15 @@ def ajax_aceptar_postulado(request):
         postulacion.estadoPostulacion = "Aceptado en " + universidad.nombre
         postulacion.save()
         data = serializers.serialize('json', asignada, fields =('nombreEstud', 'nombreUniv'))
+        asunto = "Sistema de Gestion de Intercambio"
+        mensaje = "Hola ya tiene universidad asignada para su intercambio por favor ingrese al sistema para mas informacion sobre su postulacion. \n"
+        #correo = EmailMessage(asunto, mensaje, to=['contacto@asuntopais.com'])
+        correo = EmailMessage(asunto, mensaje, to=[estudiante.email])
+        try:
+            print "enviando"
+            correo.send()
+        except:
+            mensaje="error al enviar el mensaje"
         return HttpResponse(data, mimetype='application/json')
     else:
         return False
@@ -199,7 +208,17 @@ def asignar_universidad(request, id_universidad, id_estudiante):
     universidad.cupo = universidad.cupo - 1
     universidad.save()
     postulacion = Postulacion.objects.get(username=estudiante)
-    postulacion.estadoPostulacion = "Aceptado en " + universidad.nombre
+    postulacion.estadoPostulacion = "Aceptado en " + universidad.nombre +". Como esta no era ninguna de sus opciones principales comuniquese con la coordinacion para informacion de como seguir adelante con su postulacion."
     postulacion.save()
+    asunto = "Sistema de Gestion de Intercambio"
+    mensaje = "Hola ya tiene universidad asignada para su intercambio por favor ingrese al sistema para mas informacion sobre su postulacion. \n"
+    #correo = EmailMessage(asunto, mensaje, to=['contacto@asuntopais.com'])
+    correo = EmailMessage(asunto, mensaje, to=[estudiante.email])
+    try:
+        print "enviando"
+        correo.send()
+
+    except:
+        mensaje="error al enviar el mensaje"
     asignada_aux = UniversidadAsignada.objects.create(nombreEstud=estudiante, nombreUniv=universidad)
     return HttpResponseRedirect("/sin_asignar/1")

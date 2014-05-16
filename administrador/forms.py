@@ -41,3 +41,7 @@ class EditarPerfilForm(forms.Form):
 class CrearUniversidadForm(forms.ModelForm):
     class Meta:
         model = Universidad
+
+class RedactarAnuncio(forms.Form):
+    asunto = forms.CharField()
+    mensaje = forms.CharField(widget=forms.Textarea)
