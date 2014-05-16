@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block js %}
+    <script>
+        function agregar_materiaCON() {
+            var contador = document.getElementById('count_con').value;
+            contador = parseInt(contador) + 1;
+            document.getElementById('count_con').value = contador;
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listCON\" class=\"form-control\" onchange=\"ColocarNombreCON(this," + contador + ")\" onclick=\"ColocarNombreCON(this," + contador + ")\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"nom_" + contador + "\" class=\"form-control\" disabled/></td><td><input type=\"text\" id=\"cred_" + contador + "\" class=\"form-control\" disabled/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" onkeypress='return numero(event)' onkeyup='return numero(event)' name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+        }
+    </script>
+    <script>
+        function agregar_materiaSIN() {
+            var contador = document.getElementById('count_sin').value;
+            contador = parseInt(contador) + 1;
+            document.getElementById('count_sin').value = contador;
+            $("#tabla_materias").append("<tr><td><select name=\"lista_materias\" id=\"listSIN\" class=\"form-control\" onchange=\"ColocarNombreSIN(this," + contador + ")\" onclick=\"ColocarNombreSIN(this," + contador + ")\"> {% for materia in materias %}<option value=\"{{materia.id}}\">{{materia.codigo}}</option>{% endfor %}</select></td><td><input type=\"text\" id=\"nombre_mat_" + contador + "\" class=\"form-control\" disabled/></td><td><input type=\"text\" id=\"cred_mat_" + contador + "\" class=\"form-control\" disabled/></td><td><input type=\"text\" class=\"form-control\" name='cod_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" name='nom_des_" + contador + "'></td><td><input type=\"text\" class=\"form-control\" onkeypress='return numero(event)' onkeyup='return numero(event)' name='cred_des_" + contador + "'></td><td><input type=\"checkbox\" checked hidden=\"True\" name='check_" + contador + "'/> <button class=\"btn btn-danger\" onclick=\"eliminarFila(this)\">Eliminar</button></td></tr>");
+        }
+        function eliminarFila(btn){
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+        function numero(e) {
+            var codigo;
+            codigo = (document.all) ? e.keyCode : e.which;
+            if (codigo > 31 && (codigo < 48 || codigo > 57) ) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <script>
+        function ColocarNombreCON(btn,numero) {
+            var id = $(btn).val();
+            var nombre = "nom_" + numero;
+            var creditos = "cred_" + numero
+            $.ajax({
+                data : {'id':id},
+                url: '/nombreMaterias/',
+                type: 'get',
+                success: function(data){
+                    console.log(data);
+                    document.getElementById(nombre).value = data[0].fields.nombre;
+                    document.getElementById(creditos).value = data[0].fields.creditos;
+                }
+            })
+        }
+    </script>
+    <script>
+        function ColocarNombreSIN(btn,numero) {
+            var id = $(btn).val();
+            var nombre = "nombre_mat_" + numero;
+            var creditos = "cred_mat_" + numero
+            $.ajax({
+                data : {'id':id},
+                url: '/nombreMaterias/',
+                type: 'get',
+                success: function(data){
+                    console.log(data);
+                    document.getElementById(nombre).value = data[0].fields.nombre;
+                    document.getElementById(creditos).value = data[0].fields.creditos;
+                }
+            })
+        }
+    </script>
+
+    <script>
+	    function verPais(btn){
+        document.getElementById('divPROGRAMA1').style.display = 'none';
+        var id = $(btn).val();
+        console.log(id);
+        $.ajax({
+            data : {'modo':'convenio','id':id},
+            url: '/ajaxConvenio/',
+            type: 'get',
+            success: function(data){
+                console.log(data);
+                var paises = "";
+                var uni = "";
+                paises += '<label>País</label><select id="paises_prog" onchange="verUniv(this)" onclick="verUniv(this)" class=" form-control">';
+                for(var i=0; i<data.length; i++){
+                    paises += '<option value="' + data[i].pk + '">'+ data[i].fields.printable_name +'</option> ';
+                }
+                paises += '</select>';
+            $('#paises').html(paises);
+
+            }
+        });
+	}
+    </script>
+{% endblock %}
+
+{% block seccion-contenido %}
+<div class="container">
+    <h3>Paso 3: Modificar Plan de estudio {{hayPlan}}</h3>
+    <h4 style="text-align: center;">Modifique las asignaturas que desea del plan de estudio y de una razon del porque lo solicita</h4> <br>
+
+    <form class="" id='formulario_invoice' method='post' action=''>{% csrf_token %}
+        {% if hayPlan %}
+            <input type="hidden" id="count_con" name="count"  value="{{tamano}}" />
+        {% else %}
+            <input type="hidden" id="count_sin" name="count"  value="0" />
+        {% endif %}
+
+        <center>{{formulario}}</center> <br>
+        <table id="tabla_materias" class="content table table-hover table-condensed"    >
+            <thead>
+                <th>Código USB</th>
+                <th>Nombre USB</th>
+                <th>Créditos USB</th>
+                <th>Código Mat. Univ. Destino</th>
+                <th>Nombre Mat. Univ. Destino</th>
+                <th>Créditos Mat. Univ. Destino</th>
+                <th>Eliminar</th>
+            </thead>
+
+
+            {% if hayPlan %}
+                {% for planEst in estudiante.casosExc.casosPlanEstudio.all %}
+                    <tr>
+                        <td>
+                            <select name="lista_materias" id="listCON" class="form-control" onchange="ColocarNombreCON(this,{{planEst.auxiliar}})" onclick="ColocarNombreCON(this,{{planEst.auxiliar}})" >
+                            {% for materia in materias %}
+                                <option value="{{materia.id}}" {% if planEst.materiaUsb.codigo == materia.codigo %}selected{%endif%}>{{materia.codigo}}</option>
+                            {% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="text" value="{{planEst.materiaUsb.nombre}}" id="nom_{{planEst.auxiliar}}" class="form-control"/></td>
+                        <td><input type="text" value="{{planEst.materiaUsb.creditos}}" id="cred_{{planEst.auxiliar}}" class="form-control"/></td>
+                        <td><input type="text" name='cod_des_{{planEst.auxiliar}}' class="form-control" value="{{planEst.codigoUniv}}"> </input> </td>
+                        <td><input type="text" name="nom_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.nombreMateriaUniv}}"> </input></td>
+                        <td><input type="text" name="cred_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.creditosUniv}}" onkeypress='return numero(event)' onkeyup='return numero(event)'> </input></td>
+                        <td><input type="checkbox" name="check_{{planEst.auxiliar}}" checked hidden="True"/> <button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for planEst in estudiante.planDeEstudio.all %}
+                    <tr>
+                        <td>
+                            <select name="lista_materias" id="listCON" class="form-control" onchange="ColocarNombreCON(this,{{planEst.auxiliar}})" onclick="ColocarNombreCON(this,{{planEst.auxiliar}})" >
+                            {% for materia in materias %}
+                                <option value="{{materia.id}}" {% if planEst.materiaUsb.codigo == materia.codigo %}selected{%endif%}>{{materia.codigo}}</option>
+                            {% endfor %}
+                            </select>
+                        </td>
+                        <td><input type="text" value="{{planEst.materiaUsb.nombre}}" id="nom_{{planEst.auxiliar}}" class="form-control"/></td>
+                        <td><input type="text" value="{{planEst.materiaUsb.creditos}}" id="cred_{{planEst.auxiliar}}" class="form-control"/></td>
+                        <td><input type="text" name='cod_des_{{planEst.auxiliar}}' class="form-control" value="{{planEst.codigoUniv}}"> </input> </td>
+                        <td><input type="text" name="nom_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.nombreMateriaUniv}}"> </input></td>
+                        <td><input type="text" name="cred_des_{{planEst.auxiliar}}" class="form-control" value="{{planEst.creditosUniv}}" onkeypress='return numero(event)' onkeyup='return numero(event)'> </input></td>
+                        <td><input type="checkbox" name="check_{{planEst.auxiliar}}" checked hidden="True"/> <button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+
+        </table>
+
+        <div class="row">
+                <div class="final col-md-4 col-md-push-4 col-sm-4 col-sm-push-4">
+                    <input type='submit' class="btn btn-primary" value='Guardar' />
+                </div>
+        </div>
+
+
+    </form>
+    <br>
+    {% if hayPlan %}
+        <button id="boton_agregarCON" onclick="agregar_materiaCON()" class="btn btn-primary">Agregar Materia</button>
+    {% else %}
+        <button id="boton_agregarSIN" onclick="agregar_materiaSIN()" class="btn btn-primary">Agregar Materia</button>
+    {% endif %}
+</div>
+
+
+</div>
+{% endblock %}

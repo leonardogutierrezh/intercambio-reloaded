@@ -25,6 +25,13 @@
     </h3>
 
     <br>
+    {% if estudiante.casosExc.pasantia %}
+        <a href="{{MEDIA_URL}}{{estudiante.casosExc.filePasantia}}">Ver documento pasantía</a>
+    {% else %}
+        {% if estudiante.casosExc.proyecto %}
+            <a href="{{MEDIA_URL}}{{estudiante.casosExc.fileProyecto}}">Ver documento proyecto</a>
+        {% endif %}
+    {% endif %}
     <table class="table table-striped table-bordered table-hover" >
         <thead>
             <th>Razones del estudiante</th>

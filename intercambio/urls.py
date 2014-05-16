@@ -63,6 +63,7 @@ urlpatterns = patterns('',
     url(r'^solicitarPasantia', 'estudiante.views.solicitarPasantia'),
     url(r'^extenderTrim', 'estudiante.views.extenderTrim'),
     url(r'^proyectoGrado', 'estudiante.views.proyectoGrado'),
+    url(r'^CasosPlanEstudio', 'estudiante.views.CasosPlanEstudio_vi'),
 
     ############### Coordinacion ##########################
     url(r'^listar_solicitudes_coord', 'postulante.views.listar_solicitudes_coord'),

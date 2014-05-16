@@ -282,3 +282,6 @@ class proyectoGradoForm(forms.Form):
 
 class extenderTrimForm(forms.Form):
     razones = forms.CharField(widget=forms.Textarea)
+
+class cambiarPlan(forms.Form):
+    razones = forms.CharField(widget=forms.Textarea(attrs={'cols':60,'rows':5}))

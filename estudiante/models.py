@@ -7,6 +7,13 @@ from postulante.models import *
 from countries.models import *
 from administrador.models import Idioma,Universidad
 
+class CasosPlanEstudio(models.Model):
+    materiaUsb = models.ForeignKey(MateriaUSB)
+    codigoUniv = models.CharField(max_length=100)
+    nombreMateriaUniv = models.CharField(max_length=100)
+    creditosUniv = models.IntegerField()
+    auxiliar = models.CharField(max_length=10)
+
 class CasosExcepcionales(models.Model):
     pasantia = models.BooleanField(default=False)
     proyecto = models.BooleanField(default=False)
@@ -17,7 +24,8 @@ class CasosExcepcionales(models.Model):
     fileProyecto = models.FileField(upload_to='cargas', null=True, blank=True)
     razonesProyecto = models.CharField(max_length=800, null=True, blank=True)
     razonesTrimestre = models.CharField(max_length=800, null=True, blank=True)
-
+    razonesPlanEstudio = models.CharField(max_length=800, null=True, blank=True)
+    casosPlanEstudio = models.ManyToManyField(CasosPlanEstudio, null=True, blank=True)
     comentRecomendacionCoord = models.CharField(max_length=800, null=True, blank=True)
     recomendadoCoordinacion = models.BooleanField(default=False)
 

@@ -699,6 +699,7 @@ def documentosRequeridos(request):
     return render_to_response('estudiante/documentosRequeridos.html',{'formulario':formulario,'estudiante':estudiante},context_instance=RequestContext(request))
 
 def planEstudio(request):
+    print 'plan'
     estudiante = Estudiante.objects.get(user=request.user)
     materias = MateriaUSB.objects.all().order_by('codigo')
     if request.method == 'POST':
@@ -1250,3 +1251,72 @@ def proyectoGrado(request):
         else:
             formulario = proyectoGradoForm(initial={'pasantia':estudiante.casosExc.fileProyecto,'razones':estudiante.casosExc.razonesProyecto})
     return render_to_response('estudiante/proyectoGrado.html',{'formulario':formulario},context_instance=RequestContext(request))
+
+def CasosPlanEstudio_vi(request):
+    print 'holis'
+    estudiante = Estudiante.objects.get(user=request.user)
+
+    materias = MateriaUSB.objects.all().order_by('codigo')
+    if request.method == 'POST':
+        formulario = cambiarPlan(request.POST)
+        if formulario.is_valid():
+            razones = formulario.cleaned_data['razones']
+            if estudiante.casosExc != None:
+                for planEst in estudiante.casosExc.casosPlanEstudio.all():
+                    planEst.delete()
+            lista_materias = request.POST.getlist('lista_materias')
+            contador = int(request.POST.get('count'))
+
+            aux = 0
+            num = 0
+
+            if estudiante.casosExc == None:
+                casos = CasosExcepcionales.objects.create(planEstudio=True,razonesPlanEstudio=razones)
+                casos.save()
+                estudiante.casosExc = casos
+                estudiante.tieneCasosExc = True
+            else:
+                estudiante.casosExc.planEstudio = True
+                estudiante.casosExc.razonesPlanEstudio = razones
+                estudiante.casosExc.save()
+                estudiante.tieneCasosExc = True
+
+            for lista in lista_materias:
+                materia = MateriaUSB.objects.get(id=int(lista))
+
+                ## Encontrando el numero de fila fila
+                check = 'check_' + str(aux)
+                if not(request.POST.get(check)):
+                    existe = True
+                    while existe:
+                        aux = aux + 1
+                        check = 'check_' + str(aux)
+                        if request.POST.get(check):
+                            existe = False
+                cod_destino = "cod_des_" + str(aux)
+                nom_destino = "nom_des_" + str(aux)
+                cred_destino = "cred_des_" + str(aux)
+
+                codigoUniv = request.POST.get(cod_destino)
+                nombreMateriaUniv = request.POST.get(nom_destino)
+                creditosUniv = int(request.POST.get(cred_destino))
+
+                plan = CasosPlanEstudio.objects.create(materiaUsb = materia,codigoUniv=codigoUniv,nombreMateriaUniv=nombreMateriaUniv,creditosUniv=creditosUniv,auxiliar =num)
+                plan.save()
+                print plan.nombreMateriaUniv
+
+                estudiante.casosExc.casosPlanEstudio.add(plan)
+                num = num + 1
+                aux = aux + 1
+
+            estudiante.save()
+
+            return  HttpResponseRedirect('/modificarCasosExcepcionales')
+    else:
+        formulario = cambiarPlan()
+    if estudiante.casosExc != None:
+        print 'si hay'
+        hayPlan = True
+    else:
+        hayPlan = False
+    return render_to_response('estudiante/planEstudioCasos.html',{'formulario':formulario,'materias':materias,'estudiante':estudiante,'hayPlan':hayPlan,'tamano':len(estudiante.planDeEstudio.all())-1},context_instance=RequestContext(request))
