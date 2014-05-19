@@ -16,7 +16,9 @@
                 <td>{{ elemento.0.nombre1 }} {{ elemento.0.apellido1 }}</td>
                 <td>Carnet: {{ elemento.0.carnet }}</td>
                 <td>Carrera: {{ elemento.0.carrera_usb }}</td>
-                <td><button class="btn btn-default btn-sm">Aceptar</button></td>
+                <td><button class="btn btn-default btn-sm">Aceptar</button>
+                	<button class="btn btn-default btn-sm"><a href="/verDetallePostulacionDRIC/{{elemento.0.id}}" class="btn-xs btn-default">Ver</a></button>
+                </td>
             </tr>
     {% endfor %}
     </table>

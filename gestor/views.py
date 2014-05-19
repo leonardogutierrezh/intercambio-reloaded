@@ -22,7 +22,7 @@ from reportlab.platypus import SimpleDocTemplate, Image
 from django.core import serializers
 from administrador.models import Universidad, Log
 #from postulante.forms import *
-#from gestor.forms import *
+from gestor.forms import *
 
 def perfilDecanato(request):
     user = request.user
@@ -91,3 +91,8 @@ def ver_tabla_postulados(request, opcion):
     else:
         print 3
     return render_to_response('gestor/ver_tabla_postulados.html', {'lista': lista}, context_instance=RequestContext(request))
+
+def verDetallePostulacionDRIC(request,id_user):
+    estudiante = Estudiante.objects.get(id=int(id_user))
+    postulacion = Postulacion.objects.get(username=estudiante)
+    return render_to_response('postulante/verDetallePostulacion.html', {'estudiante':estudiante,'postulacion':postulacion},context_instance=RequestContext(request))
