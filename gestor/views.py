@@ -264,7 +264,7 @@ def aceptarCasoExc(request,id_user):
 
     correo = EmailMessage(titulo, contenido, to=[email_est])
     try:
-        correo.send()
+        #correo.send()
         estudiante.aprobadoCasoDeca = True
         estudiante.vistoCasoDeca = True
         estudiante.save()
@@ -299,7 +299,7 @@ def noAceptarCasoExc(request,id_user):
 
     correo = EmailMessage(titulo, contenido, to=[email_est])
     try:
-        correo.send()
+        #correo.send()
         estudiante.aprobadoCasoDeca = False
         estudiante.vistoCasoDeca = True
         estudiante.save()

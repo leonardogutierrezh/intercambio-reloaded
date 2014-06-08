@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block js %}
+{% endblock %}
+
+{% block seccion-contenido %}
+    <div class="row">
+        <div class="col-md-8 col-md-push-1">
+            <h2>Retirarse del intercambio</h2>
+            <h4 style="text-align: center;">Indique sus razones del porque desea usted retirarse del programa</h4> <br>
+
+
+        </div>
+    </div>
+    <form id='formulario' enctype='multipart/form-data' method='post' action=''> {% csrf_token %}
+        <div class="row">
+
+                <div class="col-md-6 col-md-push-2 col-sm-2">
+                    {{ formulario | bootstrap }}
+                </div>
+        </div>
+
+        <div class="row">
+            <div class="final col-md-3 col-md-push-5 col-sm-3 col-sm-push-3">
+                <input type='submit' class="btn btn-primary" value='Enviar' />
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

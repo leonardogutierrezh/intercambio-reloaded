@@ -869,7 +869,7 @@ def descargarPlanilla(request):
         # Create the PDF object, using the response object as its "file."
         p = canvas.Canvas(response)
 
-        p.drawInlineImage("./intercambio/static/img/cebollaUSB.jpg", 110, 780, 0.8*inch, 0.5*inch)
+        #p.drawInlineImage("./intercambio/static/img/cebollaUSB.jpg", 110, 780, 0.8*inch, 0.5*inch)
         p.setFont("Helvetica",11)
         p.drawString( 60, 765, "UNIVERSIDAD SIMON BOLIVAR")
 
@@ -1320,3 +1320,15 @@ def CasosPlanEstudio_vi(request):
     else:
         hayPlan = False
     return render_to_response('estudiante/planEstudioCasos.html',{'formulario':formulario,'materias':materias,'estudiante':estudiante,'hayPlan':hayPlan,'tamano':len(estudiante.planDeEstudio.all())-1},context_instance=RequestContext(request))
+
+def retirarIntercambio(request):
+    print 'hola************************'
+    #estudiante = Estudiante.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        formulario = extenderTrim(request.POST)
+        if formulario.is_valid():
+            print 'valiod'
+    else:
+        formulario = extenderTrimForm()
+    return render_to_response('estudiante/retirarIntercambio.html',{'formulario':formulario},context_instance=RequestContext(request))
