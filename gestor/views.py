@@ -264,12 +264,12 @@ def aceptarCasoExc(request,id_user):
 
     correo = EmailMessage(titulo, contenido, to=[email_est])
     try:
-        #correo.send()
-        estudiante.aprobadoCasoDeca = True
-        estudiante.vistoCasoDeca = True
-        estudiante.save()
+        correo.send()
     except:
         'no se envio el correo'
+    estudiante.aprobadoCasoDeca = True
+    estudiante.vistoCasoDeca = True
+    estudiante.save()
 
     estudiantes = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=True,vistoCasoDeca=False)
     aceptadoCaso = True
@@ -299,12 +299,12 @@ def noAceptarCasoExc(request,id_user):
 
     correo = EmailMessage(titulo, contenido, to=[email_est])
     try:
-        #correo.send()
-        estudiante.aprobadoCasoDeca = False
-        estudiante.vistoCasoDeca = True
-        estudiante.save()
+        correo.send()
     except:
         'no se envio el correo'
+    estudiante.aprobadoCasoDeca = False
+    estudiante.vistoCasoDeca = True
+    estudiante.save()
 
     estudiantes = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=True,vistoCasoDeca=False)
     rechazadoCaso = True

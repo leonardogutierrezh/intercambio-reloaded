@@ -135,16 +135,16 @@ class formularioDOS_form(forms.Form):
     codigo_postal = forms.CharField(max_length=50,widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label='Código postal')
 
 class formularioTRES_form(forms.Form):
-    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono celular. (Recuerda incluir código del país)")
-    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono casa. (Recuerda incluir código del país)")
+    cel = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono celular. (recuerda incluir código del país)")
+    tel_casa = forms.IntegerField(widget=forms.TextInput(attrs={'onkeypress':'return numero(event)','onkeyup':'return numero(event)'}), label="Teléfono casa. (recuerda incluir código del país)")
     email = forms.EmailField()
 
 class formularioCUATRO_formUSB(forms.Form):
     tipo_choice = (
         ('Intercambio academico (solo asignaturas)','Intercambio académico (sólo asignaturas)'),
         ('Intercambio academico + Pasantia internacional','Intercambio académico + Pasantía internacional'),
-        ('Intercambio academico + Trabajo de grado','Intercambio académico + Trabajo de grado'),
-        ('Trabajo de grado','Trabajo de grado'),
+        ('Intercambio academico + Proyecto de grado','Intercambio académico + Proyecto de grado'),
+        ('Proyecto de grado','Proyecto de grado'),
         ('Doble titulacion','Doble titulacion'),
     )
     inicio_choice = (
