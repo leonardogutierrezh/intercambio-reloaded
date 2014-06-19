@@ -166,7 +166,6 @@ def estadoPostulacion(request):
     estudiante = Estudiante.objects.get(user=user)
     postulacion = Postulacion.objects.get(username=estudiante)
 
-    print postulacion.estadoPostulacion
     return render_to_response('estudiante/estadoPostulacion.html', {'estudiante':estudiante,'postulacion':postulacion}, context_instance=RequestContext(request))
 
 def perfilEstudianteUSB(request):
