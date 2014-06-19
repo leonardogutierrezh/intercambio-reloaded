@@ -248,6 +248,13 @@ class documentosRequeridosUSB_form(forms.Form):
     certificado = forms.FileField(required=False,label='**Certificado de idiomas')
 
 
+class documentosRequeridosUSB_formEDIT(forms.Form):
+    foto = forms.ImageField(required=False)
+    informe = forms.FileField(label='Informe académico',required=False)
+    carta = forms.FileField(label='Carta de motivación',required=False)
+    planilla = forms.FileField(label='*Planilla CINDA/SMILE',required=False)
+    certificado = forms.FileField(label='**Certificado de idiomas',required=False)
+
 
 class documentosRequeridosExt_form(forms.Form):
     foto = forms.ImageField()

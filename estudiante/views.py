@@ -606,9 +606,12 @@ def documentosRequeridos(request):
     estudiante = Estudiante.objects.get(user=request.user)
     if request.method == 'POST':
         if estudiante.estudUsb:
-            formulario = documentosRequeridosUSB_form(request.POST,request.FILES)
             if estudiante.documentos == None:
-                if formulario.is_valid():
+                formulario = documentosRequeridosUSB_form(request.POST,request.FILES)
+            else:
+                formulario = documentosRequeridosUSB_formEDIT(request.POST,request.FILES)
+            if formulario.is_valid():
+                if estudiante.documentos == None:
                     foto = formulario.cleaned_data['foto']
                     informe = formulario.cleaned_data['informe']
                     carta = formulario.cleaned_data['carta']
@@ -649,24 +652,41 @@ def documentosRequeridos(request):
                         return HttpResponseRedirect('/postularse')
                     else:
                         return HttpResponseRedirect('/planEstudio')
-            else:
-                foto = formulario.cleaned_data['foto']
-                informe = formulario.cleaned_data['informe']
-                carta = formulario.cleaned_data['carta']
-                planilla = formulario.cleaned_data['planilla']
-                certificado = formulario.cleaned_data['certificado']
-
-                if estudiante.documentos == None:
-                    doc = DocumentosRequeridos.objects.create(foto=foto,informe=informe,carta=carta,planilla=planilla,certificado=certificado)
-                    doc.save()
-                    estudiante.documentos = doc
                 else:
-                    estudiante.documentos.foto = foto
-                    estudiante.documentos.informe = informe
-                    estudiante.documentos.carta = carta
-                    estudiante.documentos.planilla = planilla
-                    estudiante.documentos.certificado = certificado
-                    estudiante.documentos.save()
+                    foto = formulario.cleaned_data['foto']
+                    informe = formulario.cleaned_data['informe']
+                    carta = formulario.cleaned_data['carta']
+                    planilla = formulario.cleaned_data['planilla']
+                    certificado = formulario.cleaned_data['certificado']
+
+                    if estudiante.documentos == None:
+                        doc = DocumentosRequeridos.objects.create(foto=foto,informe=informe,carta=carta,planilla=planilla,certificado=certificado)
+                        doc.save()
+                        estudiante.documentos = doc
+                    else:
+                        if foto == None:
+                            print 'foto vacia'
+                        else:
+                            estudiante.documentos.foto = foto
+                        if informe == None:
+                            print 'foto vacia'
+                        else:
+                            estudiante.documentos.informe = informe
+                        if carta == None:
+                            print 'foto vacia'
+                        else:
+                            estudiante.documentos.carta = carta
+                        if planilla == None:
+                            print 'foto vacia'
+                        else:
+                            estudiante.documentos.planilla = planilla
+                        if certificado == None:
+                            print 'foto vacia'
+                        else:
+                            estudiante.documentos.certificado = certificado
+                        estudiante.documentos.save()
+
+
 
                 estudiante.segundoPaso = True
                 if estudiante.primerPaso and estudiante.segundoPaso and estudiante.tercerPaso and estudiante.cuartoPaso:
@@ -690,7 +710,7 @@ def documentosRequeridos(request):
             if estudiante.documentos == None:
                 formulario = documentosRequeridosUSB_form()
             else:
-                formulario =  documentosRequeridosUSB_form(initial={'foto':estudiante.documentos.foto,'informe':estudiante.documentos.informe,
+                formulario =  documentosRequeridosUSB_formEDIT(initial={'foto':estudiante.documentos.foto,'informe':estudiante.documentos.informe,
                                                                     'carta':estudiante.documentos.carta,'planilla':estudiante.documentos.planilla,
                                                                     'certificado':estudiante.documentos.certificado})
         else:
