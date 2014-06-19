@@ -22,7 +22,7 @@
                 <td></td>
             </tr>
         {% else %}
-            <tr id="estudiante{{ elemento.0.username.id }}" {% if elemento.3 == 1 %} class="success" {% endif %}{% if elemento.1.cupo == 0 and elemento.3 == 0 %}class="warning"{% endif %}>
+            <tr id="estudiante{{ elemento.0.username.id }}" {% if elemento.3 == 3 %}class="warning"{% endif %}{% if elemento.3 == 1 %} class="success" {% endif %}{% if elemento.1.cupo == 0 and elemento.3 == 0 %}class="danger"{% endif %}>
                 <td>{{ elemento.0.username.nombre1 }} {{ elemento.0.username.apellido1 }}</td>
                 <td>Carnet: {{ elemento.0.username.carnet }}</td>
                 <td>Carrera: {{ elemento.0.username.carrera_usb }}</td>
@@ -31,7 +31,7 @@
                     {% if elemento.3 == 1 %}
                         <button class="btn btn-default btn-sm" onclick="ajax_deshacer('{{ elemento.1.id }}','{{ elemento.0.username.id }}')">Deshacer</button>
                     {% else %}
-                        {% if elemento.1.cupo != 0 and elemento.3 == 0 %}
+                        {% if elemento.1.cupo != 0 and elemento.3 == 0  %}
                             <button class="btn btn-default btn-sm" onclick="ajax_aceptar('{{ elemento.1.id }}','{{ elemento.0.username.id }}')">Aceptar</button>
                         {% endif %}
 
