@@ -15,7 +15,7 @@ from datetime import *
 
 class Gestor_Edit_Form(forms.Form):
     username = forms.CharField(max_length=50, label="Nombre de usuario")
-    cambiarContra = forms.BooleanField(label="Cambiar contrasena", widget=forms.CheckboxInput(attrs={'onClick':'cambiarContrasena()'}), required=False)
-    contrasena1 = forms.CharField(widget=forms.PasswordInput(attrs={'disabled':'disabled'}),label="Contrasena", required=False)
-    contrasena2 = forms.CharField(widget=forms.PasswordInput(attrs={'disabled':'disabled'}),label="Contrasena de nuevo", required=False)
+    cambiarContra = forms.BooleanField(label="Cambiar contraseña", widget=forms.CheckboxInput(attrs={'onClick':'cambiarContrasena()'}), required=False)
+    contrasena1 = forms.CharField(widget=forms.PasswordInput(attrs={'disabled':'disabled'}),label="Contraseña", required=False)
+    contrasena2 = forms.CharField(widget=forms.PasswordInput(attrs={'disabled':'disabled'}),label="Contraseña de nuevo", required=False)
     nombre = forms.CharField(max_length=50)

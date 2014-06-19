@@ -124,7 +124,7 @@ def iniciarSesion(request):
                     return HttpResponseRedirect('/index')
                 else:
                     formulario = AuthenticationForm()
-                    error_log = "Nombre de usuario o contrasena incorrectos **"
+                    error_log = "Nombre de usuario o contraseña incorrectos **"
                     return render_to_response('iniciarSesion.html',{'formulario':formulario,'error_log':error_log}, context_instance=RequestContext(request))
         if 'recuperar' in request.POST:
             formulario = AuthenticationForm(request.POST)
