@@ -194,12 +194,17 @@
                                 <a href="/cerrar_sesion">Cerrar sesión</a>
                         </li>
                     {% elif user.first_name == 'dric' %}
-                              <h3 style="text-align: center">DRIC</h3>
+                                {% if comision == 1 %}
+                                    <h3 style="text-align: center">Comision Ad Hoc</h3>
+                                {% else %}
+                                    <h3 style="text-align: center">DRIC</h3>
+                                {% endif %}
+
                         <li>
                             <a href="/ver_tabla_postulados/1">Ver tabla de postulados</a>
                         </li>
                         <li>
-                            <a href="/ver_tabla_postuladosEXT">Ver tabla de postulados</a>
+                            <a href="/ver_tabla_postuladosEXT">Ver tabla de Extranjeros</a>
                         </li>
                         <li>
                                 <a href="/cerrar_sesion">Cerrar sesión</a>

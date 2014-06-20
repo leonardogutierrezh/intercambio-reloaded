@@ -113,7 +113,7 @@ def ver_tabla_postulados(request, opcion):
                 uni_aux = postulado.username.segundaOpcion.univ.nombre
     else:
         print 3
-    return render_to_response('gestor/ver_tabla_postulados.html', {'lista': lista, 'opcion': opcion}, context_instance=RequestContext(request))
+    return render_to_response('gestor/ver_tabla_postulados.html', {'comision': 1, 'lista': lista, 'opcion': opcion}, context_instance=RequestContext(request))
 
 def verDetallePostulacionDRIC(request,id_user):
     estudiante = Estudiante.objects.get(id=int(id_user))
