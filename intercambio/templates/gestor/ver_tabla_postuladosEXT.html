@@ -1,0 +1,42 @@
+{% extends 'tabla.html' %}
+{% load bootstrap %}
+{% block titulo %}
+ {% endblock %}
+{% block tabla %}
+    <table class="table table-bordered table-hover table-responsive">
+            <tr id="univ{{ elemento.1.id }}" style="background-color: #f9f9f9;">
+                <td>Nombre</td>
+                <td>Pasaporte</td>
+                <td>Pais Origen</td>
+                <td>Universidad Origen</td>
+                <td>Accion</td>
+            </tr>
+
+    {% for elemento in lista %}
+            <tr id="{{elemento.id}}">
+                <td>{{ elemento.nombre1 }} {{ elemento.apellido1 }}</td>
+                <td>{{ elemento.pasaporte }}</td>
+                <td>{{ elemento.nacionalidad}}</td>
+                <td>{{ elemento.univOrigen}}</td>
+                <td id="accion{{elemento.id}}">
+                    <button class="btn btn-default btn-sm" onclick="ajax_aceptar({{elemento.id}})">Aceptar</button>
+                </td>
+            </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+        function ajax_aceptar(id){
+            var a = "accion" + id;
+            document.getElementById(id).setAttribute("class", "success");
+            document.getElementById(a).innerHTML= "<button class=\"btn btn-default btn-sm\" onclick=\"ajax_deshacer("+id+")\">Deshacer</button>";
+        }
+        function ajax_deshacer(id){
+            var a = "accion" + id;
+            document.getElementById(id).className="";
+            document.getElementById(a).innerHTML= "<button class=\"btn btn-default btn-sm\" onclick=\"ajax_aceptar("+id+ge")\">Aceptar</button>";
+        }
+
+</script>
+{% endblock %}

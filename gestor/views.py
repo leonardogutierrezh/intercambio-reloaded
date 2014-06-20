@@ -309,3 +309,10 @@ def noAceptarCasoExc(request,id_user):
     estudiantes = Estudiante.objects.filter(tieneCasosExc = True,vistoCasoCoord=True,vistoCasoDeca=False)
     rechazadoCaso = True
     return render_to_response('gestor/verCasosExcepcionales.html', {'estudiantes':estudiantes,'rechazadoCaso':rechazadoCaso}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def ver_tabla_postuladosEXT(request):
+    lista = Estudiante.objects.filter(estudUsb=False)
+    print lista
+
+    return render_to_response('gestor/ver_tabla_postuladosEXT.html', {'lista': lista}, context_instance=RequestContext(request))
