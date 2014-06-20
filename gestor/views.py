@@ -87,6 +87,8 @@ def ver_tabla_postulados(request, opcion):
         for postulado in postulados:
             if UniversidadAsignada.objects.filter(nombreEstud=postulado.username, nombreUniv=postulado.username.primeraOpcion.univ):
                 existe=1
+            elif UniversidadAsignada.objects.filter(nombreEstud=postulado.username, nombreUniv=postulado.username.segundaOpcion.univ):
+                existe=3
             else:
                 existe=0
             if postulado.username.primeraOpcion.univ.nombre == uni_aux:
@@ -99,6 +101,8 @@ def ver_tabla_postulados(request, opcion):
         for postulado in postulados:
             if UniversidadAsignada.objects.filter(nombreEstud=postulado.username, nombreUniv=postulado.username.segundaOpcion.univ):
                 existe=1
+            elif UniversidadAsignada.objects.filter(nombreEstud=postulado.username, nombreUniv=postulado.username.primeraOpcion.univ):
+                existe=3
             else:
                 existe=0
             if postulado.username.segundaOpcion.univ.nombre == uni_aux:
@@ -151,7 +155,7 @@ def ajax_aceptar_postulado(request):
         correo = EmailMessage(asunto, mensaje, to=[estudiante.email])
         try:
             print "enviando"
-            correo.send()
+            #correo.send()
         except:
             mensaje="error al enviar el mensaje"
         return HttpResponse(data, mimetype='application/json')
