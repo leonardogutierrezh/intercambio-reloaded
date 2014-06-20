@@ -1342,12 +1342,35 @@ def CasosPlanEstudio_vi(request):
 
 def retirarIntercambio(request):
     print 'hola************************'
-    #estudiante = Estudiante.objects.get(user=request.user)
+    estudiante = Estudiante.objects.get(user=request.user)
 
     if request.method == 'POST':
-        formulario = extenderTrim(request.POST)
+        formulario = extenderTrimForm(request.POST)
         if formulario.is_valid():
             print 'valiod'
+            request.user.last_name = ""
+            request.user.save()
+            estudiante.urbanizacion = ""
+            estudiante.calle = ""
+            estudiante.edificio = ""
+            estudiante.apartamento= ""
+            estudiante.ciudad= ""
+            estudiante.estado= ""
+            estudiante.fechaNacimiento= ""
+            estudiante.comentario= ""
+            estudiante.estadoPostulacion = 'Sin postular'
+
+            estudiante.primerPaso = False
+            estudiante.segundoPaso = False
+            estudiante.tercerPaso = False
+            estudiante.cuartoPaso = False
+            estudiante.tieneCasosExc = False
+
+            post = Postulacion.objects.get(username=estudiante)
+            post.estadoPostulacion = 'Sin postular'
+            post.save()
+            estudiante.save()
+            return  HttpResponseRedirect('/index')
     else:
         formulario = extenderTrimForm()
     return render_to_response('estudiante/retirarIntercambio.html',{'formulario':formulario},context_instance=RequestContext(request))
