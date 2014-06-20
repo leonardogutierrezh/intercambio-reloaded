@@ -89,11 +89,11 @@ def registrarEstudianteExt(request):
             aux = User.objects.filter(username=username)
             if len(aux) != 0:
                 UsuarioRepetido = "El nombre de usuario ya existe **"
-                return render_to_response('estudiante/registrarEstudianteUSB.html', {'formulario': formulario,'UsuarioRepetido':UsuarioRepetido},context_instance=RequestContext(request))
+                return render_to_response('estudiante/registrarEstudianteExt.html', {'formulario': formulario,'UsuarioRepetido':UsuarioRepetido},context_instance=RequestContext(request))
 
             if contrasena1 != contrasena2:
                 ContrasenaDist = "Las contrasenas deben coincidir **"
-                return render_to_response('estudiante/registrarEstudianteUSB.html', {'formulario': formulario,'ContrasenaDist':ContrasenaDist},context_instance=RequestContext(request))
+                return render_to_response('estudiante/registrarEstudianteExt7.html', {'formulario': formulario,'ContrasenaDist':ContrasenaDist},context_instance=RequestContext(request))
 
             user = User.objects.create_user(username,email,contrasena1)
             user.first_name = "estudianteExt"

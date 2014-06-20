@@ -9,7 +9,7 @@
 {% endblock %}
 {% block tabla %}
     <div class="btn-group">
-    <a class ="btn btn-default" href="/ver_tabla_postulados/1">Opción 1</a> <a class ="btn btn-default" href="/ver_tabla_postulados/2">Opción 2</a> <a class ="btn btn-default" href="/sin_asignar/0">Opcion Alternativa</a>
+    <a class ="btn btn-default" href="/ver_tabla_postulados/1">Opción 1</a> <a class ="btn btn-default" href="/ver_tabla_postulados/2">Opción 2</a> <a id ="alternativa" class ="btn btn-default" href="/sin_asignar/0" {% if contador == 0 %} disabled="disabled" {% else %}{% endif %}>Opcion Alternativa</a>
     </div>
     <table class="table table-bordered table-hover table-responsive">
     {% for elemento in lista %}
@@ -59,14 +59,18 @@
                         var estudiante = "estudiante"+data[i].fields.nombreEstud;
                         var cupo = "cupo"+data[i].fields.nombreUniv;
                         var accion = "accion"+data[i].fields.nombreEstud;
+
                         //alert(estudiante);
                         //alert(document.getElementById(estudiante).innerHTML);
                         //alert("estudiante"+data[i].fields.nombre.toString());
                         document.getElementById(estudiante).setAttribute("class", "success");
                         document.getElementById(accion).innerHTML= "<button class=\"btn btn-default btn-sm\" onclick=\"ajax_deshacer('"+ id +"','"+ id_estudiante +"')\">Deshacer</button><button class=\"btn btn-default btn-sm\"><a href=\"/verDetallePostulacionDRIC/" + id_estudiante + "\" class=\"btn-xs btn-default\">Ver</a></button>";
-
+                        //document.getElementById("alternativa").disabled = false;
                         document.getElementById(cupo).innerHTML = "Cupos: " + (parseInt(document.getElementById(cupo).innerHTML.split(" ")[1]) - 1).toString();
                         //document.getelementbyid('id_encargado').innerhtml = document.getelementbyid('id_encargado').innerhtml+'<option value='+data[i].pk+'>'+data[i].fields.nombre+'</option>';
+                        {% if contador == 0 %}
+                        location.reload(true);
+                        {% endif %}
                     }
 
                 });
